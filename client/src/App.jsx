@@ -14,7 +14,7 @@ import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 
 const App = () => {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } });
-  const videoId = "pt3_ryl6q4.jpg"
+  const videoId = "pt3_ryl6q4.mp4"
   const cloudName = "dp0h5vpsz"
 
   
@@ -24,7 +24,6 @@ const App = () => {
       <SingleView cloudName={cloudName} videoId={videoId}/>
       <EventSpace />
       <Home />
-      <LiveChat />
       <Login />
       <Signup />
       <Upload cloudName={cloudName} />

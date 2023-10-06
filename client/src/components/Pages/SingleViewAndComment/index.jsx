@@ -1,6 +1,7 @@
 const style = {
   height: "auto",
-  width: "auto",
+  width: "100%",
+  aspectRatio: "2/1",
   border: "0",
 };
 
@@ -12,15 +13,20 @@ const SingleView = ({ cloudName, videoId }) => {
   return (
     <>
       <h1>SingleView</h1>
-      <iframe
-        title="shoes"
-        src={`https://res.cloudinary.com/${cloudName}/video/upload/v1696603416/${videoId}`}
-        style={style}
-        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-      ></iframe>
-      <img width="500px" src={`https://res.cloudinary.com/${cloudName}/video/upload/v1696603416/${videoId}`}>
+      <div>
+        <iframe
+          title="shoes"
+          src={`https://res.cloudinary.com/${cloudName}/video/upload/v1696603416/${videoId}`}
+          style={style}
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        ></iframe>
+      </div>
 
-      </img>
+      <img
+        width="500px"
+        src={`https://res.cloudinary.com/dp0h5vpsz/image/upload/v1696603392/K_E_thumb_tunq8u.jpg`}
+        alt="wedding"
+      ></img>
       <h3>Comment Section</h3>
     </>
   );
