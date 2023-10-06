@@ -11,7 +11,7 @@ const SingleView = ({ cloudName, videoId }) => {
   console.log("videoId", videoId);
 
   return (
-    <>
+    <div style={{backgroundColor: 'silver'}}>
       <h1>SingleView</h1>
       <div>
         <iframe
@@ -28,7 +28,7 @@ const SingleView = ({ cloudName, videoId }) => {
         alt="wedding"
       ></img>
       <h3>Comment Section</h3>
-    </>
+    </div>
   );
 };
 
