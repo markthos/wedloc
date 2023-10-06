@@ -11,6 +11,8 @@ import {
 } from "./components/Pages";
 import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const App = () => {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } });
@@ -19,31 +21,9 @@ const App = () => {
 
   return (
     <>
-      <h1>wedloc</h1>
+      
       <Router>
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/singleview">SingleView</a>
-          </li>
-          <li>
-            <a href="/eventspace">EventSpace</a>
-          </li>
-          <li>
-            <a href="/livechat">LiveChat</a>
-          </li>
-          <li>
-            <a href="/login">Login</a>
-          </li>
-          <li>
-            <a href="/signup">Signup</a>
-          </li>
-          <li>
-            <a href="/upload">Upload</a>
-          </li>
-        </ul>
+      <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} />
@@ -53,6 +33,7 @@ const App = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/upload" element={<Upload cloudName={cloudName}/>} />
         </Routes>
+        <Footer />
       </Router>
     </>
   );
