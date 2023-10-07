@@ -1,5 +1,7 @@
 const { User, Message, Capsule } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
+const { createWriteStream } = require('fs');
+const path = require('path');
 
 const resolvers = {
     Query: {
@@ -94,6 +96,17 @@ const resolvers = {
             // const token = signToken(user);
             return { user };
         },
+        async uploadFile(_, { file }) {
+            const { createReadStream, filename, mimetype, encoding } = await file;
+            
+            // Set up a stream to write the uploaded file to disk
+            const stream = createReadStream();
+            const filePath = path.join(__dirname, `/public/uploads/${filename}`);
+            await stream.pipe(createWriteStream(filePath));
+      
+            // Return metadata and file path (adjust as needed)
+            return { filename, mimetype, encoding, url: `/uploads/${filename}` };
+          },
     }
 };
 

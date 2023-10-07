@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+
+scalar Upload
+
     type Capsule {
         _id: ID
         title: String!
@@ -31,6 +34,13 @@ const typeDefs = gql`
         GetCapsule(_id: ID!): Capsule
     }
 
+    type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+        url: String!
+      }
+    
     type Mutation {
         createCapsule(title: String!, date: String!): Capsule
         addPost(capsuleId: ID!, text: String!): Post
@@ -38,6 +48,7 @@ const typeDefs = gql`
         login(email: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
         AddMessage(text: String!): Message
+        uploadFile(file: Upload!): File!
     }
 `;
 
