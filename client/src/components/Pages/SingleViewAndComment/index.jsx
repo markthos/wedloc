@@ -1,6 +1,6 @@
 const style = {
   height: "auto",
-  width: "100%",
+  width: "500px",
   aspectRatio: "2/1",
   border: "0",
 };
@@ -11,8 +11,9 @@ const SingleView = ({ cloudName, videoId }) => {
   console.log("videoId", videoId);
 
   return (
-    <>
+    <div style={{backgroundColor: 'silver'}}>
       <h1>SingleView</h1>
+      <h3>this is a video iframe tag</h3>
       <div>
         <iframe
           title="shoes"
@@ -22,13 +23,14 @@ const SingleView = ({ cloudName, videoId }) => {
         ></iframe>
       </div>
 
+      <h3>this is a photo img tag</h3>
       <img
         width="500px"
         src={`https://res.cloudinary.com/dp0h5vpsz/image/upload/v1696603392/K_E_thumb_tunq8u.jpg`}
         alt="wedding"
       ></img>
       <h3>Comment Section</h3>
-    </>
+    </div>
   );
 };
 

@@ -27,7 +27,7 @@ const Upload = ({ cloudName }) => {
   }, [img, cloudName]);
 
   return (
-    <>
+    <div style={{backgroundColor: 'silver'}}>
       <h1>Upload</h1>
       <input
         type="file"
@@ -40,7 +40,7 @@ const Upload = ({ cloudName }) => {
         }}
       />
       {myImage && <AdvancedImage cldImg={myImage} />}
-    </>
+    </div>
   );
 };
 
