@@ -18,7 +18,8 @@ const app = express();
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  context: authMiddleware,
+  // still needs testing
+  // context: authMiddleware,
 });
 
 const httpServer = http.createServer(app);
