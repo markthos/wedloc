@@ -3,6 +3,12 @@ const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  
 const resolvers = {
     Query: {
         // Get capsule by id
@@ -96,16 +102,36 @@ const resolvers = {
             // const token = signToken(user);
             return { user };
         },
-        async uploadFile(_, { file }) {
-            const { createReadStream, filename, mimetype, encoding } = await file;
-            
-            // Set up a stream to write the uploaded file to disk
-            const stream = createReadStream();
-            const filePath = path.join(__dirname, `/public/uploads/${filename}`);
-            await stream.pipe(createWriteStream(filePath));
+        uploadFile: async (_, { file }) => {
+            try {
+              const { createReadStream, filename, mimetype } = await file;
+              
+              // Convert Buffer to Stream
+              const fileStream = createReadStream();
       
-            // Return metadata and file path (adjust as needed)
-            return { filename, mimetype, encoding, url: `/uploads/${filename}` };
+              // Upload to Cloudinary
+              const result = await new Promise((resolve, reject) => {
+                const cloudStream = cloudinary.uploader.upload_stream(
+                  { resource_type: "auto" },
+                  (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                  }
+                );
+      
+                fileStream.pipe(cloudStream);
+              });
+      
+              // Return metadata and URL
+              return {
+                filename,
+                mimetype,
+                encoding: "base64",
+                url: result.secure_url,
+              };
+            } catch (error) {
+              throw new Error(`Failed to upload file: ${error}`);
+            }
           },
     }
 };
