@@ -8,6 +8,7 @@ const capsuleSchema = new Schema({
     date : {
         type: Date,
         required: true,
+        default: Date.now,
     },
     posts : [
         {
@@ -15,7 +16,7 @@ const capsuleSchema = new Schema({
             ref: 'Post',
         }
     ],
-    user : {
+    owner : {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },

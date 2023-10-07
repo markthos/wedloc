@@ -1,4 +1,4 @@
-const { User, Message, Capsule } = require('../models');
+const { User, Message, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 
 const resolvers = {
@@ -17,6 +17,10 @@ const resolvers = {
         GetMessages: async () => {
             return await Message.find({});
         }, 
+        // for dev use
+        getUsers: async () => {
+            return await User.find({});
+        }
     },
     Mutation: {
         // Create a capsule with a title and date by a logged in user
@@ -25,7 +29,7 @@ const resolvers = {
                 const capsule = await Capsule.create({
                     title,
                     date,
-                    user: context.user._id,
+                    owner: context.user._id,
                 });
                 await User.findOneAndUpdate(
                     { _id: context.user._id },
@@ -71,9 +75,12 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in!');
         },
         // Add a message to the database without being logged in
-        AddMessage: async (parent, { text }) => {
+        AddMessage: async (parent, { text, postId }) => {
             const message = await Message.create({
                 text,
+                post: postId,
+                // CONTEXT NOT SETUP YET
+                // author: context.user._id 
             });
             return message;
         },
@@ -81,6 +88,10 @@ const resolvers = {
             const user = await User.create(args);
             // const token = signToken(user);
             return { user };
+        },
+        deleteUser: async (parent, { userId }) => {
+            const user = await User.findOneAndDelete({ _id: userId });
+            console.log('user deleted', user);
         },
         login: async (parent, { email, password }) => {
             const user = await User.findOne({ email });

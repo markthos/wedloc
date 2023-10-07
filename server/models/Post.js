@@ -1,28 +1,26 @@
 const { Schema, model } = require('mongoose');
 
-const messageSchema = new Schema({
+const postSchema = new Schema({
     text: {
         type: String,
         required: true,
     },
-    // added other necessary fields -am
     date : {
         type: Date,
         required: true,
         default: Date.now,
     },
-    author: {
+    // changed 'user' to 'owner' -am
+    owner : {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        default: 'Anonymous Guest'
     },
-    post : {
+    capsule : {
         type: Schema.Types.ObjectId,
-        ref: 'Post',
+        ref: 'Capsule',
     },
 });
 
+const Post = model('Post', postSchema);
 
-const Message = model('Message', messageSchema);
-
-module.exports = Message;
+module.exports = Post;
