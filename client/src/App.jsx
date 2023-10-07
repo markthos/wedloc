@@ -1,21 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
-import { Comment, EventSpace, Home, LiveChat, Login, Signup, Upload } from './components/Pages';
+import {
+  Comment,
+  EventCreator,
+  EventSpace,
+  Home,
+  LiveChat,
+  Login,
+  Profile,
+  Signup,
+  Upload,
+} from './pages';
 import './App.css';
+import SiteNav from './components/SiteNav';
+
+import { Route, Routes } from 'react-router-dom';
 
 const App = () => {
   return (
     <>
-      <h1>wedloc</h1>
-      <Comment />
-      <EventSpace />
-      <Home />
-      <LiveChat />
-      <Login />
-      <Signup />
-      <Upload />
+      <SiteNav />
+      <Routes>
+        <Route path="/comment" element={<Comment />} />
+        <Route path="/event-creator" element={<EventCreator />} />
+        <Route path="/event-space" element={<EventSpace />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/live-chat" element={<LiveChat />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/upload" element={<Upload />} />
+      </Routes>
     </>
-  )
+  );
 }
 
 export default App
