@@ -85,7 +85,11 @@ const resolvers = {
             return message;
         },
         addUser: async (parent, args) => {
-            const user = await User.create(args);
+            const user = await User.create({
+                username: args.username,
+                email: args.email,
+                password: args.password,
+              });
             // const token = signToken(user);
             return { user };
         },
