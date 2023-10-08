@@ -1,3 +1,6 @@
+// Upload page
+
+
 import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/url-gen";
 import { useEffect, useState } from "react";
@@ -7,7 +10,7 @@ import { fill } from "@cloudinary/url-gen/actions/resize";
 //!this entire page is currently not working
 
 
-const Upload = ({ cloudName }) => {
+export default function Upload({ cloudName }) {
   const [img, setImg] = useState("");
   const [myImage, setMyImage] = useState(null);
 
@@ -43,5 +46,3 @@ const Upload = ({ cloudName }) => {
     </div>
   );
 };
-
-export default Upload;
