@@ -8,7 +8,7 @@ const socketIo = require('socket.io'); // Import Socket.IO
 
 const { v2: cloud } = require('cloudinary'); // Cloudinary setup
           
-// const { graphqlUploadExpress } = require('graphql-upload');
+const { graphqlUploadExpress } = require('graphql-upload');
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
@@ -41,7 +41,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
-// app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 })); // Adjust max file size and max number of files as needed
+app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 })); // Adjust max file size and max number of files as needed
 
 const startApolloServer = async () => {
   await apolloServer.start();
