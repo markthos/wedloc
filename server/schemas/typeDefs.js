@@ -1,6 +1,22 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+
+scalar Upload
+
+    type Capsule {
+        _id: ID
+        title: String!
+        date: String!
+        posts: [Post]
+        user: User
+    }
+    type Post {
+        _id: ID
+        text: String!
+        capsuleId: ID!
+        user: User
+    }
     type User {
         _id: ID
         username: String!
@@ -14,13 +30,24 @@ const typeDefs = gql`
 
     type Query {
         me: User
-        getMessages: [Message]
+        GetMessages: [Message]
+        GetCapsule(_id: ID!): Capsule
     }
 
+    type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+        url: String!
+      }
+    
     type Mutation {
+        createCapsule(title: String!, date: String!): Capsule
+        addPost(capsuleId: ID!, text: String!): Post
+        deletePost(postId: ID!): Post
         login(email: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
-        addMessage(text: String!): Message
+        AddMessage(text: String!): Message
     }
 `;
 
