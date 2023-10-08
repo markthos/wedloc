@@ -10,13 +10,13 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        GetMessages: async () => {
+        getMessages: async () => {
             return await Message.find({});
         }, 
     },
     Mutation: {
         // Add a message to the database without being logged in
-        AddMessage: async (parent, { text }) => {
+        addMessage: async (parent, { text }) => {
             const message = await Message.create({
                 text,
             });

@@ -54,10 +54,10 @@ function LiveChat() {
   const handleSendMessage = async (event) => {
     event.preventDefault();
     try {
-      // // Send a new message via GraphQL mutation
+      // Send a new message via GraphQL mutation
       // await addMessage({ variables: { text: messageText } });
 
-      // Emit the same message to the Socket.IO server
+      //Emit the same message to the Socket.IO server
       socket.emit('sendMessage', messageText);
       console.log('Sent message:', messageText);
 

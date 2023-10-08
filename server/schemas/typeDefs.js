@@ -14,13 +14,13 @@ const typeDefs = gql`
 
     type Query {
         me: User
-        GetMessages: [Message]
+        getMessages: [Message]
     }
 
     type Mutation {
         login(email: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
-        AddMessage(text: String!): Message
+        addMessage(text: String!): Message
     }
 `;
 
