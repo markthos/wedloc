@@ -1,3 +1,6 @@
+// The Live Chat Page using SOCKET.IO
+
+
 import React, { useState, useEffect } from 'react';
 // import { useQuery, useMutation } from '@apollo/react-hooks';
 // import { gql } from 'apollo-boost';
@@ -28,7 +31,7 @@ const socket = io('http://localhost:3000'); // Change the URL to match your Sock
 //   }
 // `;
 
-function LiveChat() {
+export default function LiveChat() {
   const [messageText, setMessageText] = useState('');
   // const { loading, data } = useQuery(GET_MESSAGES);
   // const [addMessage] = useMutation(ADD_MESSAGE);
@@ -90,5 +93,3 @@ function LiveChat() {
     </div>
   );
 }
-
-export default LiveChat;

@@ -1,32 +1,48 @@
-const Header = () => {
+// The site header where the navigation and logo live
+// All links will be changed to NavLinks in the future to use the active class functionality of react-router-dom
+
+
+import { Link as RouterLink, NavLink, Link } from 'react-router-dom';
+
+export default function Header() {
+
   return (
-    <div style={{display:"flex"}}>
+    <div>
       <h1>wedloc</h1>
-      <ul style={{display:"flex", listStyle: "none", gap: "10px"}}>
+      <nav>
+        <ul>
           <li>
-            <a href="/">Home</a>
+            <RouterLink to={'Home'}>Home</RouterLink>
           </li>
           <li>
-            <a href="/singleview">SingleView</a>
+            <RouterLink to={'About'}>About</RouterLink>
           </li>
           <li>
-            <a href="/eventspace">EventSpace</a>
+            <RouterLink to={'EventCreator'}>Event Creator</RouterLink>
           </li>
           <li>
-            <a href="/livechat">LiveChat</a>
+            <RouterLink to={'EventSpace'}>Event Space</RouterLink>
           </li>
           <li>
-            <a href="/login">Login</a>
+            <RouterLink to={'LiveChat'}>Live Chat</RouterLink>
           </li>
           <li>
-            <a href="/signup">Signup</a>
+            <RouterLink to={'Login'}>Login</RouterLink>
           </li>
           <li>
-            <a href="/upload">Upload</a>
+            <RouterLink to={'Profile'}>Profile</RouterLink>
+          </li>
+          <li>
+            <RouterLink to={'Signup'}>Sign Up</RouterLink>
+          </li>
+          <li>
+            <RouterLink to={'SingleView'}>Single View Page</RouterLink>
+          </li>
+          <li>
+            <RouterLink to={'Upload'}>Upload Page</RouterLink>
           </li>
         </ul>
+      </nav>
     </div>
-  )
+  );
 }
-
-export default Header
