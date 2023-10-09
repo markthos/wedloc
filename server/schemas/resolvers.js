@@ -1,6 +1,14 @@
 const { User, Message, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
+const { createWriteStream } = require('fs');
+const path = require('path');
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+  
 const resolvers = {
     Query: {
         // Get capsule by id
@@ -109,6 +117,37 @@ const resolvers = {
             // const token = signToken(user);
             return { user };
         },
+        uploadFile: async (_, { file }) => {
+            try {
+              const { createReadStream, filename, mimetype } = await file;
+              
+              // Convert Buffer to Stream
+              const fileStream = createReadStream();
+      
+              // Upload to Cloudinary
+              const result = await new Promise((resolve, reject) => {
+                const cloudStream = cloudinary.uploader.upload_stream(
+                  { resource_type: "auto" },
+                  (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                  }
+                );
+      
+                fileStream.pipe(cloudStream);
+              });
+      
+              // Return metadata and URL
+              return {
+                filename,
+                mimetype,
+                encoding: "base64",
+                url: result.secure_url,
+              };
+            } catch (error) {
+              throw new Error(`Failed to upload file: ${error}`);
+            }
+          },
     }
 };
 

@@ -1,3 +1,6 @@
+// Single View for any video or photo with a comment section
+
+
 const style = {
   height: "auto",
   width: "500px",
@@ -6,7 +9,7 @@ const style = {
 };
 
 // DEMO VIDEO in there
-const SingleView = ({ cloudName, videoId }) => {
+export default function SingleView ({ cloudName, videoId }) {
   console.log("cloudName", cloudName);
   console.log("videoId", videoId);
 
@@ -33,5 +36,3 @@ const SingleView = ({ cloudName, videoId }) => {
     </div>
   );
 };
-
-export default SingleView;

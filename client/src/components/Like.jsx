@@ -1,9 +1,10 @@
-const Like = () => {
-  return (
-    <>
-      <h1>Like</h1>
-    </>
-  );
-};
+// The Like Component
 
-export default Like;
+
+export default function Like() {
+    return (
+        <div>
+            Like Compnent
+        </div>
+    );
+}
