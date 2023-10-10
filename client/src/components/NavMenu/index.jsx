@@ -1,26 +1,37 @@
-import React, { useState } from "react";
-import { CiLogin } from 'react-icons/ci';
-import { MdOutlineHome, MdMenu, MdOutlinePersonAddAlt1, MdOutlineAddToPhotos, MdOutlineInfo } from 'react-icons/md'
-import { FaRegAddressCard } from 'react-icons/fa'
+import React, { useState, useEffect, useRef } from "react";
+import './index.css'
+import navMenuIcon from '../../images/navMenuIcon.png'
 
-let home = {MdOutlineHome}
-let login = {CiLogin}
-let signup = {MdOutlinePersonAddAlt1}
-let createEvent = {MdOutlineAddToPhotos}
-let myEvents = {FaRegAddressCard}
-let about = {MdOutlineInfo}
 
-// I want to add logic that prevents this menu from displaying whichever page the user is currently on, but that's not a right now task.
 
  function NavMenu({ currentPage, handlePageChange }) {
+
+    const [open, setOpen] = useState(false);
+    
+    let menuRef = useRef();
+
+    useEffect(() => {
+        let handler = (e) => {
+            if (!menuRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handler);
+
+        return() => {
+            document.removeEventListener("mousedown", handler);
+        }
+    });
+
     return (
-        <div className="menu-container">
-            <div className="menu-trigger">
-                {MdMenu}
+        <div className="menu-container" ref={menuRef}>
+            <div className="menu-trigger" onClick={()=>{setOpen(!open)}}>
+                <img src={navMenuIcon}></img>
             </div>
 
-            <div className="dropdown-menu">
-                <h3>Test<br/><span>This is a test</span></h3>
+            <div className={`dropdown-menu ${open? 'active' : 'inactive'}`}>
+                <h3>Lo!<br/><span>I am your navigator</span></h3>
                 <ul>
                     <li className="homeNav">
                         <a 
@@ -28,7 +39,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('Home')}
                         className={currentPage === 'Home' ? 'nav-link active' : 'nav-link'}
                         >
-                        {home} Home
+                        Home
                         </a>
                     </li>
                     <li className="loginNav">
@@ -37,7 +48,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('Login')}
                         className={currentPage === 'Login' ? 'nav-link active' : 'nav-link'}
                         >
-                        {login} Login
+                        Login
                         </a>
                     </li>
                     <li className="signupNav">
@@ -46,7 +57,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('Signup')}
                         className={currentPage === 'Signup' ? 'nav-link active' : 'nav-link'}
                         >
-                        {signup} Sign Up
+                        Sign Up
                         </a>
                     </li>
                     <li className="createEventNav">
@@ -55,7 +66,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('CreateEvent')}
                         className={currentPage === 'CreateEvent' ? 'nav-link active' : 'nav-link'}
                         >
-                        {createEvent} Create Event
+                        Create Event
                         </a>
                     </li>
                     <li className="myEventsNav">
@@ -64,7 +75,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('MyEvents')}
                         className={currentPage === 'MyEvents' ? 'nav-link active' : 'nav-link'}
                         >
-                        {myEvents} My Events
+                        My Events
                         </a>
                     </li>
                     <li className="AboutNav">
@@ -73,7 +84,7 @@ let about = {MdOutlineInfo}
                         onClick={() => handlePageChange('About')}
                         className={currentPage === 'About' ? 'nav-link active' : 'nav-link'}
                         >
-                        {about} About Us
+                        About Us
                         </a>
                     </li>
                 </ul>

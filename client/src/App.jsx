@@ -5,6 +5,7 @@ import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import NavMenu from "./components/NavMenu";
 
 export default function App() {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } });
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <>
       <Header />
+      {<NavMenu />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} /> 
