@@ -13,8 +13,10 @@ export default function EventSpace() {
 //   if (loading) return <p>Loading...</p>; // This could be prettier
 
   return (
-    <div>
+    <div className="body">
+    <section className="contentSection">
       <h1>Event Space</h1>
+    </section>
       <Link to="/livechat">LiveChat</Link>
       <Link to="/singleview">SingleView</Link>
       <p>display title, and new photos and videos</p>
@@ -30,4 +32,5 @@ export default function EventSpace() {
       </ul> */}
     </div>
   );
+
 }
