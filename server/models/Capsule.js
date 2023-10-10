@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const postSchema = require('./Post');
+const livechatSchema = require('./LiveChat');
 
 const capsuleSchema = new Schema({
     title: {
@@ -10,17 +12,19 @@ const capsuleSchema = new Schema({
         required: true,
         default: Date.now,
     },
+    location : {
+        type: String,
+    },
     posts : [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Post',
-        }
+        postSchema,
+    ],
+    chat: [
+        livechatSchema,
     ],
     owner : {
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-
 });
 
 const Capsule = model('Capsule', capsuleSchema);
