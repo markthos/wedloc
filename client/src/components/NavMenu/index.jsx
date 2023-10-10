@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, } from "react";
+import { Link as RouterLink, NavLink } from 'react-router-dom'
 import './index.css'
 import navMenuIcon from '../../images/navMenuIcon.png'
 
@@ -31,61 +32,24 @@ import navMenuIcon from '../../images/navMenuIcon.png'
             </div>
 
             <div className={`dropdown-menu ${open? 'active' : 'inactive'}`}>
-                <h3>Lo!<br/><span>I am your navigator</span></h3>
                 <ul>
-                    <li className="homeNav">
-                        <a 
-                        href="#Home"
-                        onClick={() => handlePageChange('Home')}
-                        className={currentPage === 'Home' ? 'nav-link active' : 'nav-link'}
-                        >
-                        Home
-                        </a>
+                    <li className="liNav">
+                        <NavLink to={'/'}>Home</NavLink>
                     </li>
-                    <li className="loginNav">
-                        <a 
-                        href="#Login"
-                        onClick={() => handlePageChange('Login')}
-                        className={currentPage === 'Login' ? 'nav-link active' : 'nav-link'}
-                        >
-                        Login
-                        </a>
+                    <li className="liNav">
+                        <NavLink to={'/login'}>Login</NavLink>
                     </li>
-                    <li className="signupNav">
-                        <a 
-                        href="#Signup"
-                        onClick={() => handlePageChange('Signup')}
-                        className={currentPage === 'Signup' ? 'nav-link active' : 'nav-link'}
-                        >
-                        Sign Up
-                        </a>
+                    <li className="liNav">
+                        <RouterLink to={'/signup'}>Sign Up</RouterLink>
                     </li>
-                    <li className="createEventNav">
-                        <a 
-                        href="#CreateEvent"
-                        onClick={() => handlePageChange('CreateEvent')}
-                        className={currentPage === 'CreateEvent' ? 'nav-link active' : 'nav-link'}
-                        >
-                        Create Event
-                        </a>
+                    <li className="liNav">
+                        <NavLink to={'/eventcreator'}>Create Event</NavLink>
                     </li>
-                    <li className="myEventsNav">
-                        <a 
-                        href="#MyEvents"
-                        onClick={() => handlePageChange('MyEvents')}
-                        className={currentPage === 'MyEvents' ? 'nav-link active' : 'nav-link'}
-                        >
-                        My Events
-                        </a>
+                    <li className="liNav">
+                        <NavLink to={'/eventspace'}>Event Space</NavLink>
                     </li>
-                    <li className="AboutNav">
-                        <a 
-                        href="#About"
-                        onClick={() => handlePageChange('About')}
-                        className={currentPage === 'About' ? 'nav-link active' : 'nav-link'}
-                        >
-                        About Us
-                        </a>
+                    <li className="liNav">
+                        <NavLink to={'/about'}>About</NavLink>
                     </li>
                 </ul>
             </div>
