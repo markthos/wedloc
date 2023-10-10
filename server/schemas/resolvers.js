@@ -1,4 +1,4 @@
-const { User, Message, Capsule, Post } = require('../models');
+const { User, LiveChat, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
@@ -23,8 +23,8 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        GetMessages: async () => {
-            return await Message.find({});
+        GetChat: async () => {
+            return await LiveChat.find({});
         }, 
         // for dev use
         getUsers: async () => {
@@ -83,15 +83,15 @@ const resolvers = {
             }
             throw new AuthenticationError('You need to be logged in!');
         },
-        // Add a message to the database without being logged in
-        AddMessage: async (parent, { text, postId }) => {
-            const message = await Message.create({
+        // Add a Live to the database without being logged in
+        AddChat: async (parent, { text, postId }) => {
+            const LiveChat = await LiveChat.create({
                 text,
                 post: postId,
                 // CONTEXT NOT SETUP YET
                 // author: context.user._id 
             });
-            return message;
+            return LiveChat;
         },
         addUser: async (parent, args) => {
             try {

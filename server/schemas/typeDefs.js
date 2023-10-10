@@ -8,31 +8,44 @@ scalar Upload
         _id: ID
         title: String!
         date: String!
+        location: String
         posts: [Post]
-        user: User
+        chat: [LiveChat]
+        owner: User
     }
     type Post {
         _id: ID
-        text: String!
-        capsuleId: ID!
-        owner: User
+        url: String!
+        thumbnail: String
+        date: String!
+        upVotes: Int!
+        comments: [Comment]
+        owner: String!
     }
     type User {
         _id: ID
         username: String!
+        firstName: String
+        lastName: String
         email: String!
         password: String!
     }
-    type Message {
+    type LiveChat {
         _id: ID
         text: String!
         date: String!
-        author: User
+        author: String!
+    }
+    type Comment {
+        _id: ID
+        text: String!
+        Author: String!
+        date: String!
     }
 
     type Query {
         me: User
-        GetMessages: [Message]
+        GetChat: [LiveChat]
         GetCapsule(_id: ID!): Capsule
         getUsers: [User]
     }
@@ -50,7 +63,7 @@ scalar Upload
         deletePost(postId: ID!): Post
         login(username: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
-        AddMessage(text: String!): Message
+        AddChat(text: String!): LiveChat
         uploadFile(file: Upload!): File!
         deleteUser(userId: ID!): User
     }
