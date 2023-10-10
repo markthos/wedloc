@@ -15,7 +15,7 @@ scalar Upload
         _id: ID
         text: String!
         capsuleId: ID!
-        user: User
+        owner: User
     }
     type User {
         _id: ID
@@ -26,12 +26,15 @@ scalar Upload
     type Message {
         _id: ID
         text: String!
+        date: String!
+        author: User
     }
 
     type Query {
         me: User
         GetMessages: [Message]
         GetCapsule(_id: ID!): Capsule
+        getUsers: [User]
     }
 
     type File {
@@ -42,14 +45,24 @@ scalar Upload
       }
     
     type Mutation {
-        createCapsule(title: String!, date: String!): Capsule
+        createCapsule(title: String!, date: String!, owner:ID!): Capsule
         addPost(capsuleId: ID!, text: String!): Post
         deletePost(postId: ID!): Post
-        login(email: String!, password: String!): User
+        login(username: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
         AddMessage(text: String!): Message
         uploadFile(file: Upload!): File!
+        deleteUser(userId: ID!): User
     }
 `;
+
+
+// TRACKING BASIC USER FLOW
+
+// make account WORKS (small error issue, but saves to db regardless)
+// delete account WORKS
+//
+
+
 
 module.exports = typeDefs;

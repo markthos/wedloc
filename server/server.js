@@ -2,6 +2,7 @@ require('dotenv').config(); // dotenv setup to configure environment variables
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
+const { authMiddleware } = require('./utils/auth');
 
 const http = require('http'); // http for socket.io
 const socketIo = require('socket.io'); // Import Socket.IO
@@ -18,6 +19,8 @@ const app = express();
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
+  // still needs testing
+  // context: authMiddleware,
 });
 
 const httpServer = http.createServer(app);

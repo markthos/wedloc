@@ -1,4 +1,4 @@
-const { User, Message, Capsule } = require('../models');
+const { User, Message, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
@@ -26,6 +26,10 @@ const resolvers = {
         GetMessages: async () => {
             return await Message.find({});
         }, 
+        // for dev use
+        getUsers: async () => {
+            return await User.find({});
+        }
     },
     Mutation: {
         // Create a capsule with a title and date by a logged in user
@@ -34,7 +38,7 @@ const resolvers = {
                 const capsule = await Capsule.create({
                     title,
                     date,
-                    user: context.user._id,
+                    owner: context.user._id,
                 });
                 await User.findOneAndUpdate(
                     { _id: context.user._id },
@@ -80,19 +84,34 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in!');
         },
         // Add a message to the database without being logged in
-        AddMessage: async (parent, { text }) => {
+        AddMessage: async (parent, { text, postId }) => {
             const message = await Message.create({
                 text,
+                post: postId,
+                // CONTEXT NOT SETUP YET
+                // author: context.user._id 
             });
             return message;
         },
         addUser: async (parent, args) => {
-            const user = await User.create(args);
-            // const token = signToken(user);
-            return { user };
+            try {
+                const user = await User.create({
+                    username: args.username,
+                    email: args.email,
+                    password: args.password,
+                });
+                return user;
+            } catch (error) {
+                console.error("Error creating user:", error);
+                throw new Error("Failed to create user");
+            }
         },
-        login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+        deleteUser: async (parent, { userId }) => {
+            const user = await User.findOneAndDelete({ _id: userId });
+            console.log('user deleted', user);
+        },
+        login: async (parent, { username, password }) => {
+            const user = await User.findOne({ username });
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
             }
@@ -101,7 +120,7 @@ const resolvers = {
                 throw new AuthenticationError('Incorrect credentials');
             }
             // const token = signToken(user);
-            return { user };
+            return  user ;
         },
         uploadFile: async (_, { file }) => {
             try {
