@@ -11,6 +11,7 @@ const typeDefs = gql`
     posts: [Post]
     chat: [LiveChat]
     owner: User!
+    capsules: [Capsule]
   }
   type Post {
     _id: ID
@@ -38,7 +39,7 @@ const typeDefs = gql`
   type Comment {
     _id: ID
     text: String!
-    Author: String!
+    author: String!
     date: String!
   }
 
