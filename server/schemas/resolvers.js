@@ -13,7 +13,7 @@ cloudinary.config({
 const resolvers = {
     Query: {
         // Get capsule by id
-        GetCapsule: async (parent, { _id }) => {
+        getCapsule: async (parent, { _id }) => {
             return await Capsule.findOne({ _id }).populate('posts');
         },
         me: async (parent, args, context) => {
@@ -23,7 +23,7 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        GetChat: async () => {
+        getChat: async () => {
             return await LiveChat.find({});
         }, 
         // for dev use
@@ -32,13 +32,15 @@ const resolvers = {
         }
     },
     Mutation: {
+        //!! ADD ATTENDEES  and req.session.name saved 
+
         // Create a capsule with a title and date by a logged in user
         createCapsule: async (parent, { title, date }, context) => {
             if (context.user) {
                 const capsule = await Capsule.create({
                     title,
                     date,
-                    owner: context.user._id,
+                    owner: context.user._id
                 });
                 await User.findOneAndUpdate(
                     { _id: context.user._id },
@@ -84,14 +86,15 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in!');
         },
         // Add a Live to the database without being logged in
-        AddChat: async (parent, { text, postId }) => {
-            const LiveChat = await LiveChat.create({
-                text,
-                post: postId,
-                // CONTEXT NOT SETUP YET
-                // author: context.user._id 
-            });
-            return LiveChat;
+        addChat: async (parent, { text, author }, context) => {
+
+            const newLiveChat = await Capsule.findOneAndUpdate(
+                { _id: context.capsuleId },
+                { $addToSet: { chat: { text, author } } },
+                { new: true })
+
+
+            return newLiveChat;
         },
         addUser: async (parent, args) => {
             try {
@@ -153,6 +156,7 @@ const resolvers = {
               throw new Error(`Failed to upload file: ${error}`);
             }
           },
+        
     }
 };
 

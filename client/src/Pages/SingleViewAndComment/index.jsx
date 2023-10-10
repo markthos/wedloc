@@ -10,6 +10,8 @@ const style = {
 
 // DEMO VIDEO in there
 export default function SingleView ({ cloudName, videoId }) {
+  
+
   console.log("cloudName", cloudName);
   console.log("videoId", videoId);
 

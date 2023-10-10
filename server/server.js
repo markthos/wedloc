@@ -1,5 +1,6 @@
 require('dotenv').config(); // dotenv setup to configure environment variables
 const express = require('express');
+const session = require('express-session');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
@@ -28,6 +29,15 @@ const io = socketIo(httpServer);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'hey there', // idk why it isnt pulling from the process.env
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours 
+  }
+}))
 
 // Configure Cloud setup 
 cloud.config({ 

@@ -16,7 +16,7 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} />
+        <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} /> 
         <Route path="/eventspace" element={<EventSpace />} />
         <Route path="/livechat" element={<LiveChat />} />
         <Route path="/login" element={<Login />} />
