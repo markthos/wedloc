@@ -13,7 +13,7 @@ cloudinary.config({
 const resolvers = {
     Query: {
         // Get capsule by id
-        GetCapsule: async (parent, { _id }) => {
+        getCapsule: async (parent, { _id }) => {
             return await Capsule.findOne({ _id }).populate('posts');
         },
         me: async (parent, args, context) => {
@@ -23,7 +23,7 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        GetChat: async () => {
+        getChat: async () => {
             return await LiveChat.find({});
         }, 
         // for dev use
@@ -84,14 +84,19 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in!');
         },
         // Add a Live to the database without being logged in
-        AddChat: async (parent, { text, postId }) => {
-            const LiveChat = await LiveChat.create({
+        addChat: async (parent, { text, author }, context) => {
+            const liveChat = await LiveChat.create({
                 text,
-                post: postId,
-                // CONTEXT NOT SETUP YET
-                // author: context.user._id 
-            });
-            return LiveChat;
+                author,
+            })
+
+            await Capsule.findOneAndUpdate(
+                { _id: context.capsuleId },
+                { $addToSet: { chat: liveChat._id } },
+                { new: true })
+
+
+            return liveChat;
         },
         addUser: async (parent, args) => {
             try {
