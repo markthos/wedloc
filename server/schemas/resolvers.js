@@ -94,13 +94,17 @@ const resolvers = {
             return message;
         },
         addUser: async (parent, args) => {
-            const user = await User.create({
-                username: args.username,
-                email: args.email,
-                password: args.password,
-              });
-            // const token = signToken(user);
-            return { user };
+            try {
+                const user = await User.create({
+                    username: args.username,
+                    email: args.email,
+                    password: args.password,
+                });
+                return user;
+            } catch (error) {
+                console.error("Error creating user:", error);
+                throw new Error("Failed to create user");
+            }
         },
         deleteUser: async (parent, { userId }) => {
             const user = await User.findOneAndDelete({ _id: userId });
