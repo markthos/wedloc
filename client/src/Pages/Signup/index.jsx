@@ -3,8 +3,10 @@
 
 export default function Signup() {
     return (
-        <div>
-            <h1>Sign Up Page</h1>
-        </div>
+      <div className="body">
+        <section className="contentSection">
+          <h1>Sign Up</h1>
+        </section>
+      </div>
     );
 }

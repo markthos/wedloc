@@ -1,8 +1,10 @@
-const { User, Message, Capsule, Post } = require('../models');
+const { User, LiveChat, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
+const { signToken, authMiddleware} = require('../utils/auth');
+require('dotenv').config();
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -13,7 +15,7 @@ cloudinary.config({
 const resolvers = {
     Query: {
         // Get capsule by id
-        GetCapsule: async (parent, { _id }) => {
+        getCapsule: async (parent, { _id }) => {
             return await Capsule.findOne({ _id }).populate('posts');
         },
         me: async (parent, args, context) => {
@@ -23,8 +25,8 @@ const resolvers = {
             }
             throw new AuthenticationError('Not logged in');
         },
-        GetMessages: async () => {
-            return await Message.find({});
+        getChat: async () => {
+            return await LiveChat.find({});
         }, 
         // for dev use
         getUsers: async () => {
@@ -32,13 +34,15 @@ const resolvers = {
         }
     },
     Mutation: {
+        //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
+
         // Create a capsule with a title and date by a logged in user
         createCapsule: async (parent, { title, date }, context) => {
             if (context.user) {
                 const capsule = await Capsule.create({
                     title,
                     date,
-                    owner: context.user._id,
+                    owner: context.user._id
                 });
                 await User.findOneAndUpdate(
                     { _id: context.user._id },
@@ -83,15 +87,16 @@ const resolvers = {
             }
             throw new AuthenticationError('You need to be logged in!');
         },
-        // Add a message to the database without being logged in
-        AddMessage: async (parent, { text, postId }) => {
-            const message = await Message.create({
-                text,
-                post: postId,
-                // CONTEXT NOT SETUP YET
-                // author: context.user._id 
-            });
-            return message;
+        // Add a Live to the database without being logged in
+        addChat: async (parent, { text, author }, context) => {
+
+            const newLiveChat = await Capsule.findOneAndUpdate(
+                { _id: context.capsuleId },
+                { $addToSet: { chat: { text, author } } },
+                { new: true })
+
+
+            return newLiveChat;
         },
         addUser: async (parent, args) => {
             try {
@@ -115,11 +120,13 @@ const resolvers = {
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
             }
+            console.log('user found', user);
             const correctPw = await user.isCorrectPassword(password);
             if (!correctPw) {
                 throw new AuthenticationError('Incorrect credentials');
             }
-            // const token = signToken(user);
+            const token = signToken(user);
+            console.log('token', token);
             return  user ;
         },
         uploadFile: async (_, { file }) => {
@@ -153,6 +160,7 @@ const resolvers = {
               throw new Error(`Failed to upload file: ${error}`);
             }
           },
+        
     }
 };
 

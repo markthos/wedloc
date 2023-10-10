@@ -1,68 +1,78 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
+  scalar Upload
 
-scalar Upload
+  type Capsule {
+    _id: ID
+    title: String!
+    date: String!
+    location: String
+    posts: [Post]
+    chat: [LiveChat]
+    owner: User!
+    capsules: [Capsule]
+  }
+  type Post {
+    _id: ID
+    url: String!
+    thumbnail: String
+    date: String!
+    upVotes: Int!
+    comments: [Comment]
+    owner: String!
+  }
+  type User {
+    _id: ID
+    username: String!
+    firstName: String
+    lastName: String
+    email: String!
+    password: String!
+  }
+  type LiveChat {
+    _id: ID
+    text: String!
+    date: String!
+    author: String!
+  }
+  type Comment {
+    _id: ID
+    text: String!
+    author: String!
+    date: String!
+  }
 
-    type Capsule {
-        _id: ID
-        title: String!
-        date: String!
-        posts: [Post]
-        user: User
-    }
-    type Post {
-        _id: ID
-        text: String!
-        capsuleId: ID!
-        owner: User
-    }
-    type User {
-        _id: ID
-        username: String!
-        email: String!
-        password: String!
-    }
-    type Message {
-        _id: ID
-        text: String!
-        date: String!
-        author: User
-    }
+  type Query {
+    me: User
+    getChat: [LiveChat]
+    getCapsule(_id: ID!): Capsule
+    getUsers: [User]
+  }
 
-    type Query {
-        me: User
-        GetMessages: [Message]
-        GetCapsule(_id: ID!): Capsule
-        getUsers: [User]
-    }
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+    url: String!
+  }
 
-    type File {
-        filename: String!
-        mimetype: String!
-        encoding: String!
-        url: String!
-      }
-    
-    type Mutation {
-        createCapsule(title: String!, date: String!, owner:ID!): Capsule
-        addPost(capsuleId: ID!, text: String!): Post
-        deletePost(postId: ID!): Post
-        login(username: String!, password: String!): User
-        addUser(username: String!, email: String!, password: String!): User
-        AddMessage(text: String!): Message
-        uploadFile(file: Upload!): File!
-        deleteUser(userId: ID!): User
-    }
+  type Mutation {
+    createCapsule(title: String!, date: String!, owner: ID!): Capsule
+    addPost(capsuleId: ID!, text: String!): Post
+    deletePost(postId: ID!): Post
+    login(username: String!, password: String!): User
+    addUser(username: String!, email: String!, password: String!): User
+    addChat(text: String!): LiveChat
+    uploadFile(file: Upload!): File!
+    deleteUser(userId: ID!): User
+  }
 `;
-
 
 // TRACKING BASIC USER FLOW
 
 // make account WORKS (small error issue, but saves to db regardless)
 // delete account WORKS
 //
-
-
 
 module.exports = typeDefs;

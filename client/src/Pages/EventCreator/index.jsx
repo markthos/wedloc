@@ -3,8 +3,10 @@
 
 export default function EventCreator() {
   return (
-    <div>
-      <h1>Event Creator</h1>
+    <div className="body">
+      <section className="contentSection">
+        <h1>Event Creator</h1>
+      </section>
     </div>
   );
 }

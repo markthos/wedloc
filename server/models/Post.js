@@ -1,26 +1,30 @@
-const { Schema, model } = require('mongoose');
+const { Schema } = require('mongoose');
+const commentSchema = require('./Comment');
 
 const postSchema = new Schema({
-    text: {
+    url: {
         type: String,
         required: true,
+    },
+    thumbnail: {
+        type: String,
     },
     date : {
         type: Date,
         required: true,
         default: Date.now,
     },
-    // changed 'user' to 'owner' -am
-    owner : {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+    upVotes : {
+        type: Number,
+        required: true,
+        default: 0,
     },
-    capsule : {
-        type: Schema.Types.ObjectId,
-        ref: 'Capsule',
+    comments: [commentSchema],
+    owner : {
+        type: String,
+        required: true,
+        default: 'Anonymous Guest'
     },
 });
 
-const Post = model('Post', postSchema);
-
-module.exports = Post;
+module.exports = postSchema;
