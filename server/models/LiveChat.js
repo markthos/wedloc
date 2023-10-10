@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-const livechatSchema = new Schema({
+const liveChatSchema = new Schema({
     text: {
         type: String,
         required: true,
@@ -17,4 +17,4 @@ const livechatSchema = new Schema({
     },
 });
 
-module.exports = livechatSchema;
+module.exports = liveChatSchema;

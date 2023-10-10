@@ -9,10 +9,10 @@ const userSchema = new Schema({
         unique: true,
     },
     firstName: {
-        type: String
+        type: String//thisisnt working
     },
     lastName: {
-        type: String
+        type: String//this isnt working
     },
     email: {
         type: String,

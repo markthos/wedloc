@@ -1,5 +1,4 @@
 import { useQuery, useMutation } from "@apollo/client";
-import { useSession } from "react-session"
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
 import { ADD_CHAT } from "../../utils/mutations";
@@ -57,7 +56,7 @@ export default function LiveChat() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>; // This could be prettier 
 
   return (
     <div style={{ backgroundColor: "silver" }}>
@@ -72,7 +71,12 @@ export default function LiveChat() {
         <input
           type="text"
           value={chatData.text}
-          onChange={(e) => setChatData((data) => ({...chatData, text: e.target.value}))}
+          onChange={(e) =>
+            setChatData((data) => ({
+              text: e.target.value,
+              author: localStorage.getItem("userName"), // setUsername to local storage
+            }))
+          }
         />
         <button onClick={handleSendMessage}>Send Message</button>
       </form>

@@ -10,7 +10,7 @@ const typeDefs = gql`
     location: String
     posts: [Post]
     chat: [LiveChat]
-    owner: User
+    owner: User!
   }
   type Post {
     _id: ID
