@@ -52,6 +52,7 @@ scalar Upload
         addUser(username: String!, email: String!, password: String!): User
         AddMessage(text: String!): Message
         uploadFile(file: Upload!): File!
+        deleteUser: User
     }
 `;
 
