@@ -1,3 +1,3 @@
 const db = require('../config/connection');
 
-// const timeData = require('./timeData.json');
+const timeData = require('./timeData.json');
