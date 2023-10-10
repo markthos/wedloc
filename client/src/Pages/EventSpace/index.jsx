@@ -3,8 +3,10 @@
 
 export default function EventSpace() {
     return (
-        <div>
-            <h1>Event Space</h1>
-        </div>
+      <div className="body">
+        <section className="contentSection">
+          <h1>Event Space</h1>
+        </section>
+      </div>
     );
 }

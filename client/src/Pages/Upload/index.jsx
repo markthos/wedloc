@@ -30,19 +30,21 @@ export default function Upload({ cloudName }) {
   }, [img, cloudName]);
 
   return (
-    <div style={{backgroundColor: 'silver'}}>
-      <h1>Upload</h1>
-      <input
-        type="file"
-        onChange={(e) => {
-          const selectedFile = e.target.files[0];
-          // Ensure that a file is selected
-          if (selectedFile) {
-            setImg(selectedFile);
-          }
-        }}
-      />
-      {myImage && <AdvancedImage cldImg={myImage} />}
+    <div className="body">
+      <section className="contentSection">
+        <h1>Upload</h1>
+        <input
+          type="file"
+          onChange={(e) => {
+            const selectedFile = e.target.files[0];
+            // Ensure that a file is selected
+            if (selectedFile) {
+              setImg(selectedFile);
+            }
+          }}
+        />
+        {myImage && <AdvancedImage cldImg={myImage} />}
+      </section>
     </div>
   );
 };

@@ -73,23 +73,24 @@ export default function LiveChat() {
   // if (loading) return <p>Loading...</p>;
 
   return (
-
-    <div style={{backgroundColor: 'silver'}}>
-    <h1>Live Chat</h1>
-      {/* <div>
+    <div className="body">
+      <section className="contentSection">
+        <h1>Live Chat</h1>
+        {/* <div>
         {data.messages.map((message) => (
           <div key={message.id}>{message.text}</div>
         ))}
       </div> */}
-      <ul id="messages"></ul>
-      <form>
-        <input
-          type="text"
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Send Message</button>
-      </form>
+        <ul id="messages"></ul>
+        <form>
+          <input
+            type="text"
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+          />
+          <button onClick={handleSendMessage}>Send Message</button>
+        </form>
+      </section>
     </div>
   );
 }

@@ -1,11 +1,14 @@
 // The Site Footer
 
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function Footer() {
 
   return (
-    <div>
-      <p>Copyright © WEDLOC 2023</p>
-    </div>
+    <footer className="footer">
+      <p className="headerText">
+        Copyright © <RouterLink to={'/'}>WedLoc</RouterLink> 2023
+      </p>
+    </footer>
   );
 }
