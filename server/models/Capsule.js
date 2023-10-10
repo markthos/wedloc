@@ -18,11 +18,6 @@ const capsuleSchema = new Schema({
   },
   posts: [postSchema],
   chat: [liveChatSchema],
-  owner: {
-    type: Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
-  },
   attendants: [attendeesSchema],
 });
 

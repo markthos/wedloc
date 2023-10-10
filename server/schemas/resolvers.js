@@ -34,7 +34,7 @@ const resolvers = {
         }
     },
     Mutation: {
-        //!! ADD ATTENDEES  and req.session.name saved 
+        //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
 
         // Create a capsule with a title and date by a logged in user
         createCapsule: async (parent, { title, date }, context) => {
