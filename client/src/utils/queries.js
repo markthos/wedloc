@@ -39,3 +39,15 @@ export const GET_CAPSULE = gql`
     }
   }
 `;
+
+export const LOGIN_USER = gql`
+  mutation login($username: String!, $password: String!) {
+    login(userName: $username, password: $password) {
+      token
+      user {
+        _id
+        username
+      }
+    }
+  }
+`;
