@@ -63,7 +63,7 @@ const Login = (props) => {
               placeholder="password"
             />
             <button 
-              type="button" 
+              type="submit" 
               style={{ cursor: 'pointer' }}
             >
               Log In
