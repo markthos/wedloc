@@ -1,67 +1,79 @@
 // The Log In Page
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../../utils/queries';
 
-import { checkPassword } from '../../utils/helpers';
+import Auth from '../../utils/auth'
 
-const Login = () => {
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+const Login = (props) => {
+  const [formState, setFormState] = useState({username: '', password: ''});
+  const [login, { error, data}] = useMutation(LOGIN_USER);
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
 
-  const handleInputChange = (e) => {
-    const { target } = e;
-    const inputType = target.name;
-    const inputValue = target.value;
-
-    if (inputType === 'userName') {
-      setUserName(inputValue);
-    } else {
-      setPassword(inputValue);
-    }
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-    if (!userName) {
-      setErrorMessage('Username is invalid, please try again.');
-      return;
+    try {
+      const { data } = await login({
+        variables: { ...formState },
+      });
+      Auth.login(data.login.token);
+    } catch (error) {
+      console.error(error);
     }
-    if (!checkPassword(password)) {
-      setErrorMessage(`Invalid password, please try again.`);
-      return;
-    }
-    alert(`Welcome ${userName}`);
 
-    setUserName('');
-    setPassword('');
+    setFormState({
+      username: '',
+      password: '',
+    })
   };
 
   return (
-      <div className="body">
-        <section className="contentSection">
-          <form className="form">
+      <div className="card">
+        <section className="card-body">
+          {data ? (
+            <p>
+              <Link to="/">back to the homepage.</Link>
+            </p>
+          ) : (
+          <form onSubmit={handleFormSubmit}>
             <input
-              value={userName}
-              name="userName"
-              onChange={handleInputChange}
+              className='form-input'
+              value={formState.username}
+              onChange={handleChange}
               type="text"
+              name="username"
               placeholder="username"
             />
             <input
-              value={password}
+              className='form-input'
+              value={formState.password}
+              onChange={handleChange}
               name="password"
-              onChange={handleInputChange}
               type="password"
               placeholder="password"
             />
-            <button type="button" onClick={handleFormSubmit}>
+            <button 
+              type="button" 
+              style={{ cursor: 'pointer' }}
+            >
               Log In
             </button>
           </form>
-          {errorMessage && (
-            <div>
-              <p className="error-text">{errorMessage}</p>
+          )}
+
+          {error && (
+            <div className='errorMessage'>
+              {error.message}
             </div>
           )}
         </section>
