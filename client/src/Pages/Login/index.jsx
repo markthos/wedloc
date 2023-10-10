@@ -1,6 +1,6 @@
 // The Log In Page
 import React, { useState } from 'react';
-import { checkPassword, validateEmail } from '../../../utils/helpers';
+import { checkPassword, validateEmail } from '../../utils/helpers';
 
 const Login = () => {
   const [userName, setUserName] = useState('');
