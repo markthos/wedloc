@@ -98,14 +98,16 @@ const resolvers = {
 
             return newLiveChat;
         },
-        addUser: async (parent, args) => {
+        // add a user to the database and login with token
+        addUser: async (parent, { username, email, password }) => {
             try {
                 const user = await User.create({
-                    username: args.username,
-                    email: args.email,
-                    password: args.password,
+                    username,
+                    email,
+                    password,
                 });
-                return user;
+                const token = signToken(user);
+                return { token, user };
             } catch (error) {
                 console.error("Error creating user:", error);
                 throw new Error("Failed to create user");
