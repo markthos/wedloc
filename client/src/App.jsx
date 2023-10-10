@@ -7,13 +7,18 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import NavMenu from "./components/NavMenu";
 
+const client = new ApolloClient({
+  uri: "/graphql",
+  cache: new InMemoryCache(),
+});
+
 export default function App() {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } });
   const videoId = "pt3_ryl6q4.mp4";
   const cloudName = "dp0h5vpsz";
 
   return (
-    <>
+    <ApolloProvider client={client}>
       <Header />
       {<NavMenu />}
       <Routes>
@@ -29,6 +34,6 @@ export default function App() {
         <Route path="/eventcreator" element={<EventCreator />} />
       </Routes>
       <Footer />
-    </>
+    </ApolloProvider>
   );
 };
