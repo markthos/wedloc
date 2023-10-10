@@ -3,6 +3,8 @@ const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
+const { signToken, authMiddleware} = require('../utils/auth');
+require('dotenv').config();
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
@@ -118,11 +120,13 @@ const resolvers = {
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
             }
+            console.log('user found', user);
             const correctPw = await user.isCorrectPassword(password);
             if (!correctPw) {
                 throw new AuthenticationError('Incorrect credentials');
             }
-            // const token = signToken(user);
+            const token = signToken(user);
+            console.log('token', token);
             return  user ;
         },
         uploadFile: async (_, { file }) => {
