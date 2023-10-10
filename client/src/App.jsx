@@ -11,6 +11,8 @@ export default function App() {
   const videoId = "pt3_ryl6q4.mp4";
   const cloudName = "dp0h5vpsz";
 
+  const hardCodedSeedCapsule = "6525b9501d305b31276141b2"
+
   return (
     <>
       <Header />
@@ -18,6 +20,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} /> 
         <Route path="/eventspace" element={<EventSpace />} />
+        <Route path="/eventspace/:id" element={<EventSpace />} />
         <Route path="/livechat" element={<LiveChat />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

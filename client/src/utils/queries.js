@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_CHAT = gql`
   query getChat {
@@ -12,29 +12,31 @@ export const GET_CHAT = gql`
 `;
 
 export const GET_CAPSULE = gql`
-  query getCapsule($capsuleId: ID!) {
-    capsule(capsuleId: $capsuleId) {
+  query GetCapsule($id: ID!) {
+    getCapsule(_id: $id) {
       _id
       title
       date
-      owner
-      chat {
-        _id
-        text
-        author
-        date
-      }
+      location
       posts {
         _id
-        text
+        url
+        thumbnail
         date
         upVotes
         comments {
           _id
           text
-          date
           author
+          date
         }
+        owner
+      }
+      chat {
+        _id
+        text
+        date
+        author
       }
     }
   }

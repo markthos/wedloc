@@ -1,16 +1,37 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-// import { useQuery } from "@apollo/client";
-// import { GET_CAPSULE } from "../../utils/queries";
+import { useQuery } from "@apollo/client";
+import { GET_CAPSULE } from "../../utils/queries";
 
 export default function EventSpace() {
-//   const [loading, data] = useQuery(GET_CAPSULE);
 
-//   console.log(data);
-//   if (loading) return <p>Loading...</p>; // This could be prettier
+  const {id} = useParams()
+
+  console.log(id)
+
+  const [loading, error, data] = useQuery(GET_CAPSULE, {
+    variables: { id },
+  });
+
+  console.log(data);
+  if (loading) return <p>Loading...</p>; // This could be prettier
+  if (data && data.getCapsule) {
+    // Render your component with the data
+  } else if (error) {
+    // Handle the error here, e.g., display an error message
+    console.error("Error fetching data:", error);
+    return <p>Error loading data.</p>;
+  }
+
+  
+  if (!id) {
+    return <p>NO Event Here</p>;
+  }
+
+
+
 
   return (
     <div className="body">
@@ -20,6 +41,7 @@ export default function EventSpace() {
       <Link to="/livechat">LiveChat</Link>
       <Link to="/singleview">SingleView</Link>
       <p>display title, and new photos and videos</p>
+      
       {/* <ul>
         {data.capsule.map((capsule) => (
           <li key={data.posts._id}>
