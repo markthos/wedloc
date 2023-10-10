@@ -6,42 +6,29 @@ import { useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries";
 
 export default function EventSpace() {
+  const { id } = useParams();
 
-  const {id} = useParams()
+  console.log(id);
 
-  console.log(id)
-
-  const [loading, error, data] = useQuery(GET_CAPSULE, {
-    variables: { id },
+  const { loading, data } = useQuery(GET_CAPSULE, {
+    variables: { id: id },
   });
 
-  console.log(data);
-  if (loading) return <p>Loading...</p>; // This could be prettier
-  if (data && data.getCapsule) {
-    // Render your component with the data
-  } else if (error) {
-    // Handle the error here, e.g., display an error message
-    console.error("Error fetching data:", error);
-    return <p>Error loading data.</p>;
-  }
-
+  const cap = data?.getCapsule || "";
   
-  if (!id) {
-    return <p>NO Event Here</p>;
-  }
+  if (loading) return <p>Loading...</p>; // This could be prettier
 
-
-
+  console.log("Here :" + JSON.stringify(cap, null, 2));
 
   return (
     <div className="body">
-    <section className="contentSection">
-      <h1>Event Space</h1>
-    </section>
+      <section className="contentSection">
+        <h1>Event Space</h1>
+      </section>
       <Link to="/livechat">LiveChat</Link>
       <Link to="/singleview">SingleView</Link>
       <p>display title, and new photos and videos</p>
-      
+
       {/* <ul>
         {data.capsule.map((capsule) => (
           <li key={data.posts._id}>
@@ -54,5 +41,4 @@ export default function EventSpace() {
       </ul> */}
     </div>
   );
-
 }
