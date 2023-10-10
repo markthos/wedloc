@@ -8,6 +8,12 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
+    firstName: {
+        type: String
+    },
+    lastName: {
+        type: String
+    },
     email: {
         type: String,
         // required: true // false could make it easier for guests to interact with the site
