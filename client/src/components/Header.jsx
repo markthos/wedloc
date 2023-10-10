@@ -8,11 +8,22 @@ export default function Header() {
 
   return (
     <div>
-      <h1>wedloc</h1>
-      <nav>
+      <h1
+        className="logoText"
+        style={{ textAlign: 'center', fontSize: 64, margin: 0, padding: 0 }}
+      >
+        WedLoc
+      </h1>
+      <nav className="nav headerText">
         <ul>
           <li>
-            <RouterLink to={'Home'}>Home</RouterLink>
+            <RouterLink to={'/'}>Home</RouterLink>
+          </li>
+          <li>
+            <RouterLink to={'Signup'}>Sign Up</RouterLink>
+          </li>
+          <li>
+            <RouterLink to={'Login'}>Login</RouterLink>
           </li>
           <li>
             <RouterLink to={'About'}>About</RouterLink>
@@ -27,13 +38,7 @@ export default function Header() {
             <RouterLink to={'LiveChat'}>Live Chat</RouterLink>
           </li>
           <li>
-            <RouterLink to={'Login'}>Login</RouterLink>
-          </li>
-          <li>
             <RouterLink to={'Profile'}>Profile</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={'Signup'}>Sign Up</RouterLink>
           </li>
           <li>
             <RouterLink to={'SingleView'}>Single View Page</RouterLink>

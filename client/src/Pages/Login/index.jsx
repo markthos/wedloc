@@ -37,33 +37,34 @@ const Login = () => {
   };
 
   return (
-    <>
-      <h1>Login</h1>
-      <div>
-        <form className="form">
-          <input
-          value={userName}
-          name="userName"
-          onChange={handleInputChange}
-          type="text"
-          placeholder="username"
-          />
-          <input
-          value={password}
-          name="password"
-          onChange={handleInputChange}
-          type="password"
-          placeholder="password"
-          />
-          <button type="button" onClick={handleFormSubmit}>Submit</button>
-        </form>
-        {errorMessage && (
-          <div>
-            <p className="error-text">{errorMessage}</p>
-          </div>
-        )}
+      <div className="body">
+        <section className="contentSection">
+          <form className="form">
+            <input
+              value={userName}
+              name="userName"
+              onChange={handleInputChange}
+              type="text"
+              placeholder="username"
+            />
+            <input
+              value={password}
+              name="password"
+              onChange={handleInputChange}
+              type="password"
+              placeholder="password"
+            />
+            <button type="button" onClick={handleFormSubmit}>
+              Log In
+            </button>
+          </form>
+          {errorMessage && (
+            <div>
+              <p className="error-text">{errorMessage}</p>
+            </div>
+          )}
+        </section>
       </div>
-    </>
   );
 };
 
