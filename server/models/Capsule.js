@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 const postSchema = require('./Post');
 const livechatSchema = require('./LiveChat');
+const attendeesSchema = require('./Attendees');
 
 const capsuleSchema = new Schema({
     title: {
@@ -25,6 +26,9 @@ const capsuleSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
+    attendants: [
+        attendeesSchema,
+    ],
 });
 
 const Capsule = model('Capsule', capsuleSchema);

@@ -32,6 +32,7 @@ const resolvers = {
         }
     },
     Mutation: {
+        //!! ADD ATTENDEES  and req.session.name saved 
         // Create a capsule with a title and date by a logged in user
         createCapsule: async (parent, { title, date }, context) => {
             if (context.user) {
@@ -85,14 +86,10 @@ const resolvers = {
         },
         // Add a Live to the database without being logged in
         addChat: async (parent, { text, author }, context) => {
-            const liveChat = await LiveChat.create({
-                text,
-                author,
-            })
 
             await Capsule.findOneAndUpdate(
                 { _id: context.capsuleId },
-                { $addToSet: { chat: liveChat._id } },
+                { $addToSet: { chat: { text, author } } },
                 { new: true })
 
 
@@ -158,6 +155,7 @@ const resolvers = {
               throw new Error(`Failed to upload file: ${error}`);
             }
           },
+        
     }
 };
 

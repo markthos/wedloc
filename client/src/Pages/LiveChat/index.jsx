@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "@apollo/client";
+import { useSession } from "react-session"
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
 import { ADD_CHAT } from "../../utils/mutations";
@@ -10,7 +11,10 @@ import { useState, useEffect } from "react";
 const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
 
 export default function LiveChat() {
-  const [messageText, setMessageText] = useState("");
+  const [chatData, setChatData] = useState({
+    text: "",
+    author: "",
+  });
   const { loading, data } = useQuery(GET_CHAT);
   const [addChat] = useMutation(ADD_CHAT);
 
@@ -36,34 +40,39 @@ export default function LiveChat() {
     event.preventDefault();
     try {
       // // Send a new message via GraphQL mutation
-      // await addMessage({ variables: { text: messageText } });
+      await addChat({
+        variables: { text: chatData.text, author: chatData.author },
+      });
 
       // Emit the same message to the Socket.IO server
-      socket.emit("sendMessage", messageText);
-      console.log("Sent message:", messageText);
+      socket.emit("sendMessage", chatData.text);
+      console.log("Sent message:", chatData.text);
 
-      setMessageText("");
+      setChatData({
+        text: "",
+        author: "",
+      });
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  // if (loading) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div style={{ backgroundColor: "silver" }}>
       <h1>Live Chat</h1>
-      {/* <div>
+      <div>
         {data.messages.map((message) => (
           <div key={message.id}>{message.text}</div>
         ))}
-      </div> */}
-      <ul id="messages"></ul>
+      </div>
+      {/* <ul id="messages"></ul> */}
       <form>
         <input
           type="text"
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
+          value={chatData.text}
+          onChange={(e) => setChatData((data) => ({...chatData, text: e.target.value}))}
         />
         <button onClick={handleSendMessage}>Send Message</button>
       </form>
