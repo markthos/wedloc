@@ -110,8 +110,8 @@ const resolvers = {
             const user = await User.findOneAndDelete({ _id: userId });
             console.log('user deleted', user);
         },
-        login: async (parent, { email, password }) => {
-            const user = await User.findOne({ email });
+        login: async (parent, { username, password }) => {
+            const user = await User.findOne({ username });
             if (!user) {
                 throw new AuthenticationError('Incorrect credentials');
             }
@@ -120,7 +120,7 @@ const resolvers = {
                 throw new AuthenticationError('Incorrect credentials');
             }
             // const token = signToken(user);
-            return { user };
+            return  user ;
         },
         uploadFile: async (_, { file }) => {
             try {

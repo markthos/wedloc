@@ -48,7 +48,7 @@ scalar Upload
         createCapsule(title: String!, date: String!, owner:ID!): Capsule
         addPost(capsuleId: ID!, text: String!): Post
         deletePost(postId: ID!): Post
-        login(email: String!, password: String!): User
+        login(username: String!, password: String!): User
         addUser(username: String!, email: String!, password: String!): User
         AddMessage(text: String!): Message
         uploadFile(file: Upload!): File!
