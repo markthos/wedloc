@@ -5,6 +5,12 @@ import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import NavMenu from "./components/NavMenu";
+
+const client = new ApolloClient({
+  uri: "/graphql",
+  cache: new InMemoryCache(),
+});
 
 export default function App() {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } });
@@ -14,8 +20,9 @@ export default function App() {
   const hardCodedSeedCapsule = "6525b9501d305b31276141b2"
 
   return (
-    <>
+    <ApolloProvider client={client}>
       <Header />
+      {<NavMenu />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/singleview" element={<SingleView cloudName={cloudName} videoId={videoId} />} /> 
@@ -30,6 +37,6 @@ export default function App() {
         <Route path="/eventcreator" element={<EventCreator />} />
       </Routes>
       <Footer />
-    </>
+    </ApolloProvider>
   );
 };
