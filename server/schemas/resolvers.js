@@ -2,6 +2,7 @@ const { User, Message, Capsule, Post } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { createWriteStream } = require('fs');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
