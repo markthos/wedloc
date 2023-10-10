@@ -6,6 +6,9 @@ import { Link as RouterLink, NavLink, Link } from 'react-router-dom';
 
 export default function Header() {
 
+
+  const hardCodedSeedCapsule = "6525b9501d305b31276141b2"
+
   return (
     <div>
       <h1
@@ -20,31 +23,31 @@ export default function Header() {
             <RouterLink to={'/'}>Home</RouterLink>
           </li>
           <li>
-            <RouterLink to={'Signup'}>Sign Up</RouterLink>
+            <RouterLink to={'signup'}>Sign Up</RouterLink>
           </li>
           <li>
-            <RouterLink to={'Login'}>Login</RouterLink>
+            <RouterLink to={'login'}>Login</RouterLink>
           </li>
           <li>
-            <RouterLink to={'About'}>About</RouterLink>
+            <RouterLink to={'about'}>About</RouterLink>
           </li>
           <li>
-            <RouterLink to={'EventCreator'}>Event Creator</RouterLink>
+            <RouterLink to={'eventcreator'}>Event Creator</RouterLink>
           </li>
           <li>
-            <RouterLink to={'EventSpace'}>Event Space</RouterLink>
+            <RouterLink to={'eventspace'} >Event Space</RouterLink>
           </li>
           <li>
-            <RouterLink to={'LiveChat'}>Live Chat</RouterLink>
+            <RouterLink to={'livechat'}>Live Chat</RouterLink>
           </li>
           <li>
-            <RouterLink to={'Profile'}>Profile</RouterLink>
+            <RouterLink to={'profile'}>Profile</RouterLink>
           </li>
           <li>
-            <RouterLink to={'SingleView'}>Single View Page</RouterLink>
+            <RouterLink to={'singleview'}>Single View Page</RouterLink>
           </li>
           <li>
-            <RouterLink to={'Upload'}>Upload Page</RouterLink>
+            <RouterLink to={'upload'}>Upload Page</RouterLink>
           </li>
         </ul>
       </nav>

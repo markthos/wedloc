@@ -10,8 +10,6 @@ const typeDefs = gql`
     location: String
     posts: [Post]
     chat: [LiveChat]
-    owner: User!
-    capsules: [Capsule]
   }
   type Post {
     _id: ID
@@ -29,6 +27,7 @@ const typeDefs = gql`
     lastName: String
     email: String!
     password: String!
+    capsules: [Capsule]
   }
   type LiveChat {
     _id: ID

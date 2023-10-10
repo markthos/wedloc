@@ -1,25 +1,34 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-// import { useQuery } from "@apollo/client";
-// import { GET_CAPSULE } from "../../utils/queries";
+import { useQuery } from "@apollo/client";
+import { GET_CAPSULE } from "../../utils/queries";
 
 export default function EventSpace() {
-//   const [loading, data] = useQuery(GET_CAPSULE);
+  const { id } = useParams();
 
-//   console.log(data);
-//   if (loading) return <p>Loading...</p>; // This could be prettier
+  console.log(id);
+
+  const { loading, data } = useQuery(GET_CAPSULE, {
+    variables: { id: id },
+  });
+
+  const cap = data?.getCapsule || "";
+  
+  if (loading) return <p>Loading...</p>; // This could be prettier
+
+  console.log("Here :" + JSON.stringify(cap, null, 2));
 
   return (
     <div className="body">
-    <section className="contentSection">
-      <h1>Event Space</h1>
-    </section>
+      <section className="contentSection">
+        <h1>Event Space</h1>
+      </section>
       <Link to="/livechat">LiveChat</Link>
       <Link to="/singleview">SingleView</Link>
       <p>display title, and new photos and videos</p>
+
       {/* <ul>
         {data.capsule.map((capsule) => (
           <li key={data.posts._id}>
@@ -32,5 +41,4 @@ export default function EventSpace() {
       </ul> */}
     </div>
   );
-
 }
