@@ -6,8 +6,7 @@ const cloudinary = require("cloudinary").v2;
 const { signToken, authMiddleware } = require("../utils/auth");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
-const bcrypt = require('bcryptjs');
-
+const bcrypt = require("bcryptjs");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -23,12 +22,15 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-      return await User.findOne({ _id: context.user._id });
-     }
+        return await User.findOne({ _id: context.user._id });
+      }
       throw new AuthenticationError("Authentication error");
     },
-    getChat: async () => {
-      return await LiveChat.find({});
+    getChat: async (parent, { capsuleId }) => {
+      const capsule = await Capsule.findById({ _id: capsuleId });
+
+      const capsuleChat = capsule.chat;
+      return capsuleChat;
     },
     // for dev use
     getUsers: async () => {
@@ -37,17 +39,17 @@ const resolvers = {
     getPost: async (parent, { capsuleId, postId }) => {
       const capsule = await Capsule.findById({ _id: capsuleId });
 
-      const postIdObject = new ObjectId(postId)
-      const post = capsule.posts.find(post => post._id.equals(postIdObject));
+      const postIdObject = new ObjectId(postId);
+      const post = capsule.posts.find((post) => post._id.equals(postIdObject));
       if (!post) {
-        console.log("post not found")
+        console.log("post not found");
         return null; // Post not found
       }
 
-      console.log("post found", post)
-    
-      return post
-    }
+      console.log("post found", post);
+
+      return post;
+    },
   },
   Mutation: {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
@@ -104,14 +106,20 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     // Add a Live to the database without being logged in
-    addChat: async (parent, { text, author }, context) => {
+    addChat: async (parent, { text, author, capsuleId }) => {
+      console.log("adding chat...", text, author, capsuleId);
+
       const newLiveChat = await Capsule.findOneAndUpdate(
-        { _id: context.capsuleId },
+        { _id: capsuleId },
         { $addToSet: { chat: { text, author } } },
         { new: true }
       );
 
-      return newLiveChat;
+      const newChat = newLiveChat.chat[newLiveChat.chat.length - 1];
+
+      console.log("newLiveChat", newChat);
+
+      return newChat;
     },
     // add a user to the database and login with token
     // addUser: async (parent, { username, email, password }) => {
@@ -134,15 +142,15 @@ const resolvers = {
         const user = await User.create({
           username: username,
           email: email,
-          password: hashedPassword
+          password: hashedPassword,
         });
         const token = signToken(user);
-        return {user, token};
+        return { user, token };
       } catch (error) {
-        console.error('Error creating user:', error);
-        throw new Error('Error creating user');
+        console.error("Error creating user:", error);
+        throw new Error("Error creating user");
       }
-    },    
+    },
     deleteUser: async (parent, { userId }) => {
       const user = await User.findOneAndDelete({ _id: userId });
       console.log("user deleted", user);
@@ -159,9 +167,8 @@ const resolvers = {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user);
-      console.log(token, user)
+      console.log(token, user);
       return { token, user };
-      
     },
     uploadFile: async (_, { file }) => {
       try {
