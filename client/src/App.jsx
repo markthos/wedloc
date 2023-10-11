@@ -11,7 +11,7 @@ import {
   Profile,
   About,
   EventCreator,
-  AttendeeSignup
+  AttendeeSignup,
 } from "./Pages";
 import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
@@ -32,19 +32,22 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <Header />  
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/attendeesignup/:eventId" element={<AttendeeSignup />} />
           <Route
             path="/eventspace/:eventId/singleview/:postId"
-            element={<SingleView/>}
-          /> 
-          <Route path="/eventspace/:eventId" element={<EventSpace />} /> {/* single event page with a param */}
+            element={<SingleView />}
+          />
+          <Route path="/eventspace/:eventId" element={<EventSpace />} />
           <Route path="/eventspace/:eventId/livechat" element={<LiveChat />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/upload" element={<Upload cloudName={cloudName} />} />
+          <Route
+            path="/eventspace/:eventId/upload"
+            element={<Upload cloudName={cloudName} />}
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/eventcreator" element={<EventCreator />} />

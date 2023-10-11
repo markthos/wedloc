@@ -71,13 +71,8 @@ const resolvers = {
       throw new AuthenticationError("You need to be logged in!");
     },
     // Add a post to a capsule by a logged in user
-    addPost: async (parent, { capsuleId, text }, context) => {
-      if (context.user) {
-        const post = await Post.create({
-          text,
-          capsuleId,
-          user: context.user._id,
-        });
+    addPost: async (parent, { capsuleId,  }) => {
+
         await Capsule.findOneAndUpdate(
           { _id: capsuleId },
           { $addToSet: { posts: post._id } }
