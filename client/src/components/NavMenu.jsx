@@ -23,7 +23,10 @@ export default function NavMenu({ currentPage, handlePageChange }) {
   });
 
   return (
-    <div ref={menuRef} className="absolute right-3 top-3 cursor-pointer">
+    <div
+      ref={menuRef}
+      className="absolute right-5 top-1/2 -translate-y-1/2 transform cursor-pointer"
+    >
       <div
         onClick={() => {
           setOpen(!open);
@@ -33,11 +36,11 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       </div>
 
       <div
-        className={`border-opacity-15 absolute right-2.5 top-24 w-[11vw] transform border px-5 py-2.5 text-lg 
+        className={`absolute right-0 top-0 w-[11vw] transform border px-5 py-2.5 text-lg 
         ${
           open
-            ? "visible translate-y-0 opacity-100"
-            : "invisible translate-y-[-20px] opacity-0"
+            ? "visible bg-white"
+            : "invisible"
         } transition-all duration-500 ease-in-out`}
       >
         <ul>
