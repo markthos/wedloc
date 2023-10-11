@@ -6,6 +6,8 @@ const cloudinary = require("cloudinary").v2;
 const { signToken, authMiddleware } = require("../utils/auth");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
+const bcrypt = require('bcryptjs');
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -21,10 +23,9 @@ const resolvers = {
     },
     me: async (parent, args, context) => {
       if (context.user) {
-        const userData = await User.findOne({ _id: context.user._id });
-        return userData;
-      }
-      throw new AuthenticationError("Not logged in");
+      return await User.findOne({ _id: context.user._id });
+     }
+      throw new AuthenticationError("Authentication error");
     },
     getChat: async () => {
       return await LiveChat.find({});
@@ -113,25 +114,41 @@ const resolvers = {
       return newLiveChat;
     },
     // add a user to the database and login with token
-    addUser: async (parent, { username, email, password }) => {
+    // addUser: async (parent, { username, email, password }) => {
+    //   try {
+    //     const user = await User.create({
+    //       username,
+    //       email,
+    //       password,
+    //     });
+    //     const token = signToken(user);
+    //     return { token, user };
+    //   } catch (error) {
+    //     console.error("Error creating user:", error);
+    //     throw new Error("Failed to create user");
+    //   }
+    // },
+    addUser: async (_, { username, email, password }) => {
       try {
+        const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
-          username,
-          email,
-          password,
+          username: username,
+          email: email,
+          password: hashedPassword
         });
         const token = signToken(user);
-        return { token, user };
+        return {user, token};
       } catch (error) {
-        console.error("Error creating user:", error);
-        throw new Error("Failed to create user");
+        console.error('Error creating user:', error);
+        throw new Error('Error creating user');
       }
-    },
+    },    
     deleteUser: async (parent, { userId }) => {
       const user = await User.findOneAndDelete({ _id: userId });
       console.log("user deleted", user);
     },
     login: async (parent, { username, password }) => {
+      console.log("hit login");
       const user = await User.findOne({ username });
       if (!user) {
         throw new AuthenticationError("Incorrect credentials");
@@ -142,8 +159,9 @@ const resolvers = {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user);
-      console.log("token", token);
-      return user;
+      console.log(token, user)
+      return { token, user };
+      
     },
     uploadFile: async (_, { file }) => {
       try {

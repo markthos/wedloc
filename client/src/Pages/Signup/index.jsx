@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useMutation } from '@apollo/client';
+import { REGISTER_USER } from '../../graphql/mutations';
 
 function Signup() {
   const [userData, setUserData] = useState({ username: '', email: '', password: '' });
+  const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,11 +17,11 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/users', userData);
-      console.log('User successfully added:', response.data);
+      const { data } = await addUser({ variables: { ...userData } });
+      console.log('User successfully added:', data);
       // Redirect to login or another page after successful registration
     } catch (error) {
-      console.error('Error during registration:', error.response.data);
+      console.error('Error during registration:', error);
       // Handle registration errors (like showing error messages to the user)
     }
   };
@@ -35,4 +37,3 @@ function Signup() {
 }
 
 export default Signup;
-

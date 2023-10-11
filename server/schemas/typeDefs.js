@@ -22,13 +22,18 @@ const typeDefs = gql`
   }
   type User {
     _id: ID
-    username: String!
+    username: String
     firstName: String
     lastName: String
-    email: String!
-    password: String!
+    email: String
+    password: String
     capsules: [Capsule]
   }
+  type Auth {
+    token: ID!
+    user: User
+  }
+ 
   type LiveChat {
     _id: ID
     text: String!
@@ -62,7 +67,7 @@ const typeDefs = gql`
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): User
-    addUser(username: String!, email: String!, password: String!): User
+    addUser(username: String!, email: String!, password: String!): Auth
     addChat(text: String!): LiveChat
     uploadFile(file: Upload!): File!
     deleteUser(userId: ID!): User
