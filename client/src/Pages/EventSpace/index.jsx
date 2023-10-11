@@ -1,10 +1,9 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
-import { Link, useParams } from "react-router-dom";
-
+import { Link, useParams, Navigate } from "react-router-dom";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
-
 import { Orbit } from "@uiball/loaders";
 
 //! Temporary styles for the images
@@ -28,11 +27,18 @@ const styleADiv = {
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
+  const [name, setName] = useState(localStorage.getItem("name") || "");
+
+
 
   // Query for getting sinlge capsule data by passing in the id
   const { loading, data } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
+
+  if (!name) {
+    return <Navigate to={`/attendeesignup/${eventId}`} />
+  }
 
   // Check for the capsule data
   const cap = data?.getCapsule || null;
@@ -73,7 +79,7 @@ export default function EventSpace() {
             <li key={post._id}>
               <h3>{post.title}</h3>
               <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
-                <img width="100px" src={post.url} alt={post._id} />
+                <img width="200px" src={post.url} alt={post._id} />
               </Link>
             </li>
           ))}

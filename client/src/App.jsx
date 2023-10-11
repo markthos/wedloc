@@ -11,6 +11,7 @@ import {
   Profile,
   About,
   EventCreator,
+  AttendeeSignup
 } from "./Pages";
 import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
@@ -26,10 +27,7 @@ const client = new ApolloClient({
 
 export default function App() {
   const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } }); // Create a Cloudinary instance
-  const videoId = "pt3_ryl6q4.mp4"; // Hard coded video id for testing
   const cloudName = "dp0h5vpsz"; // Our Cloudinary cloud name
-
-  const hardCodedSeedCapsule = "6525b9501d305b31276141b2"; // Hard coded seed capsule for testing
 
   return (
     <ApolloProvider client={client}>
@@ -37,6 +35,7 @@ export default function App() {
         <Header />  
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/attendeesignup/:eventId" element={<AttendeeSignup />} />
           <Route
             path="/eventspace/:eventId/singleview/:postId"
             element={<SingleView/>}
