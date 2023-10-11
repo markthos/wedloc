@@ -66,7 +66,7 @@ const typeDefs = gql`
     createCapsule(title: String!, date: String!, owner: ID!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
-    login(username: String!, password: String!): User
+    login(username: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     addChat(text: String!): LiveChat
     uploadFile(file: Upload!): File!
