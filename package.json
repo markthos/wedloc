@@ -17,7 +17,11 @@
         "concurrently": "^5.1.0"
     },
     "dependencies": {
+        "axios": "^1.5.1",
+        "bcrypt": "^5.1.1",
+        "bcryptjs": "^2.4.3",
         "graphql-upload": "^16.0.2",
-        "jwt-decode": "^3.1.2"
+        "jwt-decode": "^3.1.2",
+        "mongoose": "^7.6.1"
     }
 }

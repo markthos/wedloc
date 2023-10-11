@@ -6,6 +6,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    trim: true, // removes whitespace
   },
   firstName: {
     type: String, //thisisnt working
@@ -15,14 +16,15 @@ const userSchema = new Schema({
   },
   email: {
     type: String,
-    // required: true // false could make it easier for guests to interact with the site
-    // unique: true,
-    // COMMENTED OUT FOR EASY TESTING. UNCOMMENT FOR PRODUCTION
-    // match: [/.+@.+\..+/, 'Must use a valid email address'],
+    type: String,
+    required: true,
+    unique: true,
+    match: [/.+@.+\..+/, 'Must use a valid email address'],
   },
   password: {
     type: String,
     required: true,
+    trim: true,
   },
   capsules: [
     {
