@@ -23,7 +23,10 @@ export default function NavMenu({ currentPage, handlePageChange }) {
   });
 
   return (
-    <div ref={menuRef} className="absolute right-3 top-3 cursor-pointer">
+    <div
+      ref={menuRef}
+      className="absolute right-5 top-1/2 -translate-y-1/2 transform cursor-pointer"
+    >
       <div
         onClick={() => {
           setOpen(!open);
@@ -33,31 +36,41 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       </div>
 
       <div
-        className={`border-opacity-15 absolute right-2.5 top-24 w-[11vw] transform border px-5 py-2.5 text-lg 
+        className={`absolute right-0 top-0 w-[15vw] transform border px-5 py-2.5 text-lg 
         ${
-          open
-            ? "visible translate-y-0 opacity-100"
-            : "invisible translate-y-[-20px] opacity-0"
+          open ? "bg-white visible" : "invisible"
         } transition-all duration-500 ease-in-out`}
       >
         <ul>
           <li className="list-none p-2.5">
-            <NavLink to={"/"}>Home</NavLink>
+            <RouterLink to={"/"}>Home</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/login"}>Login</NavLink>
+            <RouterLink to={"signup"}>Sign Up</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <RouterLink to={"/signup"}>Sign Up</RouterLink>
+            <RouterLink to={"login"}>Login</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/eventcreator"}>Create Event</NavLink>
+            <RouterLink to={"about"}>About</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/eventspace"}>Event Space</NavLink>
+            <RouterLink to={"eventcreator"}>Event Creator</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/about"}>About</NavLink>
+            <RouterLink to={"eventspace"}>Event Space</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"livechat"}>Live Chat</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"profile"}>Profile</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"singleview"}>Single View Page</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"upload"}>Upload Page</RouterLink>
           </li>
         </ul>
       </div>
