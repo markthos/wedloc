@@ -7,11 +7,11 @@ import { Link as RouterLink, NavLink, Link } from 'react-router-dom';
 export default function Header() {
 
   return (
-    <header className="relative">
+    <header>
       <h1 className="font-logo py-3 text-center text-6xl">
         <RouterLink to={"/"}>WedLoc</RouterLink>
       </h1>
-      <NavMenu className="relative" />
+      <NavMenu />
       {/* <nav className="font-sans">
         <ul className="flex justify-evenly">
           <li>
