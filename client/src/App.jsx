@@ -39,10 +39,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
-            path="/singleview/:id"
-            element={<SingleView cloudName={cloudName} videoId={videoId} />}
-          /> {/* single view page with a param */}
-          <Route path="/eventspace/:id" element={<EventSpace />} /> {/* single event page with a param */}
+            path="/eventspace/:eventID/singleview/:postID"
+            element={<SingleView/>}
+          /> 
+          <Route path="/eventspace/:eventID" element={<EventSpace />} /> {/* single event page with a param */}
           <Route path="/livechat" element={<LiveChat />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

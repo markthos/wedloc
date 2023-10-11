@@ -50,3 +50,22 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const GET_POST = gql`
+ query getPost($capsuleId: ID!, $postId: ID!) {
+  getPost(capsuleID: $capsuleId, postID: $postId) {
+    _id
+    url
+    thumbnail
+    date
+    upVotes
+    comments {
+      _id
+      text
+      author
+      date
+    }
+    owner
+  }
+ }
+`;

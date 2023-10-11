@@ -32,6 +32,9 @@ const resolvers = {
     getUsers: async () => {
       return await User.find({});
     },
+    getPost: async (parent, { capsuleID, postID }) => {
+      return await Capsule.findOne({ capsuleID }, { posts: { $elemMatch: { postID } }});
+    }
   },
   Mutation: {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
