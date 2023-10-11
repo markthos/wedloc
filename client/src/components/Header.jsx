@@ -12,40 +12,6 @@ export default function Header() {
         <RouterLink to={"/"}>WedLoc</RouterLink>
       </h1>
       <NavMenu />
-      {/* <nav className="font-sans">
-        <ul className="flex justify-evenly">
-          <li>
-            <RouterLink to={"/"}>Home</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"signup"}>Sign Up</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"login"}>Login</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"about"}>About</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"eventcreator"}>Event Creator</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"eventspace"}>Event Space</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"livechat"}>Live Chat</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"profile"}>Profile</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"singleview"}>Single View Page</RouterLink>
-          </li>
-          <li>
-            <RouterLink to={"upload"}>Upload Page</RouterLink>
-          </li>
-        </ul>
-      </nav> */}
     </header>
   );
 }

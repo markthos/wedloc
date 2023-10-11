@@ -36,31 +36,41 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       </div>
 
       <div
-        className={`absolute right-0 top-0 w-[11vw] transform border px-5 py-2.5 text-lg 
+        className={`absolute right-0 top-0 w-[15vw] transform border px-5 py-2.5 text-lg 
         ${
-          open
-            ? "visible bg-white"
-            : "invisible"
+          open ? "bg-white visible" : "invisible"
         } transition-all duration-500 ease-in-out`}
       >
         <ul>
           <li className="list-none p-2.5">
-            <NavLink to={"/"}>Home</NavLink>
+            <RouterLink to={"/"}>Home</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/login"}>Login</NavLink>
+            <RouterLink to={"signup"}>Sign Up</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <RouterLink to={"/signup"}>Sign Up</RouterLink>
+            <RouterLink to={"login"}>Login</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/eventcreator"}>Create Event</NavLink>
+            <RouterLink to={"about"}>About</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/eventspace"}>Event Space</NavLink>
+            <RouterLink to={"eventcreator"}>Event Creator</RouterLink>
           </li>
           <li className="list-none p-2.5">
-            <NavLink to={"/about"}>About</NavLink>
+            <RouterLink to={"eventspace"}>Event Space</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"livechat"}>Live Chat</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"profile"}>Profile</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"singleview"}>Single View Page</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"upload"}>Upload Page</RouterLink>
           </li>
         </ul>
       </div>
