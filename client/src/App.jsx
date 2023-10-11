@@ -39,10 +39,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
-            path="/eventspace/:eventID/singleview/:postID"
+            path="/eventspace/:eventId/singleview/:postId"
             element={<SingleView/>}
           /> 
-          <Route path="/eventspace/:eventID" element={<EventSpace />} /> {/* single event page with a param */}
+          <Route path="/eventspace/:eventId" element={<EventSpace />} /> {/* single event page with a param */}
           <Route path="/livechat" element={<LiveChat />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

@@ -4,6 +4,7 @@ const { createWriteStream } = require("fs");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const { signToken, authMiddleware } = require("../utils/auth");
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 
 cloudinary.config({
@@ -32,8 +33,19 @@ const resolvers = {
     getUsers: async () => {
       return await User.find({});
     },
-    getPost: async (parent, { capsuleID, postID }) => {
-      return await Capsule.findOne({ capsuleID }, { posts: { $elemMatch: { postID } }});
+    getPost: async (parent, { capsuleId, postId }) => {
+      const capsule = await Capsule.findById({ _id: capsuleId });
+
+      const postIdObject = new ObjectId(postId)
+      const post = capsule.posts.find(post => post._id.equals(postIdObject));
+      if (!post) {
+        console.log("post not found")
+        return null; // Post not found
+      }
+
+      console.log("post found", post)
+    
+      return post
     }
   },
   Mutation: {

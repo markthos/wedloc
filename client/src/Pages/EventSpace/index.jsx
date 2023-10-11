@@ -27,11 +27,11 @@ const styleADiv = {
 
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
-  const { eventID } = useParams(); // the params for the capsule id
+  const { eventId } = useParams(); // the params for the capsule id
 
   // Query for getting sinlge capsule data by passing in the id
   const { loading, data } = useQuery(GET_CAPSULE, {
-    variables: { id: eventID },
+    variables: { id: eventId },
   });
 
   // Check for the capsule data
@@ -65,14 +65,14 @@ export default function EventSpace() {
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           <Link to="/livechat">LiveChat</Link>
         </button>
-        <button>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           <Link to="/upload">Upload</Link>
         </button>
         <ul style={eventStyles}>
           {cap.posts.map((post) => (
             <li key={post._id}>
               <h3>{post.title}</h3>
-              <Link to={`/eventspace/${eventID}/singleview/${post._id}`}>
+              <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
                 <img width="100px" src={post.url} alt={post._id} />
               </Link>
             </li>

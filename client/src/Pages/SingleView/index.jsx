@@ -1,9 +1,10 @@
 // Single View for any video or photo with a comment section
 
 import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, redirect } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
+import { Orbit } from "@uiball/loaders";
 
 const style = {
   height: "auto",
@@ -12,31 +13,58 @@ const style = {
   border: "0",
 };
 
+const styleADiv = {
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#E4DDD3",
+};
+
 // DEMO VIDEO in there
 export default function SingleView({ cloudName, videoId }) {
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
 
-  const { eventID, postID } = useParams();
+  const { eventId, postId } = useParams();
 
-  console.log("eventID", eventID);
-  console.log("postID", postID);
+  console.log("eventId", eventId);
+  console.log("postId", postId);
 
-  const [loading, data] = useQuery(GET_POST, {
-    variables: { id: postID },
+  const {loading, data} = useQuery(GET_POST, {
+    variables: { capsuleId: eventId, postId: postId },
   });
 
-  console.log("data", data);
+  const postData = data?.getPost;
 
-  const post = data?.url || null;
+  console.log("data", postData);
 
-  const extension = post.split(".").pop();
+  useEffect(() => {
+    if (data) {
+      const extension = postData.url.split(".").pop();
+      console.log("extension", extension);
+      if (extension === "jpg" || extension === "png") {
+        setImageFile(true);
+        setVideoFile(false);
+      } else if (extension === "mp4" || extension === "mov") {
+        setImageFile(false);
+        setVideoFile(true);
+      } else {
+        setImageFile(false);
+        setVideoFile(false);
+      }
+    }
+  }, [data]);
 
-  if (extension === "jpg" || extension === "png") {
-    setImageFile(true);
-  } else if (extension === "mp4" || extension === "mov") {
-    setVideoFile(true);
-  } else return <redirect to={`/eventspace/${eventID}`} />;
+  if (loading)
+    return (
+      <div style={styleADiv}>
+        <Orbit size={200} color="white" />
+      </div>
+    );
+
+
+
 
   return (
     <div className="body">
@@ -46,14 +74,14 @@ export default function SingleView({ cloudName, videoId }) {
           {imgFile && (
             <img
               width="500px"
-              src={`https://res.cloudinary.com/dp0h5vpsz/image/upload/v1696603392/K_E_thumb_tunq8u.jpg`}
-              alt="wedding"
+              src={postData.url}
+              alt={postData._id}
             ></img>
           )}
           {videoFile && (
             <iframe
-              title="shoes"
-              src={`https://res.cloudinary.com/${cloudName}/video/upload/v1696603416/${videoId}`}
+              title={postData._id}
+              src={postData.url}
               style={style}
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
             ></iframe>

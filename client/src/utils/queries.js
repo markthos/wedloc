@@ -52,8 +52,8 @@ export const LOGIN_USER = gql`
 `;
 
 export const GET_POST = gql`
- query getPost($capsuleId: ID!, $postId: ID!) {
-  getPost(capsuleID: $capsuleId, postID: $postId) {
+query getPost($capsuleId: ID!, $postId: ID!) {
+  getPost(capsuleId: $capsuleId, postId: $postId) {
     _id
     url
     thumbnail
@@ -67,5 +67,5 @@ export const GET_POST = gql`
     }
     owner
   }
- }
+}
 `;
