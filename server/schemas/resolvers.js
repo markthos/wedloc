@@ -67,23 +67,22 @@ const resolvers = {
           { $addToSet: { capsules: capsule._id } }
         );
         return capsule;
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
       }
-      throw new AuthenticationError("You need to be logged in!");
     },
-    // Add a post to a capsule by a logged in user
-    addPost: async (parent, { capsuleId,  }) => {
 
-        await Capsule.findOneAndUpdate(
-          { _id: capsuleId },
-          { $addToSet: { posts: post._id } }
-        );
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { posts: post._id } }
-        );
-        return post;
-      }
-      throw new AuthenticationError("You need to be logged in!");
+    // Add a post to a capsule by a logged in user
+    addPost: async (parent, { capsuleId }) => {
+      await Capsule.findOneAndUpdate(
+        { _id: capsuleId },
+        { $addToSet: { posts: post._id } }
+      );
+      await User.findOneAndUpdate(
+        { _id: context.user._id },
+        { $addToSet: { posts: post._id } }
+      );
+      return post;
     },
     // Delete a post by a logged in user
     deletePost: async (parent, { postId }, context) => {

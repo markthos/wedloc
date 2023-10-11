@@ -1,4 +1,4 @@
-// Upload page
+// The Upload page
 
 import { AdvancedImage } from "@cloudinary/react";
 import { CloudinaryImage } from "@cloudinary/url-gen";
@@ -54,9 +54,9 @@ export default function Upload({ cloudName }) {
     }
   };
   return (
-    <div className="body">
-      <section className="contentSection">
-        <h1>Upload a photo or video!</h1>
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
+        <h1>Upload</h1>
         <input
           type="file"
           id="fileInput"
@@ -75,6 +75,6 @@ export default function Upload({ cloudName }) {
         </button>
         {imageURL && <img src={imageURL} alt="Selected Media" />}
       </section>
-    </div>
+    </main>
   );
 }

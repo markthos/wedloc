@@ -1,7 +1,10 @@
+// Attendee Signup Page
+
+
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 
-const AttendeeSignup = () => {
+export default function AttendeeSignup() {
   const [attendee, setAttendee] = useState("");
   const [name, setName] = useState(localStorage.getItem("name") || "");
 
@@ -30,19 +33,19 @@ const AttendeeSignup = () => {
   }
 
   return (
-    <div>
-      <h1>What's Your name?</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="First Name"
-          value={attendee}
-          onChange={handleInputChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
+        <h1>What's Your name?</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="First Name"
+            value={attendee}
+            onChange={handleInputChange}
+          />
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
   );
 };
-
-export default AttendeeSignup;

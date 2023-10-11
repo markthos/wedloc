@@ -3,10 +3,10 @@
 
 export default function Profile() {
   return (
-    <div className="body">
-      <section className="contentSection">
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
         <h1>Profile</h1>
       </section>
-    </div>
+    </main>
   );
 }

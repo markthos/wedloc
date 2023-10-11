@@ -2,11 +2,11 @@
 
 
 export default function EventCreator() {
-  return (
-    <div className="body">
-      <section className="contentSection">
-        <h1>Event Creator</h1>
-      </section>
-    </div>
-  );
+    return (
+      <main className="bg-main_bg min-h-screen">
+        <section className="container m-auto">
+          <h1>Event Creator</h1>
+        </section>
+      </main>
+    );
 }

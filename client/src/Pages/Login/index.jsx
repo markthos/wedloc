@@ -1,13 +1,13 @@
 // The Log In Page
+
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
-
-// user auth
 import Auth from '../../utils/auth'
 
-const Login = (props) => {
+export default function Login(props) {
   const [formState, setFormState] = useState({username: '', password: ''});
   const [login, { error, data}] = useMutation(LOGIN_USER);
   
@@ -42,8 +42,8 @@ const Login = (props) => {
   };
 
   return (
-      <div className="card">
-        <section className="card-body">
+      <main className="bg-main_bg min-h-screen">
+        <section className="container m-auto">
           {data ? (
             <p>
               <Link to={"/"}>Home</Link>
@@ -74,15 +74,12 @@ const Login = (props) => {
             </button>
           </form>
           )}
-
           {error && (
             <div className='errorMessage'>
               {error.message}
             </div>
           )}
         </section>
-      </div>
+      </main>
   );
 };
-
-export default Login;
