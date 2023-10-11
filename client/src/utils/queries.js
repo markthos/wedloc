@@ -1,16 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_CHAT = gql`
-  query getChat {
-    messages {
-      id
-      text
-      author
-      date
-    }
-  }
-`;
-
 export const GET_CAPSULE = gql`
   query GetCapsule($id: ID!) {
     getCapsule(_id: $id) {
@@ -68,4 +57,21 @@ query getPost($capsuleId: ID!, $postId: ID!) {
     owner
   }
 }
+`;
+
+export const GET_CHAT = gql`
+  query getCapsule($id: ID!) {
+    getCapsule(_id: $id) {
+      _id
+      title
+      date
+      location
+      chat {
+        _id
+        text
+        date
+        author
+      }
+    }
+  }
 `;

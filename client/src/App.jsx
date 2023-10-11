@@ -41,7 +41,7 @@ export default function App() {
             element={<SingleView/>}
           /> 
           <Route path="/eventspace/:eventId" element={<EventSpace />} /> {/* single event page with a param */}
-          <Route path="/livechat" element={<LiveChat />} />
+          <Route path="/eventspace/:eventId/livechat" element={<LiveChat />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/upload" element={<Upload cloudName={cloudName} />} />

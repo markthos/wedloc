@@ -68,7 +68,7 @@ const typeDefs = gql`
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addChat(text: String!): LiveChat
+    addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!
     deleteUser(userId: ID!): User
   }
