@@ -1,12 +1,14 @@
-const { User, LiveChat, Capsule, Post } = require("../models");
+const { User, Capsule, Post } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { createWriteStream } = require("fs");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
+const multer = require("multer");
 const { signToken, authMiddleware } = require("../utils/auth");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -67,29 +69,42 @@ const resolvers = {
           { $addToSet: { capsules: capsule._id } }
         );
         return capsule;
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
       }
-      throw new AuthenticationError("You need to be logged in!");
     },
+
     // Add a post to a capsule by a logged in user
-    addPost: async (parent, { capsuleId, text }, context) => {
-      if (context.user) {
-        const post = await Post.create({
-          text,
-          capsuleId,
-          user: context.user._id,
-        });
-        await Capsule.findOneAndUpdate(
-          { _id: capsuleId },
-          { $addToSet: { posts: post._id } }
-        );
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $addToSet: { posts: post._id } }
-        );
-        return post;
-      }
-      throw new AuthenticationError("You need to be logged in!");
-    },
+    uploadPost: async (parent, { file }) => {
+        try {
+          console.log("uploading post...", file)
+          // Upload the image to Cloudinary
+          const uploadResult = await cloudinary.uploader.upload(file, {
+            folder: 'wedloc', // Specify the folder in Cloudinary
+          });
+  
+          console.log("uploadResult", uploadResult)
+          // Return the result of the Cloudinary upload
+          return {
+            public_id: uploadResult.public_id,
+            secure_url: uploadResult.secure_url,
+          };
+        } catch (error) {
+          throw new Error('Error uploading image: ' + error.message);
+        }
+      },
+
+
+    //   await Capsule.findOneAndUpdate(
+    //     { _id: capsuleId },
+    //     { $addToSet: { posts: post._id } }
+    //   );
+    //   await User.findOneAndUpdate(
+    //     { _id: context.user._id },
+    //     { $addToSet: { posts: post._id } }
+    //   );
+    //   return post;
+    // },
     // Delete a post by a logged in user
     deletePost: async (parent, { postId }, context) => {
       if (context.user) {

@@ -62,6 +62,12 @@ const typeDefs = gql`
     url: String!
   }
 
+
+  type ImageUploadResponse {
+    public_id: String
+    secure_url: String
+  }
+
   type Mutation {
     createCapsule(title: String!, date: String!, owner: ID!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
@@ -71,6 +77,7 @@ const typeDefs = gql`
     addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!
     deleteUser(userId: ID!): User
+    uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
   }
 `;
 

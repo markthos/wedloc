@@ -22,3 +22,12 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const UPLOAD_IMAGE = gql`
+  mutation uploadPost($file: Upload!) {
+    uploadPost(file: $file) {
+      public_id
+      secure_url
+    }
+  }
+`;
