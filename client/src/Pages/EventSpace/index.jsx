@@ -69,7 +69,7 @@ export default function EventSpace() {
         <h1>{cap.title}</h1>
 
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          <Link to="/livechat">LiveChat</Link>
+          <Link to={`/eventspace/${eventId}/livechat`} >LiveChat</Link>
         </button>
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           <Link to="/upload">Upload</Link>
