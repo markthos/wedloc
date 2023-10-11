@@ -26,7 +26,11 @@ module.exports = {
 
     signToken: function ({ username, email, _id }) {
         const payload = { username, email, _id };
-    
-        return jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: expiration });
+        try {
+          return jwt.sign({ data: payload }, process.env.JWT_SECRET, { expiresIn: expiration });
+      } catch (error) {
+          console.error("Error signing the token:", error);
+          throw error;
+      }
     },
 };
