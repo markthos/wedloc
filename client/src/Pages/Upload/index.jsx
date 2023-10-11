@@ -13,6 +13,8 @@ export default function Upload({ cloudName }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     console.log(file);
+    // const formData = new FormData();
+    // formData.append('file', image);
     setImage(file);
   };
 
@@ -26,7 +28,7 @@ export default function Upload({ cloudName }) {
 
     try {
       const { data } = await uploadImage({
-        variables: { file: image, capsuleId: eventId, owner: name },
+        variables: { file: image },
       });
       setDataURL(data.uploadImage.secure_url);
       console.log(data.uploadImage);
