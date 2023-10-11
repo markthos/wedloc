@@ -20,6 +20,12 @@ module.exports = {
     extend: {
       colors: {
         main_bg: '#E4DDD3',
+        white: '#FDFCFC',
+        black: '#242320',
+        lightgray: '#EBEAED',
+        darkgray: '#91918F',
+        beige: '#D6D1C2',
+        gold: '#E0C66C'
       }
     },
   },

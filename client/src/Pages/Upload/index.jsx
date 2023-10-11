@@ -1,4 +1,4 @@
-// Upload page
+// The Upload page
 
 
 import { AdvancedImage } from "@cloudinary/react";
@@ -30,8 +30,8 @@ export default function Upload({ cloudName }) {
   }, [img, cloudName]);
 
   return (
-    <div className="body">
-      <section className="contentSection">
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
         <h1>Upload</h1>
         <input
           type="file"
@@ -45,6 +45,6 @@ export default function Upload({ cloudName }) {
         />
         {myImage && <AdvancedImage cldImg={myImage} />}
       </section>
-    </div>
+    </main>
   );
 };

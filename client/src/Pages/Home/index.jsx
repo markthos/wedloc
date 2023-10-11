@@ -4,7 +4,7 @@
 
 export default function Home() {
     return (
-      <main className="bg-main_bg max-h-[100vh]">
+      <main className="bg-main_bg min-h-screen">
         <section className="container m-auto">
           <h1>Home Page</h1>
         </section>

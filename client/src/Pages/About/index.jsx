@@ -3,7 +3,7 @@
 
 export default function About() {
     return (
-      <main className="bg-main_bg max-h-screen">
+      <main className="bg-main_bg min-h-screen">
         <section className="container m-auto">
           <h1>About the Project</h1>
           <p>

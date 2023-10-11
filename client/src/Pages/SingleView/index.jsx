@@ -65,8 +65,8 @@ export default function SingleView({ cloudName, videoId }) {
     );
 
   return (
-    <div className="body">
-      <section className="contentSection">
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
         
         <div>
           {imgFile && (
@@ -92,6 +92,6 @@ export default function SingleView({ cloudName, videoId }) {
           ))}
         </ul>
       </section>
-    </div>
+    </main>
   );
 }

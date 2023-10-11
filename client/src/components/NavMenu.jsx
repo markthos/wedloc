@@ -60,6 +60,9 @@ export default function NavMenu({ currentPage, handlePageChange }) {
             <RouterLink to={"eventcreator"}>Event Creator</RouterLink>
           </li>
           <li className="list-none p-2.5">
+            <RouterLink to={"myevents"}>My Events</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
             <RouterLink to={"eventspace"}>Event Space</RouterLink>
           </li>
           <li className="list-none p-2.5">
