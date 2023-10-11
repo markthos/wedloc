@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useParams, redirect } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
 import { Orbit } from "@uiball/loaders";
+import dayjs from "dayjs";
 
 const style = {
   height: "auto",
@@ -31,7 +32,7 @@ export default function SingleView({ cloudName, videoId }) {
   console.log("eventId", eventId);
   console.log("postId", postId);
 
-  const {loading, data} = useQuery(GET_POST, {
+  const { loading, data } = useQuery(GET_POST, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
@@ -63,20 +64,13 @@ export default function SingleView({ cloudName, videoId }) {
       </div>
     );
 
-
-
-
   return (
     <div className="body">
       <section className="contentSection">
-        <h1>Single View Page</h1>
+        
         <div>
           {imgFile && (
-            <img
-              width="500px"
-              src={postData.url}
-              alt={postData._id}
-            ></img>
+            <img width="500px" src={postData.url} alt={postData._id}></img>
           )}
           {videoFile && (
             <iframe
@@ -87,8 +81,16 @@ export default function SingleView({ cloudName, videoId }) {
             ></iframe>
           )}
         </div>
+        <h1>posted by: {postData.owner} on {dayjs(postData.date).format("MM-DD-YYYY")}</h1>
         <h3>Comment Section</h3>
-        <p>Comments go here</p>
+        <ul>
+          {postData.comments.map((comment) => (
+            <li key={comment._id}>
+              <h3>{comment.author}</h3>
+              <p>{comment.text}</p>
+            </li>
+          ))}
+        </ul>
       </section>
     </div>
   );
