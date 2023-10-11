@@ -5,12 +5,14 @@ import navMenuIcon from '../../images/navMenuIcon.png'
 
 
 
- function NavMenu({ currentPage, handlePageChange }) {
+ function NavMenu() {
 
+    // this is for dropdown display
     const [open, setOpen] = useState(false);
     
     let menuRef = useRef();
 
+    // this allows users to close the dropdown menu by clicking outside the element
     useEffect(() => {
         let handler = (e) => {
             if (!menuRef.current.contains(e.target)) {
@@ -25,6 +27,10 @@ import navMenuIcon from '../../images/navMenuIcon.png'
         }
     });
 
+    // container remembers our menuRef state
+    // trigger reverses useState on click
+    // tried to add icon library, flailed for a while, went with the quick n dirty fix
+    // NavLinks appear to work perfectly
     return (
         <div className="menu-container" ref={menuRef}>
             <div className="menu-trigger" onClick={()=>{setOpen(!open)}}>
