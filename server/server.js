@@ -21,7 +21,7 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   // still needs testing
-  // context: authMiddleware,
+  context: authMiddleware
 });
 
 const httpServer = http.createServer(app);
@@ -30,14 +30,14 @@ const io = socketIo(httpServer);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'hey there', // idk why it isnt pulling from the process.env
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours 
-  }
-}))
+// app.use(session({
+//   secret: process.env.SESSION_SECRET || 'hey there', // idk why it isnt pulling from the process.env
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     maxAge: 24 * 60 * 60 * 1000 // 24 hours 
+//   }
+// }))
 
 // Configure Cloud setup 
 cloud.config({ 
