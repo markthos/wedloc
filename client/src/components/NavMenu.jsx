@@ -1,4 +1,6 @@
 // Sitewide navigation menu component
+// TODO: Set up menu so that when a user is not logged in it only shows the following links: Home, Sign Up, Login, About
+// TODO: Set up menu so that when a user is logged in it shows the following links: Home, My Profile, Event Creator, My Events, About, Sign Out
 
 
 import React, { useState, useEffect, useRef } from "react";
