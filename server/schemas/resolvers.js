@@ -4,6 +4,7 @@ const { createWriteStream } = require("fs");
 const path = require("path");
 const cloudinary = require("cloudinary").v2;
 const { signToken, authMiddleware } = require("../utils/auth");
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const bcrypt = require('bcryptjs');
 
@@ -33,9 +34,20 @@ const resolvers = {
     getUsers: async () => {
       return await User.find({});
     },
-    users: async () => {
-      return User.find({});
-    },
+    getPost: async (parent, { capsuleId, postId }) => {
+      const capsule = await Capsule.findById({ _id: capsuleId });
+
+      const postIdObject = new ObjectId(postId)
+      const post = capsule.posts.find(post => post._id.equals(postIdObject));
+      if (!post) {
+        console.log("post not found")
+        return null; // Post not found
+      }
+
+      console.log("post found", post)
+    
+      return post
+    }
   },
   Mutation: {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)

@@ -5,6 +5,7 @@ const userSeed = require("./userSeeds.json");
 const capsuleSeed = require("./capsuleSeeds.json");
 
 db.once("open", async () => {
+  
   await User.deleteMany({});
   await Capsule.deleteMany({});
 

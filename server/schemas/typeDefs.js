@@ -52,7 +52,7 @@ const typeDefs = gql`
     getChat: [LiveChat]
     getCapsule(_id: ID!): Capsule
     getUsers: [User]
-    users: [User]
+    getPost(capsuleId: ID!, postId: ID!): Post
   }
 
   type File {

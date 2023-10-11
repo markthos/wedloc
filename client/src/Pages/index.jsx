@@ -1,7 +1,7 @@
 // This is the index for all of the pages in the app
 
 
-import SingleView from "./SingleViewAndComment";
+import SingleView from "./SingleView";
 import EventSpace from "./EventSpace";
 import Home from "./Home";
 import LiveChat from "./LiveChat";
