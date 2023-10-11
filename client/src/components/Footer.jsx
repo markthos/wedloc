@@ -6,8 +6,12 @@ export default function Footer() {
 
   return (
     <footer className="footer">
-      <p className="headerText">
-        Copyright © <RouterLink to={'/'}>WedLoc</RouterLink> 2023
+      <p className="font-sans">
+        Copyright ©{" "}
+        <RouterLink to={"/"}>
+          <span className="font-logo text-2xl">WedLoc</span>
+        </RouterLink>{" "}
+        2023
       </p>
     </footer>
   );

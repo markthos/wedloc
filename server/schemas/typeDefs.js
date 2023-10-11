@@ -29,7 +29,6 @@ const typeDefs = gql`
     password: String
     capsules: [Capsule]
   }
-
   type Auth {
     token: ID!
     user: User

@@ -16,7 +16,7 @@ import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import NavMenu from "./components/NavMenu";
+
 import { BrowserRouter as Router } from "react-router-dom";
 
 const client = new ApolloClient({
@@ -35,7 +35,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <Router>
         <Header />
-        {<NavMenu />}
+        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route

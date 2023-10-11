@@ -136,6 +136,7 @@ const resolvers = {
       console.log("user deleted", user);
     },
     login: async (parent, { username, password }) => {
+      console.log("hit login");
       const user = await User.findOne({ username });
       if (!user) {
         throw new AuthenticationError("Incorrect credentials");
@@ -146,8 +147,9 @@ const resolvers = {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user);
-      console.log("token", token);
-      return user;
+      console.log(token, user)
+      return { token, user };
+      
     },
     uploadFile: async (_, { file }) => {
       try {

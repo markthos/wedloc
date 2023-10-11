@@ -1,48 +1,62 @@
 {
-    "name": "client",
-    "version": "0.1.0",
-    "private": true,
-    "proxy": "http://localhost:3001",
-    "dependencies": {
-        "@apollo/client": "^3.5.8",
-        "@apollo/react-hooks": "^4.0.0",
-        "@cloudinary/react": "^1.11.2",
-        "@cloudinary/url-gen": "^1.11.2",
-        "@testing-library/jest-dom": "^5.11.6",
-        "@testing-library/react": "^11.2.2",
-        "@testing-library/user-event": "^12.5.0",
-        "apollo-boost": "^0.4.9",
-        "apollo-client": "^2.6.10",
-        "graphql": "^15.8.0",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "react-icons": "^4.11.0",
-        "react-router-dom": "^6.2.1",
-        "react-scripts": "5.0.1",
-        "socket.io-client": "^4.7.2"
-    },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    }
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:3001",
+  "dependencies": {
+    "@apollo/client": "^3.5.8",
+    "@apollo/react-hooks": "^4.0.0",
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.11.2",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.13",
+    "@mui/material": "^5.14.13",
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.5.0",
+    "apollo-boost": "^0.4.9",
+    "apollo-client": "^2.6.10",
+    "axios": "^1.5.1",
+    "graphql": "^15.8.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-icons": "^4.11.0",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.7.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "autoprefixer": "^10.4.16",
+    "craco-alias": "^3.0.1",
+    "postcss": "^8.4.31",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.5",
+    "tailwindcss": "^3.3.3"
+  }
 }
