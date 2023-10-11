@@ -15,7 +15,7 @@ const socket = io("http://localhost:3000"); // Change the URL to match your Sock
 
 //! Temporary styles for the loading spinner
 const styleADiv = {
-  maxHeight: "700px",
+  maxHeight: "40vh",
   overflow: "scroll",
   display: "flex",
   flexDirection: "column",
@@ -61,6 +61,9 @@ export default function LiveChat() {
   const chatHistory = data?.getCapsule || [];
   // const dateSorted = chatHistory.chat.sort((a, b) => a.date - b.date );
 
+    // Function to scroll to the bottom of the chat history div
+
+
   // Create a new message via GraphQL mutation and set createMessage to a function
   const [createMessage, { error }] = useMutation(ADD_CHAT, {
     variables: {
@@ -69,6 +72,9 @@ export default function LiveChat() {
       author: chatData.author,
     },
   });
+
+
+  
 
   // Listen for new messages from Socket.IO and set them immediately to the chat list
   useEffect(() => {
@@ -79,7 +85,9 @@ export default function LiveChat() {
       const item = document.createElement("li");
       item.textContent = message.text; //TODO add author and date
       messages.appendChild(item);
-      messages.scrollTop = messages.scrollHeight; //TODO scroll to the bottom is not working
+
+      const chatBox = document.querySelector(".no-scrollbar");
+      chatBox.scrollTop = chatBox.scrollHeight;
     });
 
     // Clean up the event listener when the component unmounts
@@ -142,7 +150,7 @@ export default function LiveChat() {
     <main className="bg-main_bg min-h-screen">
       <section className="container m-auto">
         <h1>Live Chat</h1>
-        <div style={styleADiv}>
+        <div style={styleADiv} className="no-scrollbar">
           <ul id="messages">
           {/* map over the chat history and display the messages */}
             {chatHistory.chat.map((message) => (
@@ -170,7 +178,7 @@ export default function LiveChat() {
               }))
             }
           />
-          <button onClick={handleSendMessage}>Send Message</button>
+          <button type="submit" onClick={handleSendMessage}>Send Message</button>
         </form>
       </section>
     </main>
