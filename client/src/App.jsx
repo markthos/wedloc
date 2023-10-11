@@ -35,7 +35,7 @@ export default function App() {
     <ApolloProvider client={client}>
       <Router>
         <Header />
-        {<NavMenu />}
+        <NavMenu />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
