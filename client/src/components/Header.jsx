@@ -7,8 +7,8 @@ import { Link as RouterLink, NavLink, Link } from 'react-router-dom';
 export default function Header() {
 
   return (
-    <header className="relative">
-      <h1 className="font-logo py-3 text-center text-6xl">
+    <header className="relative bg-white">
+      <h1 className="font-logo pt-3 text-center text-6xl">
         <RouterLink to={"/"}>WedLoc</RouterLink>
       </h1>
       <NavMenu />

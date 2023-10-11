@@ -4,10 +4,10 @@
 
 export default function Home() {
     return (
-      <div className='body'>
-        <section className="contentSection">
+      <main className="bg-main_bg min-h-screen">
+        <section className="container m-auto">
           <h1>Home Page</h1>
         </section>
-      </div>
+      </main>
     );
 }

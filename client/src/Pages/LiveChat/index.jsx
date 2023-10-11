@@ -1,3 +1,6 @@
+// Live Chat Page
+
+
 import { useQuery, useMutation } from "@apollo/client";
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
@@ -136,8 +139,8 @@ export default function LiveChat() {
 
 // return the chat history and the form to send a message
   return (
-    <div className="body">
-      <section className="contentSection">
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
         <h1>Live Chat</h1>
         <div style={styleADiv}>
           <ul id="messages">
@@ -170,6 +173,6 @@ export default function LiveChat() {
           <button onClick={handleSendMessage}>Send Message</button>
         </form>
       </section>
-    </div>
+    </main>
   );
 }

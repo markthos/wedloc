@@ -1,4 +1,6 @@
 // Sitewide navigation menu component
+// TODO: Set up menu so that when a user is not logged in it only shows the following links: Home, Sign Up, Login, About
+// TODO: Set up menu so that when a user is logged in it shows the following links: Home, My Profile, Event Creator, My Events, About, Sign Out
 
 
 import React, { useState, useEffect, useRef } from "react";
@@ -56,6 +58,9 @@ export default function NavMenu({ currentPage, handlePageChange }) {
           </li>
           <li className="list-none p-2.5">
             <RouterLink to={"eventcreator"}>Event Creator</RouterLink>
+          </li>
+          <li className="list-none p-2.5">
+            <RouterLink to={"myevents"}>My Events</RouterLink>
           </li>
           <li className="list-none p-2.5">
             <RouterLink to={"eventspace"}>Event Space</RouterLink>

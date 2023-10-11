@@ -1,10 +1,10 @@
-// The About Us Page where we will talk about the team and the tech stack
+// The About Us Page to talk about the project, the team, and the tech and design stack used
 
 
 export default function About() {
     return (
-      <div className="body">
-        <section className="contentSection">
+      <main className="bg-main_bg min-h-screen">
+        <section className="container m-auto">
           <h1>About the Project</h1>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -49,6 +49,6 @@ export default function About() {
           <h2>Will</h2>
           <h1>Tech &amp; Design Stack</h1>
         </section>
-      </div>
+      </main>
     );
 }

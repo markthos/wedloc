@@ -1,8 +1,11 @@
+// The Sign Up page
+
+
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from '../../graphql/mutations';
 
-function Signup() {
+export default function Signup() {
   const [userData, setUserData] = useState({ username: '', email: '', password: '' });
   const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
@@ -27,13 +30,33 @@ function Signup() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="username" onChange={handleInputChange} placeholder="Username" required />
-      <input type="email" name="email" onChange={handleInputChange} placeholder="Email" required />
-      <input type="password" name="password" onChange={handleInputChange} placeholder="Password" required />
-      <button type="submit">Sign Up</button>
-    </form>
+    <main className="bg-main_bg min-h-screen">
+      <section className='container m-auto'>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="username"
+            onChange={handleInputChange}
+            placeholder="Username"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            onChange={handleInputChange}
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            onChange={handleInputChange}
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </section>
+    </main>
   );
 }
-
-export default Signup;

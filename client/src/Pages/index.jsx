@@ -12,5 +12,6 @@ import Profile from './Profile';
 import About from './About';
 import EventCreator from './EventCreator';
 import AttendeeSignup from "./AttendeeSignup";
+import MyEvents from "./MyEvents";
 
-export { SingleView, EventSpace, Home, LiveChat, Login, Signup, Upload, Profile, About, EventCreator, AttendeeSignup };
+export { SingleView, EventSpace, Home, LiveChat, Login, Signup, Upload, Profile, About, EventCreator, AttendeeSignup, MyEvents };

@@ -64,10 +64,9 @@ export default function EventSpace() {
   console.log("posts: " + cap.posts[0].thumbnail);
 
   return (
-    <div className="body">
-      <section className="contentSection">
+    <main className="bg-main_bg min-h-screen">
+      <section className="container m-auto">
         <h1>{cap.title}</h1>
-
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           <Link to={`/eventspace/${eventId}/livechat`} >LiveChat</Link>
         </button>
@@ -85,6 +84,6 @@ export default function EventSpace() {
           ))}
         </ul>
       </section>
-    </div>
+    </main>
   );
 }
