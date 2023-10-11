@@ -3,42 +3,82 @@
 import { Link, useParams } from "react-router-dom";
 
 import { useQuery } from "@apollo/client";
-import { GET_CAPSULE } from "../../utils/queries";
+import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
 
+import { Orbit } from "@uiball/loaders";
+
+//! Temporary styles for the images
+const eventStyles = {
+  display: "flex",
+  flexWrap: "wrap",
+  flex: "0 0 33.333333%",
+  flexWrap: "wrap",
+  gap: "1rem",
+};
+
+//! Temporary styles for the loading spinner
+const styleADiv = {
+  height: "100vh",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: "#E4DDD3",
+};
+
+//* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
-  const { id } = useParams();
+  const { eventId } = useParams(); // the params for the capsule id
 
-  console.log(id);
-
+  // Query for getting sinlge capsule data by passing in the id
   const { loading, data } = useQuery(GET_CAPSULE, {
-    variables: { id: id },
+    variables: { id: eventId },
   });
 
-  const cap = data?.getCapsule || "";
-  
-  if (loading) return <p>Loading...</p>; // This could be prettier
+  // Check for the capsule data
+  const cap = data?.getCapsule || null;
 
+  // display loading screen
+  if (loading)
+    return (
+      <div style={styleADiv}>
+        <Orbit size={200} color="white" />
+      </div>
+    );
+
+  // if no cap, return a message
+  if (!cap)
+    return (
+      <div style={styleADiv}>
+        <p>No capsule found</p>
+      </div>
+    );
+
+  //
   console.log("Here :" + JSON.stringify(cap, null, 2));
+  console.log("posts: " + cap.posts[0].thumbnail);
 
   return (
     <div className="body">
       <section className="contentSection">
-        <h1>Event Space</h1>
-      </section>
-      <Link to="/livechat">LiveChat</Link>
-      <Link to="/singleview">SingleView</Link>
-      <p>display title, and new photos and videos</p>
+        <h1>{cap.title}</h1>
 
-      {/* <ul>
-        {data.capsule.map((capsule) => (
-          <li key={data.posts._id}>
-            <h3>{capsule.posts.title}</h3>
-            <Link to={`/singleview/${capsule.posts._id}`}>
-              <img src={capsule.posts.thumbnailUrl} alt={capsule.posts._id} />
-            </Link>
-          </li>
-        ))}
-      </ul> */}
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Link to="/livechat">LiveChat</Link>
+        </button>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          <Link to="/upload">Upload</Link>
+        </button>
+        <ul style={eventStyles}>
+          {cap.posts.map((post) => (
+            <li key={post._id}>
+              <h3>{post.title}</h3>
+              <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+                <img width="100px" src={post.url} alt={post._id} />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
