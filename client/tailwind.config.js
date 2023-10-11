@@ -13,7 +13,7 @@ module.exports = {
         'logo': ['Pinyon Script', 'cursive'],
         'serif': ['Cormorant Garamond', 'serif'],
         'sans': ['Montserrat', 'sans-serif'],
-        'mono': ['Fira Mono', 'monospace'],
+        'chat': ['Fira Mono', 'monospace'],
       },
     extend: {},
   },
