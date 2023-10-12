@@ -1,20 +1,27 @@
 // The Sign Up page
 
-
-import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { REGISTER_USER } from '../../graphql/mutations';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { REGISTER_USER } from "../../graphql/mutations";
+import { Link as RouterLink } from "react-router-dom";
+import StyledButton from "../../components/StyledButton";
+import StyledFormInput from "../../components/StyledFormInput";
 
 export default function Signup() {
-  const [userData, setUserData] = useState({ username: '', email: '', password: '', firstname: '', lastname: '' });
+  const [userData, setUserData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    firstname: "",
+    lastname: "",
+  });
   const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({
       ...userData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -22,11 +29,11 @@ export default function Signup() {
     e.preventDefault();
     try {
       const { data } = await addUser({ variables: { ...userData } });
-      console.log('User successfully added:', data);
+      console.log("User successfully added:", data);
       // Redirect to home page after successful sign up
-      window.location.replace('/');
+      window.location.replace("/");
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error("Error during registration:", error);
       // Handle registration errors (like showing error messages to the user)
     }
   };
@@ -41,51 +48,48 @@ export default function Signup() {
             className="mb-5 flex flex-col items-center rounded-md bg-beige px-5 py-10 shadow-lg"
           >
             <div className="flex w-full gap-4">
-              <input
-                className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <StyledFormInput
+                halfWidthStyle
                 onChange={handleInputChange}
-                type="text"
-                name="firstName"
-                placeholder="First Name"
+                type={"text"}
+                name={"firstName"}
+                placeholder={"First Name"}
+                required
               />
-              <input
-                className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <StyledFormInput
+                halfWidthStyle
                 onChange={handleInputChange}
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
+                type={"text"}
+                name={"lastName"}
+                placeholder={"Last Name"}
+                required
               />
             </div>
-            <input
-              type="text"
-              name="username"
+            <StyledFormInput
+              fullWidthStyle
               onChange={handleInputChange}
-              placeholder="Username"
+              type={"text"}
+              name={"username"}
+              placeholder={"Username"}
               required
-              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input
-              type="email"
-              name="email"
+            <StyledFormInput
+              fullWidthStyle
               onChange={handleInputChange}
-              placeholder="Email"
+              type={"email"}
+              name={"email"}
+              placeholder={"Email"}
               required
-              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input
-              type="password"
-              name="password"
+            <StyledFormInput
+              fullWidthStyle
               onChange={handleInputChange}
-              placeholder="Password"
+              type={"password"}
+              name={"password"}
+              placeholder={"Password"}
               required
-              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <button
-              type="submit"
-              className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-            >
-              Sign Up
-            </button>
+            <StyledButton submit primaryColor displayText={"Sign Up"} />
           </form>
           <p className="text-right">
             Already a member?{" "}
