@@ -30,33 +30,44 @@ export default function Signup() {
   };
 
   return (
-    <main className="bg-main_bg min-h-screen">
-      <section className='container m-auto'>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            onChange={handleInputChange}
-            placeholder="Username"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            onChange={handleInputChange}
-            placeholder="Email"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            onChange={handleInputChange}
-            placeholder="Password"
-            required
-          />
-          <button type="submit">Sign Up</button>
-        </form>
+      <section className="flex min-h-full">
+        <div className="w-1/2 bg-darkgray">Picture Area</div>
+        <div className="flex w-1/2">
+          <div className="">
+            <form onSubmit={handleSubmit} className="flex flex-col">
+              <input
+                type="text"
+                name="username"
+                onChange={handleInputChange}
+                placeholder="Username"
+                required
+                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="email"
+                name="email"
+                onChange={handleInputChange}
+                placeholder="Email"
+                required
+                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                name="password"
+                onChange={handleInputChange}
+                placeholder="Password"
+                required
+                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              >
+                Sign Up
+              </button>
+            </form>
+          </div>
+        </div>
       </section>
-    </main>
   );
 }

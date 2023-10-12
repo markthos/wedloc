@@ -42,44 +42,50 @@ export default function Login(props) {
   };
 
   return (
-      <main className="bg-main_bg min-h-screen">
-        <section className="container m-auto">
+    <section className="flex min-h-full">
+      <div className="w-1/2 bg-darkgray">Picture Area</div>
+      <div className="flex w-1/2">
+        <div className="">
           {data ? (
             <p>
               <Link to={"/"}>Home</Link>
             </p>
           ) : (
-          <form onSubmit={handleFormSubmit}>
-            <input
-              className='form-input'
-              value={formState.username}
-              onChange={handleChange}
-              type="text"
-              name="username"
-              placeholder="username"
-            />
-            <input
-              className='form-input'
-              value={formState.password}
-              onChange={handleChange}
-              name="password"
-              type="password"
-              placeholder="password"
-            />
-            <button 
-              type="submit" 
-              style={{ cursor: 'pointer' }}
+            <form
+              onSubmit={handleFormSubmit}
+              className="flex flex-col items-center"
             >
-              Log In
-            </button>
-          </form>
+              <input
+                className="form-input mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={formState.username}
+                onChange={handleChange}
+                type="text"
+                name="username"
+                placeholder="Username"
+              />
+              <input
+                className="form-input mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={formState.password}
+                onChange={handleChange}
+                name="password"
+                type="password"
+                placeholder="Password"
+              />
+              <button
+                type="submit"
+                className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                style={{ cursor: "pointer" }}
+              >
+                Log In
+              </button>
+            </form>
           )}
-          {error && (
-            <div className='errorMessage'>
-              {error.message}
-            </div>
-          )}
-        </section>
-      </main>
+          {error && <div className="">{error.message}</div>}
+        </div>
+      </div>
+    </section>
+    // <section className="container m-auto">
+
+    // </section>
   );
 };
