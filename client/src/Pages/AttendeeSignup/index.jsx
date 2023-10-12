@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 
-export default function AttendeeSignup() {
+export default function AttendeeSignup(lastLocation) {
   const [attendee, setAttendee] = useState("");
   const [name, setName] = useState(localStorage.getItem("name") || "");
 
