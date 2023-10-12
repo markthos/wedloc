@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { REGISTER_USER } from '../../graphql/mutations';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function Signup() {
   const [userData, setUserData] = useState({ username: '', email: '', password: '' });
@@ -30,44 +31,69 @@ export default function Signup() {
   };
 
   return (
-      <section className="flex min-h-full">
-        <div className="w-1/2 bg-darkgray">Picture Area</div>
-        <div className="flex w-1/2">
-          <div className="">
-            <form onSubmit={handleSubmit} className="flex flex-col">
+    <section className="flex min-h-full">
+      <div className="hidden bg-darkgray md:block md:w-1/2">Picture Area</div>
+      <div className="flex w-screen items-center justify-center md:w-1/2">
+        <div className="w-full px-10">
+          <form
+            onSubmit={handleSubmit}
+            className="mb-5 flex flex-col items-center rounded-md bg-beige px-5 py-10 shadow-lg"
+          >
+            <div className="flex w-full gap-4">
               <input
+                className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={handleInputChange}
                 type="text"
-                name="username"
-                onChange={handleInputChange}
-                placeholder="Username"
-                required
-                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                name="firstname"
+                placeholder="First Name"
               />
               <input
-                type="email"
-                name="email"
+                className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={handleInputChange}
-                placeholder="Email"
-                required
-                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+                type="text"
+                name="lastname"
+                placeholder="Last Name"
               />
-              <input
-                type="password"
-                name="password"
-                onChange={handleInputChange}
-                placeholder="Password"
-                required
-                className="mb-4 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                type="submit"
-                className="w-full rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
-                Sign Up
-              </button>
-            </form>
-          </div>
+            </div>
+            <input
+              type="text"
+              name="username"
+              onChange={handleInputChange}
+              placeholder="Username"
+              required
+              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="email"
+              name="email"
+              onChange={handleInputChange}
+              placeholder="Email"
+              required
+              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              type="password"
+              name="password"
+              onChange={handleInputChange}
+              placeholder="Password"
+              required
+              className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit"
+              className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            >
+              Sign Up
+            </button>
+          </form>
+          <p className="text-right">
+            Already a member?{" "}
+            <RouterLink to={"/login"} className="underline hover:no-underline">
+              Log In Now!
+            </RouterLink>
+          </p>
         </div>
-      </section>
+      </div>
+    </section>
   );
 }
