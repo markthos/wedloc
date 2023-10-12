@@ -136,21 +136,6 @@ const resolvers = {
 
       return newChat;
     },
-    // add a user to the database and login with token
-    // addUser: async (parent, { username, email, password }) => {
-    //   try {
-    //     const user = await User.create({
-    //       username,
-    //       email,
-    //       password,
-    //     });
-    //     const token = signToken(user);
-    //     return { token, user };
-    //   } catch (error) {
-    //     console.error("Error creating user:", error);
-    //     throw new Error("Failed to create user");
-    //   }
-    // },
     addUser: async (_, { username, email, password }) => {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -166,9 +151,37 @@ const resolvers = {
         throw new Error("Error creating user");
       }
     },
-    deleteUser: async (parent, { userId }) => {
-      const user = await User.findOneAndDelete({ _id: userId });
-      console.log("user deleted", user);
+    updateUser: async (parent, { firstName, lastName, email, profilePic }, context) => {
+      const contextUserId = context.user._id;
+      try {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: contextUserId },
+          { firstName, lastName, email, profilePic },
+          { new: true }
+        );
+        console.log("updatedUser", updatedUser);
+        console.log("contextUserId", contextUserId);
+        return { updatedUser };
+      }
+      catch (error) {
+        console.error("Error updating user:", error);
+        throw new Error("Error updating user");
+      }
+    },
+    deleteUser: async (parent, { username }, context) => {
+      const contextUserId = context.user._id;
+      try {
+        const deletedUser = await User.findOneAndDelete(
+          { _id: contextUserId }
+        );
+        console.log("deletedUser", deletedUser);
+        console.log("contextUserId", contextUserId);
+        return { deletedUser };
+      }
+      catch (error) {
+        console.error("Error deleting user:", error);
+        throw new Error("Error deleting user");
+      }
     },
     login: async (parent, { username, password }) => {
       console.log("hit login");
