@@ -8,14 +8,13 @@ import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
 
 const style = {
-  height: "auto",
+  height: "80vh",
   width: "500px",
   aspectRatio: "2/1",
   border: "0",
 };
 
 const styleADiv = {
-  height: "100vh",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -26,19 +25,15 @@ const styleADiv = {
 export default function SingleView({ cloudName, videoId }) {
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
+  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
 
   const { eventId, postId } = useParams();
-
-  console.log("eventId", eventId);
-  console.log("postId", postId);
 
   const { loading, data } = useQuery(GET_POST, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
   const postData = data?.getPost;
-
-  console.log("data", postData);
 
   useEffect(() => {
     if (data) {
@@ -64,11 +59,24 @@ export default function SingleView({ cloudName, videoId }) {
       </div>
     );
 
+  const handleForward = () => {
+    console.log("forward");
+  };
+
+  const handleBackward = () => {
+    console.log("backward");
+  };
+
   return (
-    <main className="bg-main_bg min-h-screen">
-      <section className="container m-auto">
-        
-        <div>
+    <main className="min-screen h-100 flex justify-center overflow-hidden bg-main_bg">
+      <section className="gap container m-auto flex flex-col justify-center">
+        <div className="m-4 flex justify-center gap-4 ">
+          <button
+            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            onClick={handleBackward}
+          >
+            {"<"}
+          </button>
           {imgFile && (
             <img width="500px" src={postData.url} alt={postData._id}></img>
           )}
@@ -80,17 +88,62 @@ export default function SingleView({ cloudName, videoId }) {
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
             ></iframe>
           )}
+          <button
+            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            onClick={handleForward}
+          >
+            {">"}
+          </button>
         </div>
-        <h1>posted by: {postData.owner} on {dayjs(postData.date).format("MM-DD-YYYY")}</h1>
-        <h3>Comment Section</h3>
-        <ul>
-          {postData.comments.map((comment) => (
-            <li key={comment._id}>
-              <h3>{comment.author}</h3>
-              <p>{comment.text}</p>
-            </li>
-          ))}
-        </ul>
+        <div className="flex flex-col content-center justify-center">
+          <h1 className="center flex justify-center ">
+            posted by: {postData.owner} on{" "}
+            {dayjs(postData.date).format("MM-DD-YYYY")}
+          </h1>
+          <button
+            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            onClick={handleForward}
+          >
+            Back
+          </button>
+        </div>
+
+        <div className="m-4 flex flex-col text-center">
+          <h3>Comment Section</h3>
+          <ul className="flex flex-col gap-2">
+            {postData.comments.map((comment) => (
+              <li key={comment._id}>
+                <div className="flex justify-between">
+                  <h3>{comment.author}</h3>
+                  <p>{comment.date}</p>
+                </div>
+                {name === comment.author ? (
+                  <p className="flex justify-end bg-gray-300 text-center">
+                    {comment.text}
+                  </p>
+                ) : (
+                  <p className="flex justify-start bg-gray-300 text-center">
+                    {comment.text}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+          <form className="w-100% mb-6 mt-6 flex flex-col gap-6">
+            <input
+              type="textarea"
+              name="newComment"
+              className="resize"
+              placeholder="Comment..."
+            />
+            <button
+              type="submit"
+              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </section>
     </main>
   );
