@@ -12,6 +12,7 @@ export default function StyledFormInput({
   maxLength,
   halfWidthStyle,
   fullWidthStyle,
+  value,
 }) {
   
   let inputStyle = "";
@@ -35,6 +36,7 @@ export default function StyledFormInput({
       id={id}
       minLength={minLength}
       maxLength={maxLength}
+      value={value}
     />
   );
 }
