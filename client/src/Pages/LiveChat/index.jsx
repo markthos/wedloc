@@ -8,7 +8,7 @@ import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
 import { ADD_CHAT } from "../../utils/mutations";
 import { useState, useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
 
@@ -28,6 +28,7 @@ export default function LiveChat() {
   // Get the event ID from the URL
   const { eventId } = useParams();
   const [name, setName] = useState(localStorage.getItem("name"));
+  const navigate = useNavigate();
 
   // set up state for chat data and set default author to local storage name
   const [chatData, setChatData] = useState({
@@ -86,7 +87,7 @@ export default function LiveChat() {
     });
 
     if (!name) {
-      return <Navigate to={`/attendeesignup/${eventId}`} />;
+      navigate(`/eventspace/${eventId}/attendeesignup`);
     }
 
     // Clean up the event listener when the component unmounts
@@ -119,10 +120,6 @@ export default function LiveChat() {
         <p>No chat found</p>
       </div>
     );
-
-  if (!name) {
-    return <Navigate to={`/attendeesignup/${eventId}`} />;
-  }
 
   // handle the sending of a message on submit
   const handleSendMessage = async (event) => {

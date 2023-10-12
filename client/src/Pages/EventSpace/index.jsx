@@ -29,12 +29,21 @@ export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
   const navigate = useNavigate(); // the navigate function for redirecting
   const [name, setName] = useState(localStorage.getItem("name"));
+  const [location, setLocation] = useState("");
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
+
+  //* Check for the name in local storage
+  useEffect(() => {
+    if (!name) {
+      setLocation(`/eventspace/${eventId}`);
+      navigate(`/eventspace/${eventId}/attendeesignup`);
+    }
+  }, [name, navigate, eventId, setLocation]);
 
   //* This is the useEffect for the image upload
   useEffect(() => {
@@ -58,10 +67,6 @@ export default function EventSpace() {
   const { loading, data } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
-
-  if (!name) {
-    navigate(`/eventspace/${eventId}/attendeesignup`);
-  }
 
   // Check for the capsule data
   const cap = data?.getCapsule || null;
