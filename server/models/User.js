@@ -9,10 +9,12 @@ const userSchema = new Schema({
     trim: true, // removes whitespace
   },
   firstName: {
-    type: String, //thisisnt working
+    type: String,
+    trim: true,
   },
   lastName: {
-    type: String, //this isnt working
+    type: String,
+    trim: true,
   },
   email: {
     type: String,
@@ -25,6 +27,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true,
+  },
+  profilePic: {
+    type: String,
+    default: "https://i.imgur.com/1q6QXyv.png",
   },
   capsules: [
     {
