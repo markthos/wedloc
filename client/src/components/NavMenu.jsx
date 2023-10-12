@@ -67,7 +67,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
             <li key={item.label}>
               <NavLink
                 to={item.route}
-                activeClassName="text-red-500"
                 className="block p-3 hover:bg-lightgray"
               >
                 {item.label}
