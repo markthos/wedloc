@@ -4,7 +4,7 @@
 
 export default function Home() {
     return (
-      <main className="min-h-screen bg-main_bg font-sans text-black">
+      <>
         <section className="flex min-h-screen flex-col justify-center bg-beige">
           <div className="p-5">
             <h2 className="text-4xl md:text-8xl">Your Memories...</h2>
@@ -24,6 +24,6 @@ export default function Home() {
             </h2>
           </div>
         </section>
-      </main>
+      </>
     );
 }
