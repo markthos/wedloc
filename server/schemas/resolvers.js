@@ -136,23 +136,23 @@ const resolvers = {
 
       return newChat;
     },
-    addUser: async (_, { username, firstName, lastName, email, password }) => {
+
+    addUser: async (parent, { username, email, password, firstName, lastName }) => {
       try {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({
-          username: username,
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: hashedPassword,
+        const user = await User.create({ username, 
+          email, 
+          password, 
+          firstName, 
+          lastName 
         });
         const token = signToken(user);
-        return { user, token };
+        return { token, user };
       } catch (error) {
-        console.error("Error creating user:", error);
-        throw new Error("Error creating user");
+        // Handle the error here, e.g., log it or return an error message.
+        throw new Error("An error occurred while creating a user.");
       }
     },
+
     updateUser: async (parent, { firstName, lastName, email, profilePic }, context) => {
       const contextUserId = context.user._id;
       try {
@@ -170,7 +170,7 @@ const resolvers = {
         throw new Error("Error updating user");
       }
     },
-    deleteUser: async (parent, { username }, context) => {
+    deleteUser: async (parent, { userI }, context) => {
       const contextUserId = context.user._id;
       try {
         const deletedUser = await User.findOneAndDelete(
