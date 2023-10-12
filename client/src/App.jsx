@@ -42,7 +42,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route
-                path="/attendeesignup/:eventId"
+                path="/eventspace/:eventId/attendeesignup"
                 element={<AttendeeSignup />}
               />
               <Route

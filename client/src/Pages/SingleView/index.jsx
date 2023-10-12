@@ -2,7 +2,7 @@
 
 import { useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
-import { useParams, redirect } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
@@ -25,7 +25,7 @@ const styleADiv = {
 export default function SingleView({ cloudName, videoId }) {
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
-  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
+  const [name, setName] = useState(localStorage.getItem("name"));
 
   const { eventId, postId } = useParams();
 
@@ -66,6 +66,10 @@ export default function SingleView({ cloudName, videoId }) {
   const handleBackward = () => {
     console.log("backward");
   };
+
+  if (!name) {
+    return <Navigate to={`/attendeesignup/${eventId}`} />;
+  }
 
   return (
     <main className="min-screen h-100 flex justify-center overflow-hidden bg-main_bg">

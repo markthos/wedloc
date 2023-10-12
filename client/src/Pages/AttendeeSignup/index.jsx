@@ -1,10 +1,13 @@
 // Attendee Signup Page
 
+//!TODO THIS NEEDS DATABASE SAVE
 
 import { useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 export default function AttendeeSignup() {
+  const navigate = useNavigate();
+
   const [attendee, setAttendee] = useState("");
   const [name, setName] = useState(localStorage.getItem("name") || "");
 
@@ -12,10 +15,9 @@ export default function AttendeeSignup() {
 
   useEffect(() => {
     if (name) {
-      // If a name exists in local storage, navigate to eventspace
-      return <Navigate to={`/eventspace/${eventId}`} />;
+      navigate(`/eventspace/${eventId}`);
     }
-  }, [name, eventId]);
+  }, [name, eventId, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,12 +30,8 @@ export default function AttendeeSignup() {
     setAttendee(e.target.value);
   };
 
-  if (name) {
-    return <Navigate to={`/eventspace/${eventId}`} />;
-  }
-
   return (
-    <main className="bg-main_bg min-h-screen">
+    <main className="min-h-screen bg-main_bg">
       <section className="container m-auto">
         <h1>What's Your name?</h1>
         <form onSubmit={handleSubmit}>
@@ -48,4 +46,4 @@ export default function AttendeeSignup() {
       </section>
     </main>
   );
-};
+}
