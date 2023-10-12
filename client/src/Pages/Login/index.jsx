@@ -6,6 +6,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
 import Auth from '../../utils/auth'
+import StyledButton from '../../components/StyledButton';
 
 export default function Login(props) {
   const [formState, setFormState] = useState({username: '', password: ''});
@@ -71,12 +72,11 @@ export default function Login(props) {
                 type="password"
                 placeholder="Password"
               />
-              <button
-                type="submit"
-                className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-              >
-                Log In
-              </button>
+              <StyledButton
+                submit
+                primaryColor
+                displayText={"Log In"}
+              />
             </form>
           )}
           {error && <div className="">{error.message}</div>}
