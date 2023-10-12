@@ -4,9 +4,25 @@
 
 export default function Home() {
     return (
-      <main className="bg-main_bg min-h-screen">
-        <section className="container m-auto">
-          <h1>Home Page</h1>
+      <main className="min-h-screen bg-main_bg font-sans text-black">
+        <section className="flex min-h-screen flex-col justify-center bg-beige">
+          <div className="p-5">
+            <h2 className="text-4xl md:text-8xl">Your Memories...</h2>
+          </div>
+        </section>
+
+        <section className="flex min-h-screen flex-col justify-center bg-lightgray">
+          <div className="p-5">
+            <h2 className="text-right text-4xl md:text-8xl">...Your Journey</h2>
+          </div>
+        </section>
+
+        <section className="flex min-h-screen flex-col justify-center">
+          <div className="p-5">
+            <h2 className="text-center text-4xl md:text-8xl">
+              Beautifully Preserved
+            </h2>
+          </div>
         </section>
       </main>
     );

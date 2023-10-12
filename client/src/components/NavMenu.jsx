@@ -1,6 +1,7 @@
 // Sitewide navigation menu component
 // TODO: Set up menu so that when a user is not logged in it only shows the following links: Home, Sign Up, Login, About
 // TODO: Set up menu so that when a user is logged in it shows the following links: Home, My Profile, Event Creator, My Events, About, Sign Out
+// TODO: The width and height of the menu should be 100% wide and 50% tall of the viewport when in a small screen size, the size of the text should increase as well
 
 
 import React, { useState, useEffect, useRef } from "react";
@@ -38,7 +39,7 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       </div>
 
       <div
-        className={`absolute right-0 top-0 w-[15vw] transform border px-5 py-2.5 text-lg 
+        className={`absolute right-0 top-0 min-w-max transform border px-5 py-2.5 text-lg 
         ${
           open ? "bg-white visible" : "invisible"
         } transition-all duration-500 ease-in-out`}

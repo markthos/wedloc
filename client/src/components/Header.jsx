@@ -1,17 +1,27 @@
 // The site header where the navigation and logo live
-// All links will be changed to NavLinks in the future to use the active class functionality of react-router-dom
+
 
 import NavMenu from "./NavMenu";
-import { Link as RouterLink, NavLink, Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function Header() {
 
   return (
     <header className="relative bg-white">
-      <h1 className="font-logo pt-3 text-center text-6xl">
+      {/* Site Logo */}
+      <h1 className="pt-3 text-center font-logo text-6xl">
         <RouterLink to={"/"}>WedLoc</RouterLink>
       </h1>
+      {/* Profile Icon, if logged in it will be an image */}
+      <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
+        <RouterLink to={"/profile"}>
+          <AccountCircleIcon fontSize="large" />
+        </RouterLink>
+      </div>
+      {/* Navigation Menu */}
       <NavMenu />
+
     </header>
   );
 }
