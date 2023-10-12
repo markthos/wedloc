@@ -136,11 +136,13 @@ const resolvers = {
 
       return newChat;
     },
-    addUser: async (_, { username, email, password }) => {
+    addUser: async (_, { username, firstName, lastName, email, password }) => {
       try {
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({
           username: username,
+          firstName: firstName,
+          lastName: lastName,
           email: email,
           password: hashedPassword,
         });
