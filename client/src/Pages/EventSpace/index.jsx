@@ -1,6 +1,6 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
@@ -27,14 +27,25 @@ const styleADiv = {
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
-  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
+  const navigate = useNavigate(); // the navigate function for redirecting
+  const [name, setName] = useState(localStorage.getItem("name"));
+  const [location, setLocation] = useState("");
 
-  //info for the image upload
+  //* info for the image upload
   const [dataURL, setDataURL] = useState("");
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
 
+  //* Check for the name in local storage
+  useEffect(() => {
+    if (!name) {
+      setLocation(`/eventspace/${eventId}`);
+      navigate(`/eventspace/${eventId}/attendeesignup`);
+    }
+  }, [name, navigate, eventId, setLocation]);
+
+  //* This is the useEffect for the image upload
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
@@ -57,10 +68,6 @@ export default function EventSpace() {
     variables: { id: eventId },
   });
 
-  if (!name) {
-    return <Navigate to={`/attendeesignup/${eventId}`} />;
-  }
-
   // Check for the capsule data
   const cap = data?.getCapsule || null;
 
@@ -80,9 +87,7 @@ export default function EventSpace() {
       </div>
     );
 
-
   //TODO - Use mutation to save URL into database then update the page with the new image at the top
-
 
   return (
     <main className="min-h-screen bg-main_bg">
