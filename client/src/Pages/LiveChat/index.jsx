@@ -1,5 +1,8 @@
 // Live Chat Page
 
+//!!! EVERYTHING IS WORKING EXCEPT DATE
+//TODO DATE
+
 import { useQuery, useMutation } from "@apollo/client";
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
@@ -11,6 +14,14 @@ import dayjs from "dayjs";
 
 // Create a Socket.IO client instance
 const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
+
+const borderRadius = {
+  borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
+  borderTopRightRadius: "15px",
+  padding: "3px",
+  paddingLeft: "10px",
+  paddingRight: "10px",
+};
 
 //* This is the LiveChat component
 export default function LiveChat() {
@@ -45,6 +56,19 @@ export default function LiveChat() {
     },
   });
 
+  const scrollToBottom = () => {
+    const chatBox = document.querySelector(".no-scrollbar");
+    if (chatBox) {
+      chatBox.style.scrollBehavior = "smooth"; // Enable smooth scrolling
+      chatBox.scrollTop = chatBox.scrollHeight;
+      chatBox.style.scrollBehavior = "auto"; // Reset to default behavior
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
   // Listen for new messages from Socket.IO and set them immediately to the chat list
   useEffect(() => {
     socket.on("messageReceived", (message) => {
@@ -62,8 +86,7 @@ export default function LiveChat() {
         </div>`;
       messages.appendChild(item);
 
-      const chatBox = document.querySelector(".no-scrollbar");
-      chatBox.scrollTop = chatBox.scrollHeight;
+      scrollToBottom();
 
       setChatData({
         ...chatData,
@@ -125,24 +148,33 @@ export default function LiveChat() {
 
   // return the chat history and the form to send a message
   return (
-    <main className="flex-grow bg-main_bg ">
+    <div className=" bg-main_bg">
       <section className="container m-auto">
         <h1 className="text-center font-extrabold">Live Chat</h1>
-        <div className="no-scrollbar flex h-96 flex-col items-center justify-center overflow-scroll">
+        <div
+          className="no-scrollbar flex flex-col items-center justify-center overflow-scroll p-6"
+          style={{ height: "70vh" }}
+        >
           <ul id="messages">
             {/* map over the chat history and display the messages */}
             {chatHistory.chat.map((message) => (
               <li key={message._id}>
-                <div className="flex gap-3 justify-between">
+                <div className="flex justify-between gap-3">
                   <h3>{message.author}</h3>
                   <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
                 </div>
                 {message.author === name ? (
-                  <div className="flex justify-end bg-white font-extrabold">
+                  <div
+                    className="flex justify-end bg-white font-extrabold"
+                    style={borderRadius}
+                  >
                     <p>{message.text}</p>
                   </div>
                 ) : (
-                  <div className="flex flex-col bg-white font-extrabold">
+                  <div
+                    className="flex flex-col bg-white font-extrabold"
+                    style={borderRadius}
+                  >
                     <p>{message.text}</p>
                   </div>
                 )}
@@ -171,6 +203,6 @@ export default function LiveChat() {
           </button>
         </form>
       </section>
-    </main>
+    </div>
   );
 }
