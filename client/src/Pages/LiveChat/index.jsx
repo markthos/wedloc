@@ -1,6 +1,5 @@
 // Live Chat Page
 
-
 import { useQuery, useMutation } from "@apollo/client";
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
@@ -13,43 +12,17 @@ import dayjs from "dayjs";
 // Create a Socket.IO client instance
 const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
 
-//! Temporary styles for the loading spinner
-const styleADiv = {
-  maxHeight: "40vh",
-  overflow: "scroll",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#E4DDD3",
-};
-
-//! temp style for chat
-const styleAChat = {
-  display: "flex",
-  gap: "20px",
-};
-
-//! temp style for chat text
-const styleAChatText = {
-  backgroundColor: "white",
-  display: "flex",
-  flexDirection: "column",
-  fontWeight: "bolder",
-};
-
-
 //* This is the LiveChat component
 export default function LiveChat() {
-
   // Get the event ID from the URL
   const { eventId } = useParams();
+  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
 
-// set up state for chat data and set default author to local storage name
+  // set up state for chat data and set default author to local storage name
   const [chatData, setChatData] = useState({
     capsuleId: eventId,
     text: "",
-    author: localStorage.getItem("name"), // grab local storage name as default
+    author: localStorage.getItem("name") || "anonymous", // grab local storage name as default
   });
 
   // Query the database for the chat history
@@ -61,8 +34,7 @@ export default function LiveChat() {
   const chatHistory = data?.getCapsule || [];
   // const dateSorted = chatHistory.chat.sort((a, b) => a.date - b.date );
 
-    // Function to scroll to the bottom of the chat history div
-
+  // Function to scroll to the bottom of the chat history div
 
   // Create a new message via GraphQL mutation and set createMessage to a function
   const [createMessage, { error }] = useMutation(ADD_CHAT, {
@@ -73,9 +45,6 @@ export default function LiveChat() {
     },
   });
 
-
-  
-
   // Listen for new messages from Socket.IO and set them immediately to the chat list
   useEffect(() => {
     socket.on("messageReceived", (message) => {
@@ -83,11 +52,23 @@ export default function LiveChat() {
       console.log("Received message from Socket.IO:", message);
       const messages = document.getElementById("messages");
       const item = document.createElement("li");
-      item.textContent = message.text; //TODO add author and date
+      item.innerHTML = `
+        <div class="flex gap-3 justify-between">
+          <h3>${message.author}</h3>
+          <p>${dayjs(message.date)}</p>
+        </div>
+        <div class="flex justify-end bg-white font-extrabold">
+          <p>${message.text}</p>
+        </div>`;
       messages.appendChild(item);
 
       const chatBox = document.querySelector(".no-scrollbar");
       chatBox.scrollTop = chatBox.scrollHeight;
+
+      setChatData({
+        ...chatData,
+        text: "",
+      });
     });
 
     // Clean up the event listener when the component unmounts
@@ -99,7 +80,7 @@ export default function LiveChat() {
   // if loading, return a loading spinner
   if (loading)
     return (
-      <div style={styleADiv}>
+      <div className="max-h-100 flex flex-col items-center justify-center overflow-scroll">
         <Orbit size={200} color="white" />
       </div>
     );
@@ -107,12 +88,12 @@ export default function LiveChat() {
   // if no chathistory, return a message
   if (!chatHistory)
     return (
-      <div style={styleADiv}>
+      <div className="max-h-100 flex flex-col items-center justify-center overflow-scroll">
         <p>No chat found</p>
       </div>
     );
 
-    // handle the sending of a message on submit
+  // handle the sending of a message on submit
   const handleSendMessage = async (event) => {
     event.preventDefault();
     try {
@@ -137,37 +118,40 @@ export default function LiveChat() {
         ...chatData,
         text: "",
       });
-
-      
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-
-// return the chat history and the form to send a message
+  // return the chat history and the form to send a message
   return (
-    <main className="bg-main_bg min-h-screen">
+    <main className="flex-grow bg-main_bg ">
       <section className="container m-auto">
-        <h1>Live Chat</h1>
-        <div style={styleADiv} className="no-scrollbar">
+        <h1 className="text-center font-extrabold">Live Chat</h1>
+        <div className="no-scrollbar flex h-96 flex-col items-center justify-center overflow-scroll">
           <ul id="messages">
-          {/* map over the chat history and display the messages */}
+            {/* map over the chat history and display the messages */}
             {chatHistory.chat.map((message) => (
-              <div key={message._id}>
-                <div style={styleAChat}>
+              <li key={message._id}>
+                <div className="flex gap-3 justify-between">
                   <h3>{message.author}</h3>
                   <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
                 </div>
-                <div style={styleAChatText}>
-                  <p>{message.text}</p>
-                </div>
-              </div>
+                {message.author === name ? (
+                  <div className="flex justify-end bg-white font-extrabold">
+                    <p>{message.text}</p>
+                  </div>
+                ) : (
+                  <div className="flex flex-col bg-white font-extrabold">
+                    <p>{message.text}</p>
+                  </div>
+                )}
+              </li>
             ))}
           </ul>
         </div>
 
-        <form>
+        <form className="m-6 flex flex-col">
           <input
             type="text"
             value={chatData.text}
@@ -178,7 +162,13 @@ export default function LiveChat() {
               }))
             }
           />
-          <button type="submit" onClick={handleSendMessage}>Send Message</button>
+          <button
+            type="submit"
+            onClick={handleSendMessage}
+            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          >
+            Send Message
+          </button>
         </form>
       </section>
     </main>
