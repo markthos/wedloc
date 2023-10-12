@@ -33,28 +33,41 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/attendeesignup/:eventId" element={<AttendeeSignup />} />
-          <Route
-            path="/eventspace/:eventId/singleview/:postId"
-            element={<SingleView />}
-          />
-          <Route path="/eventspace/:eventId" element={<EventSpace />} />
-          <Route path="/eventspace/:eventId/livechat" element={<LiveChat />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/eventspace/:eventId/upload"
-            element={<Upload cloudName={cloudName} />}
-          />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/eventcreator" element={<EventCreator />} />
-          <Route path="/myevents" element={<MyEvents />} />
-        </Routes>
-        <Footer />
+        {/* This is so the entire header, main, and footer sections will show (without a scroll bar)
+        so long as the content doesn't exceed the viewport height */}
+        <div className="flex h-screen flex-col">
+          <Header />
+          {/* Main content area - this will grow to take up available space */}
+          <main className="flex-grow bg-main_bg">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/attendeesignup/:eventId"
+                element={<AttendeeSignup />}
+              />
+              <Route
+                path="/eventspace/:eventId/singleview/:postId"
+                element={<SingleView />}
+              />
+              <Route path="/eventspace/:eventId" element={<EventSpace />} />
+              <Route
+                path="/eventspace/:eventId/livechat"
+                element={<LiveChat />}
+              />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route
+                path="/eventspace/:eventId/upload"
+                element={<Upload cloudName={cloudName} />}
+              />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/eventcreator" element={<EventCreator />} />
+              <Route path="/myevents" element={<MyEvents />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
       </Router>
     </ApolloProvider>
   );
