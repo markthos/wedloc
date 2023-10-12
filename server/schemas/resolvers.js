@@ -170,7 +170,7 @@ const resolvers = {
         throw new Error("Error updating user");
       }
     },
-    deleteUser: async (parent, { userI }, context) => {
+    deleteUser: async (parent, { username }, context) => {
       const contextUserId = context.user._id;
       try {
         const deletedUser = await User.findOneAndDelete(
@@ -185,6 +185,13 @@ const resolvers = {
         throw new Error("Error deleting user");
       }
     },
+    
+    devDelUser: async (parent, { userId }) => {
+      const user = await User.findOneAndDelete({ _id: userId });
+      console.log('user deleted', user);
+    },
+
+
     login: async (parent, { username, password }) => {
       console.log("hit login");
       const user = await User.findOne({ username });
