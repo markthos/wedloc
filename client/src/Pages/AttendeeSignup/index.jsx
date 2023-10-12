@@ -1,21 +1,27 @@
 // Attendee Signup Page
 
+//!TODO THIS NEEDS DATABASE SAVE
 
 import { useEffect, useState } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
-export default function AttendeeSignup(lastLocation) {
+export default function AttendeeSignup() {
+  const navigate = useNavigate();
+  const { from } = useLocation();
+
   const [attendee, setAttendee] = useState("");
   const [name, setName] = useState(localStorage.getItem("name") || "");
 
   const { eventId } = useParams();
 
+  console.log("from: " + from);
+
   useEffect(() => {
     if (name) {
       // If a name exists in local storage, navigate to eventspace
-      return <Navigate to={`/eventspace/${eventId}`} />;
+      navigate(`/eventspace/${eventId}`);
     }
-  }, [name, eventId]);
+  }, [name, eventId, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

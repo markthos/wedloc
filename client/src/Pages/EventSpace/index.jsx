@@ -1,6 +1,6 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
-import { Link, useParams, Navigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
@@ -27,6 +27,7 @@ const styleADiv = {
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
+  const navigate = useNavigate(); // the navigate function for redirecting
   const [name, setName] = useState(localStorage.getItem("name"));
 
   //* info for the image upload
@@ -59,7 +60,7 @@ export default function EventSpace() {
   });
 
   if (!name) {
-    return <Navigate to={`/attendeesignup/${eventId}`} />;
+    navigate(`/eventspace/${eventId}/attendeesignup`);
   }
 
   // Check for the capsule data
