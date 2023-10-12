@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="relative bg-white">
       {/* Site Logo */}
-      <h1 className="pt-3 text-center font-logo text-6xl">
+      <h1 className="pt-3 text-center font-logo text-4xl md:text-6xl">
         <RouterLink to={"/"}>WedLoc</RouterLink>
       </h1>
       {/* Profile Icon, if logged in it will be an image */}
