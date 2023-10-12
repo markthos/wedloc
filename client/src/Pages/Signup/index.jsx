@@ -7,7 +7,7 @@ import { REGISTER_USER } from '../../graphql/mutations';
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function Signup() {
-  const [userData, setUserData] = useState({ username: '', email: '', password: '' });
+  const [userData, setUserData] = useState({ username: '', email: '', password: '', firstname: '', lastname: '' });
   const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
   const handleInputChange = (e) => {
@@ -23,7 +23,8 @@ export default function Signup() {
     try {
       const { data } = await addUser({ variables: { ...userData } });
       console.log('User successfully added:', data);
-      // Redirect to login or another page after successful registration
+      // Redirect to home page after successful sign up
+      window.location.replace('/');
     } catch (error) {
       console.error('Error during registration:', error);
       // Handle registration errors (like showing error messages to the user)
@@ -44,14 +45,14 @@ export default function Signup() {
                 className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={handleInputChange}
                 type="text"
-                name="firstname"
+                name="firstName"
                 placeholder="First Name"
               />
               <input
                 className="mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                 onChange={handleInputChange}
                 type="text"
-                name="lastname"
+                name="lastName"
                 placeholder="Last Name"
               />
             </div>
