@@ -29,12 +29,13 @@ export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
   const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
 
-  //info for the image upload
+  //* info for the image upload
   const [dataURL, setDataURL] = useState("");
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
 
+  //* This is the useEffect for the image upload
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
