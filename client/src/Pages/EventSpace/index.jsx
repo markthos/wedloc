@@ -27,7 +27,7 @@ const styleADiv = {
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
   const { eventId } = useParams(); // the params for the capsule id
-  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
+  const [name, setName] = useState(localStorage.getItem("name"));
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
@@ -81,9 +81,7 @@ export default function EventSpace() {
       </div>
     );
 
-
   //TODO - Use mutation to save URL into database then update the page with the new image at the top
-
 
   return (
     <main className="min-h-screen bg-main_bg">

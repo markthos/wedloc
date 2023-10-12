@@ -8,7 +8,7 @@ import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
 import { ADD_CHAT } from "../../utils/mutations";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
 
@@ -27,13 +27,13 @@ const borderRadius = {
 export default function LiveChat() {
   // Get the event ID from the URL
   const { eventId } = useParams();
-  const [name, setName] = useState(localStorage.getItem("name") || "anonymous");
+  const [name, setName] = useState(localStorage.getItem("name"));
 
   // set up state for chat data and set default author to local storage name
   const [chatData, setChatData] = useState({
     capsuleId: eventId,
     text: "",
-    author: localStorage.getItem("name") || "anonymous", // grab local storage name as default
+    author: name, // grab local storage name as default
   });
 
   // Query the database for the chat history
@@ -55,15 +55,6 @@ export default function LiveChat() {
       author: chatData.author,
     },
   });
-
-  const scrollToBottom = () => {
-    const chatBox = document.querySelector(".no-scrollbar");
-    if (chatBox) {
-      chatBox.style.scrollBehavior = "smooth"; // Enable smooth scrolling
-      chatBox.scrollTop = chatBox.scrollHeight;
-      chatBox.style.scrollBehavior = "auto"; // Reset to default behavior
-    }
-  };
 
   useEffect(() => {
     scrollToBottom();
@@ -94,11 +85,24 @@ export default function LiveChat() {
       });
     });
 
+    if (!name) {
+      return <Navigate to={`/attendeesignup/${eventId}`} />;
+    }
+
     // Clean up the event listener when the component unmounts
     return () => {
       socket.off("messageReceived");
     };
   }, []);
+
+  const scrollToBottom = () => {
+    const chatBox = document.querySelector(".no-scrollbar");
+    if (chatBox) {
+      chatBox.style.scrollBehavior = "smooth"; // Enable smooth scrolling
+      chatBox.scrollTop = chatBox.scrollHeight;
+      chatBox.style.scrollBehavior = "auto"; // Reset to default behavior
+    }
+  };
 
   // if loading, return a loading spinner
   if (loading)
@@ -115,6 +119,10 @@ export default function LiveChat() {
         <p>No chat found</p>
       </div>
     );
+
+  if (!name) {
+    return <Navigate to={`/attendeesignup/${eventId}`} />;
+  }
 
   // handle the sending of a message on submit
   const handleSendMessage = async (event) => {
