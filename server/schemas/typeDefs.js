@@ -78,6 +78,7 @@ const typeDefs = gql`
     updateUser(firstName: String!, lastName: String!, email: String!, profilePic: String!): Auth
     addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!
+    devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
   }
