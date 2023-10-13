@@ -14,9 +14,8 @@ const capsuleSchema = new Schema({
     default: Date.now,
   },
   owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    type: String,
+    required: true,
   },
   location: {
     type: String,
