@@ -266,23 +266,26 @@ const resolvers = {
       const capsuleIdObject = new ObjectId(capsuleId);
       const postIdObject = new ObjectId(postId);
 
-      const updatedPost = await Capsule.findOneAndUpdate(
+      const cap = await Capsule.findOneAndUpdate(
         { _id: capsuleIdObject, "posts._id": postIdObject },
         { $inc: { "posts.$.upVotes": 1 } },
         { new: true }
       );
 
-      if (!updatedPost) {
+      if (!cap) {
         console.log("post not found");
         return 0;
       }
 
-      const results = updatedPost.posts.find((post) =>
+      // Explicitly query the updated document
+      const updatedCapsule = await Capsule.findById(capsuleIdObject);
+      const updatedPost = updatedCapsule.posts.find((post) =>
         post._id.equals(postIdObject)
       );
-      console.log("post found: " + results.upVotes);
 
-      return results.upVotes;
+      console.log("post found: " + updatedPost.upVotes);
+
+      return updatedPost.upVotes;
     },
 
     downVote: async (parent, { capsuleId, postId }) => {
