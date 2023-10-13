@@ -72,6 +72,16 @@ const typeDefs = gql`
     secure_url: String
   }
 
+  type Payment {
+    _id: ID
+    userId: ID!
+    chargeId: String!
+    amount: Float!
+    currency: String!
+    description: String
+    createdAt: String!
+  }
+
   type Mutation {
     createCapsule(title: String!, location: String!, date: String!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
@@ -84,6 +94,7 @@ const typeDefs = gql`
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
+    addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
   }
 `;
 
