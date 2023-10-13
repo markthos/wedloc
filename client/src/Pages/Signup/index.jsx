@@ -89,7 +89,7 @@ export default function Signup() {
               placeholder={"Password"}
               required
             />
-            <StyledButton submit primaryColor displayText={"Sign Up"} />
+            <StyledButton submit primaryColor>Sign Up</StyledButton>
           </form>
           <p className="text-right">
             Already a member?{" "}

@@ -75,7 +75,9 @@ export default function Login(props) {
                 value={formState.password}
                 required
               />
-              <StyledButton submit primaryColor displayText={"Log In"} />
+              <StyledButton submit primaryColor>
+                Log In
+              </StyledButton>
             </form>
           )}
           {error && <div className="">{error.message}</div>}
