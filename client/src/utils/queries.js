@@ -34,15 +34,6 @@ export const GET_CAPSULE = gql`
   }
 `;
 
-export const LOGIN_USER = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      _id
-      username
-    }
-  }
-`;
-
 export const GET_POST = gql`
 query getPost($capsuleId: ID!, $postId: ID!) {
   getPost(capsuleId: $capsuleId, postId: $postId) {
