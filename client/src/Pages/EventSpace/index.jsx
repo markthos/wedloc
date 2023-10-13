@@ -40,7 +40,6 @@ export default function EventSpace() {
   //* Check for the name in local storage
   useEffect(() => {
     if (!name) {
-      setLocation(`/eventspace/${eventId}`);
       navigate(`/eventspace/${eventId}/attendeesignup`);
     }
   }, [name, navigate, eventId, setLocation]);
