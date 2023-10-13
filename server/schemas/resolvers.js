@@ -25,6 +25,16 @@ const resolvers = {
     getCapsulesDev: async () => {
       return await Capsule.find({});
     },
+    getCapsules: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findOne({ _id: context.user._id }).populate(
+          "capsules"
+        );
+        return user.capsules;
+      }
+      throw new AuthenticationError("Authentication error");
+    },
+    
     me: async (parent, args, context) => {
       if (context.user) {
         return await User.findOne({ _id: context.user._id });
@@ -60,11 +70,13 @@ const resolvers = {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
 
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date }, context) => {
+    createCapsule: async (parent, { title, date, location }, context) => {
       if (context.user) {
+        console.log("context.user", context.user);
         const capsule = await Capsule.create({
           title,
           date,
+          location,
           owner: context.user._id,
         });
         await User.findOneAndUpdate(

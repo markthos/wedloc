@@ -54,6 +54,7 @@ const typeDefs = gql`
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
+    getCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
   }
@@ -72,7 +73,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createCapsule(title: String!, date: String!, owner: ID!): Capsule
+    createCapsule(title: String!, location: String!, date: String!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
