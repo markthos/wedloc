@@ -3,11 +3,10 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const { authMiddleware } = require('./utils/auth');
-
 const http = require('http'); // http for socket.io
 const socketIo = require('socket.io'); // Import Socket.IO
 
-const { v2: cloud } = require('cloudinary'); // Cloudinary setup
+// const { v2: cloud } = require('cloudinary'); // Cloudinary setup
           
 // const { graphqlUploadExpress } = require('graphql-upload');
 
@@ -20,7 +19,7 @@ const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
   // still needs testing
-  // context: authMiddleware,
+  context: authMiddleware
 });
 
 const httpServer = http.createServer(app);
@@ -29,12 +28,12 @@ const io = socketIo(httpServer);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Configure Cloud setup 
-cloud.config({ 
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.API_KEY, 
-  api_secret: process.env.API_SECRET,
-});
+// // Configure Cloud setup 
+// cloud.config({ 
+//   cloud_name: process.env.CLOUD_NAME,
+//   api_key: process.env.API_KEY, 
+//   api_secret: process.env.API_SECRET,
+// });
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));

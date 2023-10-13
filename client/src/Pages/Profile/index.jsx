@@ -3,8 +3,8 @@
 
 export default function Profile() {
   return (
-    <div>
-      <h1>Profile Page</h1>
-    </div>
+      <section className="min-h-full">
+        <h1>Profile</h1>
+      </section>
   );
 }
