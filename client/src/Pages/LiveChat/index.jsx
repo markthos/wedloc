@@ -129,7 +129,6 @@ export default function LiveChat() {
     try {
       // check the console for the data
       console.log("Sending message:", chatData);
-      // // Send a new message via GraphQL mutation
 
       // Emit the same message to the Socket.IO server immediately
       socket.emit("sendMessage", chatData);
