@@ -18,13 +18,13 @@ const typeDefs = gql`
   }
   type Post {
     _id: ID
-    url: String!
+    url: String
     thumbnail: String
-    date: String!
+    date: String
     upVotes: Int
     comment_count: Int
     comments: [Comment]
-    owner: String!
+    owner: String
   }
   type User {
     _id: ID

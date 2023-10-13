@@ -274,18 +274,16 @@ const resolvers = {
 
       if (!cap) {
         console.log("post not found");
-        return 0;
+        return null;
       }
 
-      // Explicitly query the updated document
-      const updatedCapsule = await Capsule.findById(capsuleIdObject);
-      const updatedPost = updatedCapsule.posts.find((post) =>
-        post._id.equals(postIdObject)
+      const upvotes = await cap.posts.find(
+        (post) => post._id.equals(postIdObject)
       );
+      // cap now contains the updated document
+      console.log("post found: " + upvotes.upVotes);
 
-      console.log("post found: " + updatedPost.upVotes);
-
-      return updatedPost.upVotes;
+      return upvotes;
     },
 
     downVote: async (parent, { capsuleId, postId }) => {

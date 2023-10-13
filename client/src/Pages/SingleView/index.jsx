@@ -1,6 +1,6 @@
 // Single View for any video or photo with a comment section
 
-import { from, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
@@ -50,15 +50,16 @@ export default function SingleView({ cloudName, videoId }) {
 
   const postData = data?.getPost || "";
 
-  console.log("postData", postData);
-
   const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
-  const [upvoteTotal, setUpvoteTotal] = useState(postData.upVotes);
-  const [commentTotal, setCommentTotal] = useState(postData.comment_count);
+  const [upvoteTotal, setUpvoteTotal] = useState(0);
+  const [commentTotal, setCommentTotal] = useState(0);
 
+  useEffect(() => {
+    setUpvoteTotal(postData.upVotes);
+  }, [postData]);
   //TODO save to database on like and unlike
 
   //TODO save commnet to database
@@ -79,15 +80,6 @@ export default function SingleView({ cloudName, videoId }) {
       }
     }
   }, []);
-
-  useEffect(() => {
-    console.log("used this effect");
-    const updateDatabase = async () => {
-      const returned = await upVoteDatabase();
-      console.log("returned", returned);
-    };
-    updateDatabase();
-  }, [upvoteTotal, upVoteDatabase]);
 
   if (loading)
     return (
@@ -110,10 +102,12 @@ export default function SingleView({ cloudName, videoId }) {
 
   const upVote = async () => {
     if (storedLike) {
-      setUpvoteTotal(upvoteTotal - 1);
       localStorage.removeItem(`${postId}`);
     } else {
-      setUpvoteTotal(upvoteTotal + 1);
+      const returned = await upVoteDatabase({
+        variables: { capsuleId: eventId, postId: postId },
+      });
+      setUpvoteTotal(returned.data.upVote.upVotes);
       localStorage.setItem(`${postId}`, "True");
     }
     setStoredLike(!storedLike);
