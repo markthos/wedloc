@@ -77,7 +77,7 @@ const resolvers = {
           title,
           date,
           location,
-          owner: context.user._id,
+          owner: context.user.username,
         });
         await User.findOneAndUpdate(
           { _id: context.user._id },
