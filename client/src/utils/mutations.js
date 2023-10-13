@@ -42,3 +42,21 @@ mutation CreateCapsule($title: String!, $date: String!, $location: String!) {
   }
 }
 `;
+
+export const UPVOTE = gql`
+  mutation upVote($capsuleId: ID!, $postId: ID!) {
+    upVote(capsuleId: $capsuleId, postId: $postId) {
+      upVotes
+    }
+  }
+`
+
+// export const DOWNVOTE = gql`
+//   mutation downVote($capsuleId: ID!, $postId: ID!) {
+//   }
+// ` 
+
+// export const ADD_COMMENT = gql`
+//   mutation addPost($capsuleId: ID!, $text: String!) {
+//   }
+// `

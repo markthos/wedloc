@@ -21,7 +21,7 @@ const typeDefs = gql`
     url: String!
     thumbnail: String
     date: String!
-    upVotes: Int!
+    upVotes: Int
     comment_count: Int
     comments: [Comment]
     owner: String!
@@ -106,6 +106,9 @@ const typeDefs = gql`
     deleteUser(username:String!): Auth
     uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
     addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
+    upVote(capsuleId: ID!, postId: ID!): Post
+    downVote(capsuleId: ID!, postId: ID!): Post
+    addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Comment
   }
 `;
 

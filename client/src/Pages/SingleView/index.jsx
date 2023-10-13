@@ -1,6 +1,6 @@
 // Single View for any video or photo with a comment section
 
-import { useQuery } from "@apollo/client";
+import { from, useMutation, useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
@@ -13,6 +13,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { IconButton } from "@mui/material";
+import { UPVOTE } from "../../utils/mutations";
 
 const style = {
   height: "80vh",
@@ -40,7 +41,7 @@ export default function SingleView({ cloudName, videoId }) {
   const [storedLike, setStoredLike] = useState(
     localStorage.getItem(`${postId}`) || false,
   );
-  
+
   const [commentView, setCommentView] = useState(false);
 
   const { loading, data } = useQuery(GET_POST, {
@@ -49,7 +50,18 @@ export default function SingleView({ cloudName, videoId }) {
 
   const postData = data?.getPost || "";
 
-  const [upvoteTotal, setUpvoteTotal] = useState(0);
+  console.log("postData", postData);
+
+  const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
+    variables: { capsuleId: eventId, postId: postId },
+  });
+
+  const [upvoteTotal, setUpvoteTotal] = useState(postData.upVotes);
+  const [commentTotal, setCommentTotal] = useState(postData.comment_count);
+
+  //TODO save to database on like and unlike
+
+  //TODO save commnet to database
 
   useEffect(() => {
     if (data) {
@@ -67,6 +79,15 @@ export default function SingleView({ cloudName, videoId }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    console.log("used this effect");
+    const updateDatabase = async () => {
+      const returned = await upVoteDatabase();
+      console.log("returned", returned);
+    };
+    updateDatabase();
+  }, [upvoteTotal, upVoteDatabase]);
 
   if (loading)
     return (
@@ -87,13 +108,13 @@ export default function SingleView({ cloudName, videoId }) {
     navigate(`/eventspace/${eventId}`);
   };
 
-  const upVote = () => {
+  const upVote = async () => {
     if (storedLike) {
       setUpvoteTotal(upvoteTotal - 1);
       localStorage.removeItem(`${postId}`);
     } else {
       setUpvoteTotal(upvoteTotal + 1);
-      localStorage.setItem(`${postId}`, "liked");
+      localStorage.setItem(`${postId}`, "True");
     }
     setStoredLike(!storedLike);
   };
@@ -138,9 +159,14 @@ export default function SingleView({ cloudName, videoId }) {
               <p className="absolute right-0 top-0">{upvoteTotal}</p>
             )}
           </div>
-          <IconButton onClick={() => setCommentView(!commentView)}>
-            <MessageIcon />
-          </IconButton>
+          <div>
+            <IconButton onClick={() => setCommentView(!commentView)}>
+              <MessageIcon />
+            </IconButton>
+            {commentTotal > 0 && (
+              <p className="absolute right-0 top-0">{commentTotal}</p>
+            )}
+          </div>
         </div>
 
         <StyledButton
