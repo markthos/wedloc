@@ -7,6 +7,7 @@ const typeDefs = gql`
     _id: ID
     title: String!
     date: String!
+    owner: String!
     location: String
     posts: [Post]
     chat: [LiveChat]
@@ -51,6 +52,7 @@ const typeDefs = gql`
   type Query {
     me: User
     getChat: [LiveChat]
+    getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post

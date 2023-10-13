@@ -22,6 +22,9 @@ const resolvers = {
     getCapsule: async (parent, { _id }) => {
       return await Capsule.findOne({ _id });
     },
+    getCapsulesDev: async () => {
+      return await Capsule.find({});
+    },
     me: async (parent, args, context) => {
       if (context.user) {
         return await User.findOne({ _id: context.user._id });
