@@ -3,7 +3,47 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import StyledButton from '../../components/StyledButton';
 import StyledFormInput from '../../components/StyledFormInput';
 
+
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { ADD_CAPSULE } from '../../utils/mutations';
+import Auth from '../../utils/auth'
+
+
+
+
 export default function EventCreator() {
+
+  const [formState, setFormState] = useState({title: '', location: '', date: ''});
+  const [addCapsule, { error, data}] = useMutation(ADD_CAPSULE);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await addCapsule({
+        variables: { ...formState },
+      })
+      console.log(data)
+    } catch (error) {
+      console.error(error);
+    }
+
+    setFormState({
+      title: '',
+      location: '',
+      date: '',
+    })
+  };
+
     return (
       <main className="bg-main_bg min-h-screen">
         <section className="bg-beige grid container mx-auto px-auto w-1/2 rounded-tl-xl rounded-br-xl">
@@ -19,11 +59,14 @@ export default function EventCreator() {
           </p>
           </div>
           <div className="">
-            <form className="px-24 space-y-4 space-x-auto">
+            <form className="px-24 space-y-4 space-x-auto"
+              onSubmit={handleFormSubmit}>
               <StyledFormInput 
                 type="text"
-                name="event"
+                name="title"
                 placeholder={'Event Name'}
+                onChange={handleChange}
+                value={formState.title}
                 required={require}
 
               />
@@ -31,6 +74,8 @@ export default function EventCreator() {
                 type="text"
                 name="location"
                 placeholder={'City, State'}
+                onChange={handleChange}
+                value={formState.location}
                 required={require}
 
               />
@@ -38,15 +83,16 @@ export default function EventCreator() {
                 type="date"
                 name="date"
                 placeholder={'Event Date'}
+                onChange={handleChange}
+                value={formState.date}
                 required={require}
-
               />
               <StyledButton
                 submit
                 primaryColor
                 displayText={"Create Event"}
               />
-        </form>
+          </form>
         </div>
         </section>
       </main>

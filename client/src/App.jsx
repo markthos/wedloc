@@ -24,6 +24,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 const client = new ApolloClient({
   uri: "/graphql",
   cache: new InMemoryCache(),
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('id_token')}`
+  }
 });
 
 export default function App() {
