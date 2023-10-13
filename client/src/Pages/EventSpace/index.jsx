@@ -70,6 +70,8 @@ export default function EventSpace() {
   // Check for the capsule data
   const cap = data?.getCapsule || null;
 
+  console.log("cap", cap);
+
   // display loading screen
   if (loading)
     return (

@@ -9,8 +9,12 @@ const typeDefs = gql`
     date: String!
     owner: String!
     location: String
+    posts_count: Int
     posts: [Post]
+    chat_count: Int
     chat: [LiveChat]
+    attendant_count: Int
+    attendants: [Attendees]
   }
   type Post {
     _id: ID
@@ -18,6 +22,7 @@ const typeDefs = gql`
     thumbnail: String
     date: String!
     upVotes: Int!
+    comment_count: Int
     comments: [Comment]
     owner: String!
   }
@@ -48,6 +53,12 @@ const typeDefs = gql`
     author: String!
     date: String!
   }
+
+  type Attendees {
+    _id: ID
+    name: String!
+  }
+
 
   type Query {
     me: User

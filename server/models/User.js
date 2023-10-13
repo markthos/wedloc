@@ -36,6 +36,7 @@ const userSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Capsule",
+      default: [],
     },
   ],
 },
@@ -49,6 +50,11 @@ userSchema.virtual('fullName').get(function() {
   return this.firstName + ' ' + this.lastName;
 });
 
+userSchema.virtual("capsules_count").get(function () {
+  return this.capsules.length;
+});
+
+
 userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
@@ -61,6 +67,8 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isCorrectPassword = async function (password) {
   return bcrypt.compare(password, this.password);
 };
+
+
 
 const User = model("User", userSchema);
 
