@@ -7,12 +7,15 @@ export const GET_CAPSULE = gql`
       title
       date
       location
+      posts_count
+      chat_count
       posts {
         _id
         url
         thumbnail
         date
         upVotes
+        comment_count
         comments {
           _id
           text
@@ -48,6 +51,7 @@ query getPost($capsuleId: ID!, $postId: ID!) {
     thumbnail
     date
     upVotes
+    comment_count
     comments {
       _id
       text
@@ -66,6 +70,7 @@ export const GET_CHAT = gql`
       title
       date
       location
+      chat_count
       chat {
         _id
         text

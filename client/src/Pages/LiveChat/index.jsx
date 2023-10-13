@@ -153,8 +153,6 @@ export default function LiveChat() {
     }
   };
 
-  console.log(chatHistory.chat);
-
   // return the chat history and the form to send a message
   return (
     <div className=" bg-main_bg">
