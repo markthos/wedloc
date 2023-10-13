@@ -25,6 +25,16 @@ const resolvers = {
     getCapsulesDev: async () => {
       return await Capsule.find({});
     },
+    getCapsules: async (parent, args, context) => {
+      if (context.user) {
+        const user = await User.findOne({ _id: context.user._id }).populate(
+          "capsules"
+        );
+        return user.capsules;
+      }
+      throw new AuthenticationError("Authentication error");
+    },
+    
     me: async (parent, args, context) => {
       if (context.user) {
         return await User.findOne({ _id: context.user._id });
