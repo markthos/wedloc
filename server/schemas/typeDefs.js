@@ -72,7 +72,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createCapsule(title: String!, date: String!, owner: ID!): Capsule
+    createCapsule(title: String!, location: String!, date: String!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth

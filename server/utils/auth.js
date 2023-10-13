@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
 const expiration = '2h';
 require('dotenv').config();
-// const secret = "mysecretsshhhhh";
+// const secret = "mysecret";
 
 module.exports = {
     authMiddleware: function ({ req }) {
         // console.log('we hit authMiddleware')
         let token = req.query.token || req.body.token || req.headers.authorization;
-        // console.log(token)
       
         if (req.headers.authorization) {
           token = token.split(' ').pop().trim();
         }
-      
+  
         // if (!token) {
         //   throw new Error('You have no token!');
         // }
