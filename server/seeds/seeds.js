@@ -10,12 +10,18 @@ db.once("open", async () => {
   await Capsule.deleteMany({});
 
   const user = await User.create(userSeed);
+  console.log(user);
   const cap = await Capsule.create(capsuleSeed);
+  console.log(cap);
   
   user.capsules.push(cap);
+  console.log(user);
 
-  user.save()
-
+  // update user with associated capsule by owner and username
+  await User.findOneAndUpdate(
+    { owner: User.username },
+    { $addToSet: { capsules: cap._id } }
+  );
 
   console.log("all done!");
   process.exit(0);

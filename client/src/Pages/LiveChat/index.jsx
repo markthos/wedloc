@@ -7,7 +7,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import io from "socket.io-client";
 import { GET_CHAT } from "../../utils/queries";
 import { ADD_CHAT } from "../../utils/mutations";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
@@ -44,9 +44,6 @@ export default function LiveChat() {
 
   // check if there is chat history
   const chatHistory = data?.getCapsule || [];
-  // const dateSorted = chatHistory.chat.sort((a, b) => a.date - b.date );
-
-  // Function to scroll to the bottom of the chat history div
 
   // Create a new message via GraphQL mutation and set createMessage to a function
   const [createMessage, { error }] = useMutation(ADD_CHAT, {
@@ -71,9 +68,14 @@ export default function LiveChat() {
       item.innerHTML = `
         <div class="flex gap-3 justify-between">
           <h3>${message.author}</h3>
-          <p>${dayjs(message.date)}</p>
+          <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
         </div>
-        <div class="flex justify-end bg-white font-extrabold">
+        <div class="flex justify-end bg-white font-extrabold" 
+          style="border-bottom-left-radius: 15px;
+          border-top-right-radius: 15px;
+          padding: 3px;
+          padding-left: 10px;
+          padding-right: 10px;">
           <p>${message.text}</p>
         </div>`;
       messages.appendChild(item);
@@ -127,7 +129,6 @@ export default function LiveChat() {
     try {
       // check the console for the data
       console.log("Sending message:", chatData);
-      // // Send a new message via GraphQL mutation
 
       // Emit the same message to the Socket.IO server immediately
       socket.emit("sendMessage", chatData);
@@ -157,10 +158,10 @@ export default function LiveChat() {
       <section className="container m-auto">
         <h1 className="text-center font-extrabold">Live Chat</h1>
         <div
-          className="no-scrollbar flex flex-col items-center justify-center overflow-scroll p-6"
+          className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
           style={{ height: "70vh" }}
         >
-          <ul id="messages">
+          <ul id="messages" className="h-full">
             {/* map over the chat history and display the messages */}
             {chatHistory.chat.map((message) => (
               <li key={message._id}>
@@ -188,10 +189,12 @@ export default function LiveChat() {
           </ul>
         </div>
 
-        <form className="m-6 flex flex-col">
+        <form className="m-6 flex flex-col" onSubmit={handleSendMessage}>
           <input
             type="text"
             value={chatData.text}
+            required
+            placeholder="message to the event"
             onChange={(e) =>
               setChatData(() => ({
                 ...chatData,
@@ -201,7 +204,6 @@ export default function LiveChat() {
           />
           <button
             type="submit"
-            onClick={handleSendMessage}
             className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
             Send Message

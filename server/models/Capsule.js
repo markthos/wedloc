@@ -15,7 +15,7 @@ const capsuleSchema = new Schema({
   },
   owner: {
     type: String,
-    required: true
+    required: true,
   },
   location: {
     type: String,
@@ -23,6 +23,22 @@ const capsuleSchema = new Schema({
   posts: [postSchema],
   chat: [liveChatSchema],
   attendants: [attendeesSchema],
+},  {
+  toJSON: {
+    virtuals: true,
+  },
+});
+
+capsuleSchema.virtual('posts_count').get(function () {
+  return this.posts.length;
+});
+
+capsuleSchema.virtual('chat_count').get(function () {
+  return this.chat.length;
+});
+
+capsuleSchema.virtual('attendant_count').get(function () {
+  return this.attendants.length;
 });
 
 const Capsule = model("Capsule", capsuleSchema);

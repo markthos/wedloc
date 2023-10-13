@@ -1,11 +1,19 @@
 // Single View for any video or photo with a comment section
 
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
-import { useParams, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
+import StyledButton from "../../components/StyledButton";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import MessageIcon from "@mui/icons-material/Message";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { IconButton } from "@mui/material";
+import { UPVOTE } from "../../utils/mutations";
 
 const style = {
   height: "80vh",
@@ -23,17 +31,38 @@ const styleADiv = {
 
 // DEMO VIDEO in there
 export default function SingleView({ cloudName, videoId }) {
+  const { eventId, postId } = useParams();
+  const navigate = useNavigate();
+
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
 
-  const { eventId, postId } = useParams();
+  const [storedLike, setStoredLike] = useState(
+    localStorage.getItem(`${postId}`) || false,
+  );
+
+  const [commentView, setCommentView] = useState(false);
 
   const { loading, data } = useQuery(GET_POST, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
-  const postData = data?.getPost;
+  const postData = data?.getPost || "";
+
+  const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
+    variables: { capsuleId: eventId, postId: postId },
+  });
+
+  const [upvoteTotal, setUpvoteTotal] = useState(0);
+  const [commentTotal, setCommentTotal] = useState(0);
+
+  useEffect(() => {
+    setUpvoteTotal(postData.upVotes);
+  }, [postData]);
+  //TODO save to database on like and unlike
+
+  //TODO save commnet to database
 
   useEffect(() => {
     if (data) {
@@ -50,7 +79,7 @@ export default function SingleView({ cloudName, videoId }) {
         setVideoFile(false);
       }
     }
-  }, [data]);
+  }, []);
 
   if (loading)
     return (
@@ -67,51 +96,80 @@ export default function SingleView({ cloudName, videoId }) {
     console.log("backward");
   };
 
+  const handleReturn = () => {
+    navigate(`/eventspace/${eventId}`);
+  };
+
+  const upVote = async () => {
+    if (storedLike) {
+      localStorage.removeItem(`${postId}`);
+    } else {
+      const returned = await upVoteDatabase({
+        variables: { capsuleId: eventId, postId: postId },
+      });
+      setUpvoteTotal(returned.data.upVote.upVotes);
+      localStorage.setItem(`${postId}`, "True");
+    }
+    setStoredLike(!storedLike);
+  };
+
   if (!name) {
-    return <Navigate to={`/attendeesignup/${eventId}`} />;
+    navigate(`/attendeesignup/${eventId}`);
   }
 
   return (
-    <main className="min-screen h-100 flex justify-center overflow-hidden bg-main_bg">
-      <section className="gap container m-auto flex flex-col justify-center">
-        <div className="m-4 flex justify-center gap-4 ">
-          <button
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={handleBackward}
-          >
-            {"<"}
-          </button>
-          {imgFile && (
-            <img width="500px" src={postData.url} alt={postData._id}></img>
-          )}
-          {videoFile && (
-            <iframe
-              title={postData._id}
-              src={postData.url}
-              style={style}
-              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-            ></iframe>
-          )}
-          <button
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={handleForward}
-          >
-            {">"}
-          </button>
-        </div>
-        <div className="flex flex-col content-center justify-center">
-          <h1 className="center flex justify-center ">
-            posted by: {postData.owner} on{" "}
-            {dayjs(postData.date).format("MM-DD-YYYY")}
-          </h1>
-          <button
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            onClick={handleForward}
-          >
-            Back
-          </button>
+    <section className="gap container m-auto flex w-96 flex-col justify-center">
+      <h1 className="center flex justify-center ">
+        posted by: {postData.owner} on
+        {dayjs(postData.date).format("MM-DD-YYYY")}
+      </h1>
+      <div className="m-4 flex justify-center gap-4 ">
+        <button onClick={handleForward}>
+          <ChevronLeftIcon />
+        </button>
+
+        {imgFile && (
+          <img width="500px" src={postData.url} alt={postData._id}></img>
+        )}
+        {videoFile && (
+          <iframe
+            title={postData._id}
+            src={postData.url}
+            style={style}
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          ></iframe>
+        )}
+        <button onClick={handleBackward}>
+          <ChevronRightIcon />
+        </button>
+      </div>
+      <div className="flex justify-between">
+        <div className="flex flex-row items-center justify-center">
+          <div className="relative">
+            <IconButton onClick={upVote}>
+              {storedLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </IconButton>
+            {upvoteTotal > 0 && (
+              <p className="absolute right-0 top-0">{upvoteTotal}</p>
+            )}
+          </div>
+          <div>
+            <IconButton onClick={() => setCommentView(!commentView)}>
+              <MessageIcon />
+            </IconButton>
+            {commentTotal > 0 && (
+              <p className="absolute right-0 top-0">{commentTotal}</p>
+            )}
+          </div>
         </div>
 
+        <StyledButton
+          primaryColor
+          displayText={"Back"}
+          onClick={handleReturn}
+        />
+      </div>
+      {commentView && (
         <div className="m-4 flex flex-col text-center">
           <h3>Comment Section</h3>
           <ul className="flex flex-col gap-2">
@@ -140,15 +198,10 @@ export default function SingleView({ cloudName, videoId }) {
               className="resize"
               placeholder="Comment..."
             />
-            <button
-              type="submit"
-              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-            >
-              Submit
-            </button>
+            <StyledButton type="submit" primaryColor displayText={"Submit"} />
           </form>
         </div>
-      </section>
-    </main>
+      )}
+    </section>
   );
 }

@@ -9,17 +9,22 @@ const typeDefs = gql`
     date: String!
     owner: String!
     location: String
+    posts_count: Int
     posts: [Post]
+    chat_count: Int
     chat: [LiveChat]
+    attendant_count: Int
+    attendants: [Attendees]
   }
   type Post {
     _id: ID
-    url: String!
+    url: String
     thumbnail: String
-    date: String!
-    upVotes: Int!
+    date: String
+    upVotes: Int
+    comment_count: Int
     comments: [Comment]
-    owner: String!
+    owner: String
   }
   type User {
     _id: ID
@@ -49,11 +54,18 @@ const typeDefs = gql`
     date: String!
   }
 
+  type Attendees {
+    _id: ID
+    name: String!
+  }
+
+
   type Query {
     me: User
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
+    getCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
   }
@@ -71,8 +83,18 @@ const typeDefs = gql`
     secure_url: String
   }
 
+  type Payment {
+    _id: ID
+    userId: ID!
+    chargeId: String!
+    amount: Float!
+    currency: String!
+    description: String
+    createdAt: String!
+  }
+
   type Mutation {
-    createCapsule(title: String!, date: String!, owner: ID!): Capsule
+    createCapsule(title: String!, location: String!, date: String!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
@@ -83,6 +105,10 @@ const typeDefs = gql`
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
+    addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
+    upVote(capsuleId: ID!, postId: ID!): Post
+    downVote(capsuleId: ID!, postId: ID!): Post
+    addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Comment
   }
 `;
 

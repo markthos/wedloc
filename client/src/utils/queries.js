@@ -7,12 +7,15 @@ export const GET_CAPSULE = gql`
       title
       date
       location
+      posts_count
+      chat_count
       posts {
         _id
         url
         thumbnail
         date
         upVotes
+        comment_count
         comments {
           _id
           text
@@ -31,15 +34,6 @@ export const GET_CAPSULE = gql`
   }
 `;
 
-export const LOGIN_USER = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      _id
-      username
-    }
-  }
-`;
-
 export const GET_POST = gql`
 query getPost($capsuleId: ID!, $postId: ID!) {
   getPost(capsuleId: $capsuleId, postId: $postId) {
@@ -48,6 +42,7 @@ query getPost($capsuleId: ID!, $postId: ID!) {
     thumbnail
     date
     upVotes
+    comment_count
     comments {
       _id
       text
@@ -66,6 +61,7 @@ export const GET_CHAT = gql`
       title
       date
       location
+      chat_count
       chat {
         _id
         text

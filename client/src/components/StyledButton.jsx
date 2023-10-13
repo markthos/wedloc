@@ -7,17 +7,23 @@ export default function StyledButton({
   submit,
   button,
   reset,
-  displayText,
   primaryColor,
   secondaryColor,
+  outlined,
+  children,
 }) {
   // Set the button style based on the props
   let buttonStyle = "";
 
   if (primaryColor) {
-    buttonStyle = "bg-black hover:bg-darkgray text-white py-2 px-4 rounded";
+    buttonStyle =
+      "bg-black hover:bg-darkgray text-white py-2 px-4 rounded uppercase w-max";
   } else if (secondaryColor) {
-    buttonStyle = "bg-gold hover:bg-white text-black py-2 px-4 rounded";
+    buttonStyle =
+      "bg-gold hover:bg-white text-black py-2 px-4 rounded uppercase w-max";
+  } else if (outlined) {
+    buttonStyle =
+      "bg-transparent hover:underline text-black py-2 px-4 rounded uppercase w-max border-2 border-black";
   }
 
   // Set the button type based on the props
@@ -38,7 +44,7 @@ export default function StyledButton({
       disabled={disabled}
       type={buttonType}
     >
-      {displayText}
+      {children}
     </button>
   );
 }
