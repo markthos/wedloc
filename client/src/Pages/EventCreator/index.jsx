@@ -44,47 +44,38 @@ export default function EventCreator() {
     })
   };
 
-    return (
-      <main className="bg-main_bg min-h-screen">
-        <section className="bg-beige grid container mx-auto px-auto w-1/2 rounded-tl-xl rounded-br-xl">
-          <div className="my-10 space-xy-3">
-            <h1 className="font-sans text-xl text-center font-medium w-auto px-20 md:text-3xl">Event Creator</h1>
-          </div>
-          <div className='ml-10'>
-          <div className="bg-lightgray rounded-full w-32 ml-8">
-            <CameraAltOutlinedIcon fontSize="large" className="w-32 m-12" />
-          </div>
-          <p className='text-center md:text-left'>
-            Upload your event photo
-          </p>
-          </div>
-          <div className="">
-            <form className="px-24 space-y-4 space-x-auto"
-              onSubmit={handleFormSubmit}>
+  return (
+    
+    <section className="flex flex-row justify-center items-center min-h-full w-screen">
+      <div className='mb-5 flex flex-col items-center rounded-md bg-beige shadow-lg w-screen md:w-1/2'>
+        <h1 className="font-sans text-2xl text-center font-medium mt-6 md:text-3xl">Event Creator</h1>
+        <div className='flex flex-col items-center w-full'>
+          <div className=''>
+            <div className="bg-lightgray rounded-full w-32">
+              <CameraAltOutlinedIcon fontSize="large" className="w-32 m-12" />
+            </div>
+            </div>
+            <p className='m-4'>
+                Upload your event photo
+              </p>
+          <div className="w-full">
+            <form className="flex flex-col">
               <StyledFormInput 
                 type="text"
-                name="title"
+                name="event"
                 placeholder={'Event Name'}
-                onChange={handleChange}
-                value={formState.title}
                 required={require}
-
               />
               <StyledFormInput 
                 type="text"
                 name="location"
                 placeholder={'City, State'}
-                onChange={handleChange}
-                value={formState.location}
                 required={require}
-
               />
               <StyledFormInput 
                 type="date"
                 name="date"
                 placeholder={'Event Date'}
-                onChange={handleChange}
-                value={formState.date}
                 required={require}
               />
               <StyledButton
@@ -92,9 +83,11 @@ export default function EventCreator() {
                 primaryColor
                 displayText={"Create Event"}
               />
-          </form>
+            </form>
+          </div>
         </div>
-        </section>
-      </main>
-    );
+      </div>
+    </section>
+   
+  );
 }
