@@ -7,6 +7,7 @@ import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../../utils/mutations';
 import Auth from '../../utils/auth'
 import StyledButton from '../../components/StyledButton';
+import StyledFormInput from "../../components/StyledFormInput";
 
 export default function Login(props) {
   const [formState, setFormState] = useState({username: '', password: ''});
@@ -56,27 +57,25 @@ export default function Login(props) {
               onSubmit={handleFormSubmit}
               className="mb-5 flex flex-col items-center rounded-md bg-beige px-5 py-10 shadow-lg"
             >
-              <input
-                className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <StyledFormInput
+                fullWidthStyle
+                onChange={handleChange}
+                type={"text"}
+                name={"username"}
+                placeholder={"Username"}
                 value={formState.username}
-                onChange={handleChange}
-                type="text"
-                name="username"
-                placeholder="Username"
+                required
               />
-              <input
-                className="mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+              <StyledFormInput
+                fullWidthStyle
+                onChange={handleChange}
+                type={"password"}
+                name={"password"}
+                placeholder={"Password"}
                 value={formState.password}
-                onChange={handleChange}
-                name="password"
-                type="password"
-                placeholder="Password"
+                required
               />
-              <StyledButton
-                submit
-                primaryColor
-                displayText={"Log In"}
-              />
+              <StyledButton submit primaryColor displayText={"Log In"} />
             </form>
           )}
           {error && <div className="">{error.message}</div>}
