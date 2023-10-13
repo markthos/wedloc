@@ -13,6 +13,7 @@ import {
   EventCreator,
   AttendeeSignup,
   MyEvents,
+  PayMent,
 } from "./Pages";
 import "./App.css";
 import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
@@ -67,6 +68,7 @@ export default function App() {
               <Route path="/about" element={<About />} />
               <Route path="/eventcreator" element={<EventCreator />} />
               <Route path="/myevents" element={<MyEvents />} />
+              <Route path="/payment" element={<PayMent />} />
             </Routes>
           </main>
           <Footer />

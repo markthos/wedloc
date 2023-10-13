@@ -40,6 +40,7 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       { label: 'My Profile', route: '/profile' },
       { label: 'Single View', route: '/singleview' },
       { label: 'Upload', route: '/upload' },
+      { label: 'Payment', route: '/payment' },
   ];
 
   return (

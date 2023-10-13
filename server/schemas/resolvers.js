@@ -1,4 +1,4 @@
-const { User, Capsule, Post } = require("../models");
+const { User, Capsule, Post, Payment } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { createWriteStream } = require("fs");
 const path = require("path");
@@ -222,6 +222,23 @@ const resolvers = {
       console.log(token, user);
       return { token, user };
     },
+
+    addPayment: async (_, { userId, chargeId, amount, currency, description }) => {
+      try {
+        const payment = new Payment({
+          userId,
+          chargeId,
+          amount,
+          currency,
+          description
+        });
+        await payment.save();
+        return payment;
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+    
     uploadFile: async (_, { file }) => {
       try {
         const { createReadStream, filename, mimetype } = await file;
@@ -238,8 +255,7 @@ const resolvers = {
               else resolve(result);
             }
           );
-
-          fileStream.pipe(cloudStream);
+        fileStream.pipe(cloudStream);
         });
 
         // Return metadata and URL
