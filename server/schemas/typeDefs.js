@@ -65,6 +65,7 @@ const typeDefs = gql`
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
+    getCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
   }
@@ -82,8 +83,18 @@ const typeDefs = gql`
     secure_url: String
   }
 
+  type Payment {
+    _id: ID
+    userId: ID!
+    chargeId: String!
+    amount: Float!
+    currency: String!
+    description: String
+    createdAt: String!
+  }
+
   type Mutation {
-    createCapsule(title: String!, date: String!, owner: ID!): Capsule
+    createCapsule(title: String!, location: String!, date: String!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
@@ -94,6 +105,7 @@ const typeDefs = gql`
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
+    addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
   }
 `;
 
