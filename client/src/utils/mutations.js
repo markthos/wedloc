@@ -33,12 +33,30 @@ export const UPLOAD_IMAGE = gql`
 `;
 
 export const ADD_CAPSULE = gql`
-mutation CreateCapsule($title: String!, $date: String!, $location: String!) {
-  createCapsule(title: $title, date: $date, location: $location) {
-    _id
-    title
-    date
-    location
+  mutation CreateCapsule($title: String!, $date: String!, $location: String!) {
+    createCapsule(title: $title, date: $date, location: $location) {
+      _id
+      title
+      date
+      location
+    }
   }
-}
 `;
+
+export const UPVOTE = gql`
+  mutation upVote($capsuleId: ID!, $postId: ID!) {
+    upVote(capsuleId: $capsuleId, postId: $postId) {
+      upVotes
+    }
+  }
+`;
+
+// export const DOWNVOTE = gql`
+//   mutation downVote($capsuleId: ID!, $postId: ID!) {
+//   }
+// `
+
+// export const ADD_COMMENT = gql`
+//   mutation addPost($capsuleId: ID!, $text: String!) {
+//   }
+// `

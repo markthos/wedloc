@@ -17,7 +17,6 @@ const postSchema = new Schema(
     },
     upVotes: {
       type: Number,
-      required: true,
       default: 0,
     },
     comments: [commentSchema],
