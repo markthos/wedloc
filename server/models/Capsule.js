@@ -13,6 +13,10 @@ const capsuleSchema = new Schema({
     required: true,
     default: Date.now,
   },
+  owner: {
+    type: String,
+    required: true
+  },
   location: {
     type: String,
   },
