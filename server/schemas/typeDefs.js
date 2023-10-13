@@ -54,6 +54,7 @@ const typeDefs = gql`
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
+    getCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
   }
