@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
-import { REGISTER_USER } from "../../graphql/mutations";
+import { REGISTER_USER } from "../../utils/mutations";
 import { Link as RouterLink } from "react-router-dom";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
