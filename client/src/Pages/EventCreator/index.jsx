@@ -61,28 +61,30 @@ export default function EventCreator() {
           <div className="w-full">
             <form className="flex flex-col">
               <StyledFormInput 
+                fullWidthStyle
                 type="text"
                 name="event"
                 placeholder={'Event Name'}
-                required={require}
+                value={formState.username}
+                required
               />
               <StyledFormInput 
+                fullWidthStyle
                 type="text"
                 name="location"
                 placeholder={'City, State'}
-                required={require}
+                required
               />
               <StyledFormInput 
+                fullWidthStyle
                 type="date"
                 name="date"
                 placeholder={'Event Date'}
-                required={require}
+                required
               />
-              <StyledButton
-                submit
-                primaryColor
-                displayText={"Create Event"}
-              />
+              <StyledButton submit primaryColor>
+                Create Event
+              </StyledButton>
             </form>
           </div>
         </div>
