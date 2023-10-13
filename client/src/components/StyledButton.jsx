@@ -1,6 +1,5 @@
 // Styled Button Component for use throughout the application
 
-
 export default function StyledButton({
   onClick,
   disabled,
@@ -23,7 +22,7 @@ export default function StyledButton({
       "bg-gold hover:bg-white text-black py-2 px-4 rounded uppercase w-max";
   } else if (outlined) {
     buttonStyle =
-      "bg-transparent hover:underline text-black py-2 px-4 rounded uppercase w-max border-2 border-black";
+      "bg-transparent hover:underline hover:border-darkgray hover:text-darkgray text-black py-2 px-4 rounded uppercase w-max border-2 border-black";
   }
 
   // Set the button type based on the props
