@@ -1,6 +1,9 @@
 {
     "name": "wedloc",
     "version": "1.0.0",
+    "engines": {
+        "nodejs": "16.x"
+    },
     "description": "",
     "main": "server/server.js",
     "scripts": {
@@ -17,6 +20,7 @@
         "concurrently": "^5.1.0"
     },
     "dependencies": {
+        "@craco/craco": "7.1.0",
         "axios": "^1.5.1",
         "bcrypt": "^5.1.1",
         "bcryptjs": "^2.4.3",
