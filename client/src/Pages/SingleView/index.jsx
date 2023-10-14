@@ -1,10 +1,10 @@
 // Single View for any video or photo with a comment section
 
 import { useMutation, useQuery } from "@apollo/client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
-import { Orbit } from "@uiball/loaders";
+
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -14,6 +14,8 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { IconButton } from "@mui/material";
 import { UPVOTE } from "../../utils/mutations";
+
+const LazyLoadingScreen = React.lazy(() => import('../../components/LoadingScreen'));
 
 const style = {
   height: "80vh",
@@ -37,6 +39,7 @@ export default function SingleView({ cloudName, videoId }) {
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
+  const [isImageLoaded, setImageLoaded] = useState(false);
 
   const [storedLike, setStoredLike] = useState(
     localStorage.getItem(`${postId}`) || false,
@@ -49,6 +52,8 @@ export default function SingleView({ cloudName, videoId }) {
   });
 
   const postData = data?.getPost || "";
+
+  console.log(postData.url);
 
   const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
     variables: { capsuleId: eventId, postId: postId },
@@ -81,12 +86,10 @@ export default function SingleView({ cloudName, videoId }) {
     }
   }, []);
 
-  if (loading)
-    return (
-      <div style={styleADiv}>
-        <Orbit size={200} color="white" />
-      </div>
-    );
+  // if (loading)
+  //   return (
+  //     <LazyLoadingScreen /> 
+  //   );
 
   const handleForward = () => {
     console.log("forward");
@@ -117,6 +120,11 @@ export default function SingleView({ cloudName, videoId }) {
     navigate(`/attendeesignup/${eventId}`);
   }
 
+  const handleImageLoad = () => {
+    // Set the state to indicate that the image has loaded.
+    setImageLoaded(true);
+  };
+
   return (
     <section className="gap container m-auto flex w-96 flex-col justify-center">
       <h1 className="center flex justify-center ">
@@ -127,10 +135,14 @@ export default function SingleView({ cloudName, videoId }) {
         <button onClick={handleForward}>
           <ChevronLeftIcon />
         </button>
-
-        {imgFile && (
-          <img width="500px" src={postData.url} alt={postData._id}></img>
-        )}
+        <Suspense fallback={<LazyLoadingScreen />}>
+          <img
+            width="500px"
+            src={postData.url}
+            alt={postData._id}
+            onLoad={handleImageLoad} // Call the function when the image is loaded.
+          ></img>
+        </Suspense>
         {videoFile && (
           <iframe
             title={postData._id}
