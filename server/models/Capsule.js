@@ -20,6 +20,10 @@ const capsuleSchema = new Schema({
   location: {
     type: String,
   },
+  eventPic: {
+    type: String,
+    default: "https://i.imgur.com/1q6QXyv.png",
+  },
   posts: [postSchema],
   chat: [liveChatSchema],
   attendants: [attendeesSchema],

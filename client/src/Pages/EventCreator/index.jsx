@@ -2,9 +2,11 @@
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import StyledButton from '../../components/StyledButton';
 import StyledFormInput from '../../components/StyledFormInput';
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 
-import React, { useState } from 'react';
+
+import React, { useState, useEffect, useRef} from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_CAPSULE } from '../../utils/mutations';
 import Auth from '../../utils/auth'
@@ -12,9 +14,16 @@ import Auth from '../../utils/auth'
 
 
 
+
+
 export default function EventCreator() {
 
   const [formState, setFormState] = useState({title: '', location: '', date: ''});
+  // const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
+  // const cloudinaryRef = useRef(null);
+  // const widgetRef = useRef(null);
+  // const saveFolder = `wedloc/userimages`;
+
   const [addCapsule, { error, data}] = useMutation(ADD_CAPSULE);
 
   const handleChange = (event) => {
@@ -43,6 +52,22 @@ export default function EventCreator() {
       date: '',
     })
   };
+  // useEffect(() => {
+  //   cloudinaryRef.current = window.cloudinary;
+  //   widgetRef.current = cloudinaryRef.current.createUploadWidget(
+  //     {
+  //       cloudName: process.env.REACT_APP_CLOUD_NAME,
+  //       uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+  //       folder: saveFolder,
+  //     },
+  //     function (error, result) {
+  //       if (!error && result && result.event === "success") {
+  //         console.log("Done! Here is the image info: ", result.info);
+  //         setDataURL(result.info.url);
+  //       }
+  //     },
+  //   );
+  // }, [saveFolder]);
 
   return (
     
@@ -55,34 +80,40 @@ export default function EventCreator() {
               <CameraAltOutlinedIcon fontSize="large" className="w-32 m-12" />
             </div>
             </div>
-            <p className='m-4'>
-                Upload your event photo
-              </p>
+            {/* <StyledButton onClick={() => widgetRef.current.open()} outlined>
+            <AddAPhotoIcon className="mr-4" />
+            Upload Picture
+          </StyledButton> */}
           <div className="w-full">
-            <form className="flex flex-col">
+            <form  onSubmit={handleFormSubmit} className="flex flex-col">
               <StyledFormInput 
                 fullWidthStyle
                 type="text"
-                name="event"
+                name="title"
                 placeholder={'Event Name'}
-                value={formState.username}
-                required
+                onChange={handleChange}
+                value={formState.title}
+                required={require}
               />
-              <StyledFormInput 
+             <StyledFormInput 
                 fullWidthStyle
                 type="text"
                 name="location"
                 placeholder={'City, State'}
-                required
+                onChange={handleChange}
+                value={formState.location}
+                required={require}
               />
               <StyledFormInput 
-                fullWidthStyle
-                type="date"
-                name="date"
-                placeholder={'Event Date'}
-                required
-              />
-              <StyledButton submit primaryColor>
+                  fullWidthStyle
+                  type="date"
+                  name="date"
+                  placeholder={'Event Date'}
+                  onChange={handleChange}
+                  value={formState.date}
+                  required={require}
+                />
+             <StyledButton submit primaryColor>
                 Create Event
               </StyledButton>
             </form>
