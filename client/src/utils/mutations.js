@@ -55,6 +55,7 @@ export const ADD_CAPSULE = gql`
   }
 `;
 
+// upvote on a single post
 export const UPVOTE = gql`
   mutation upVote($capsuleId: ID!, $postId: ID!) {
     upVote(capsuleId: $capsuleId, postId: $postId) {
@@ -63,12 +64,26 @@ export const UPVOTE = gql`
   }
 `;
 
-// export const DOWNVOTE = gql`
-//   mutation downVote($capsuleId: ID!, $postId: ID!) {
-//   }
-// `
+// downvote on a single post
+export const DOWNVOTE = gql`
+  mutation downVote($capsuleId: ID!, $postId: ID!) {
+    downVote(capsuleId: $capsuleId, postId: $postId) {
+      upVotes
+    }
+  }
+`;
 
-// export const ADD_COMMENT = gql`
-//   mutation addPost($capsuleId: ID!, $text: String!) {
-//   }
-// `
+// add a comment to a single post
+export const ADD_COMMENT = gql`
+  mutation addComment($capsuleId: ID!, $postId: ID!, $text: String!, $author: String!) {
+    addComment(capsuleId: $capsuleId, postId: $postId, text: $text, author: $author) {
+      comment_count
+      comments {
+        _id
+        text
+        author
+        date
+      }
+    }
+  }
+`
