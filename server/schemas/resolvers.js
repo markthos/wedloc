@@ -89,6 +89,23 @@ const resolvers = {
       }
     },
 
+    devDelCapsule: async (parent, { capsuleId }) => {
+      try {
+        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+    
+        console.log("Capsule deleted", capsule);
+        return { success: true, message: "Capsule deleted successfully" };
+      } catch (error) {
+        console.error("Error deleting capsule", error);
+        return { success: false, message: "Error deleting capsule" };
+      }
+    },
+    
+
+
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { file }) => {
       try {
