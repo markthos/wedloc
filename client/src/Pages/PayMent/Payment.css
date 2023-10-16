@@ -1,0 +1,92 @@
+/* General Styles */
+.checkout-form {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .payment-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 20px;
+  }
+  
+  .card-input {
+    flex: 1;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Button Styles */
+  .payment-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  
+  .payment-options button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  
+  .payment-options button:hover {
+    transform: translateY(-2px);
+  }
+  
+  .payment-options button:active {
+    transform: translateY(0);
+  }
+  
+  .payment-options button:focus {
+    outline: none;
+  }
+  
+  /* Individual Payment Button Styles */
+  .payment-options button:nth-child(1) {
+    background-color: #2874f0;
+    color: white;
+  }
+  
+  .payment-options button:nth-child(2) {
+    background-color: #50c878;
+    color: white;
+  }
+  
+  .payment-options button:nth-child(3) {
+    background-color: #ffc222;
+    color: white;
+  }
+  
+  /* Pay Now Button Styles */
+  .pay-btn {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  
+  .pay-btn:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+  }
+  
+  .pay-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pay-btn:disabled:hover {
+    transform: none;
+  }
+  
