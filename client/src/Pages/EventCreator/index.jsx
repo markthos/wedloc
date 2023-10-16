@@ -4,21 +4,14 @@ import StyledButton from '../../components/StyledButton';
 import StyledFormInput from '../../components/StyledFormInput';
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
-
-
 import React, { useState, useEffect, useRef} from 'react';
+
 import { useMutation } from '@apollo/client';
 import { ADD_CAPSULE } from '../../utils/mutations';
-
-import Auth from '../../utils/auth'
-
-
-
 
 
 
 export default function EventCreator() {
-
   const [formState, setFormState] = useState({title: '', location: '', date: '', eventPic: ''});
   const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // using this to display the image on the page
@@ -42,9 +35,6 @@ export default function EventCreator() {
     event.preventDefault();
     widgetRef.current.open();
  }
- // handle the new image 
-
-
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
