@@ -60,7 +60,7 @@ const resolvers = {
         return null; // Post not found
       }
 
-      console.log("post found");
+      console.log("Post Found");
 
       return post;
     },
@@ -329,11 +329,11 @@ const resolvers = {
         return null; // Handle this as needed
       }
 
-      const post = await updatedPost.posts.find((post) =>
-      post._id.equals(postIdObject)
-    );
+      const post = updatedPost.posts.find((post) =>
+        post._id.equals(postIdObject)
+      );
 
-      console.log("Post updated", post);
+      console.log("New Comment Added");
 
       return post;
     },

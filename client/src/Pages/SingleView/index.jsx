@@ -16,7 +16,6 @@ import { IconButton } from "@mui/material";
 import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
 
 import LoadingScreen from "../../components/LoadingScreen";
-import { set } from "../../../../server/models/LiveChat";
 
 const LazyLoadingScreen = React.lazy(() =>
   import("../../components/LoadingScreen"),
@@ -41,7 +40,7 @@ export default function SingleView({ cloudName, videoId }) {
   const { eventId, postId } = useParams();
   const navigate = useNavigate();
 
-  const [imgFile, setImageFile] = useState(false);
+  const [imgFile, setImageFile] = useState(false); 
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
   const [isImageLoaded, setImageLoaded] = useState(false);
@@ -60,12 +59,16 @@ export default function SingleView({ cloudName, videoId }) {
   const [commentTotal, setCommentTotal] = useState(0);
 
   // query for post data
-  const { loading, data } = useQuery(GET_POST, {
+  const { loading, data, refetch } = useQuery(GET_POST, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
+  const [postData, setPostData] = useState("");
+
+  useEffect(() => {
+    setPostData(data?.getPost || "");
+  }, [data]);
   // data from query
-  const postData = data?.getPost || "";
 
   // mutation for upvoting
   const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
@@ -90,12 +93,10 @@ export default function SingleView({ cloudName, videoId }) {
     setCommentTotal(postData.comment_count);
   }, [postData]);
 
-  //TODO save to database on like and unlike
-
   //TODO save commnet to database
 
   useEffect(() => {
-    if (data) {
+    if (postData) {
       const extension = postData.url.split(".").pop();
       console.log("extension", extension);
       if (extension === "jpg" || extension === "png") {
@@ -109,7 +110,8 @@ export default function SingleView({ cloudName, videoId }) {
         setVideoFile(false);
       }
     }
-  }, []);
+  }, [postData]);
+
 
   if (loading) return <LoadingScreen />;
 
@@ -151,16 +153,16 @@ export default function SingleView({ cloudName, videoId }) {
   const handleNewComment = async (event) => {
     event.preventDefault();
 
-    console.log(name);
-    console.log(event.target.newComment.value);
     const text = event.target.newComment.value;
-    const newComments = await addCommentDatabase({
+    await addCommentDatabase({
       variables: {
         text: text,
       },
     });
 
-    console.log(newComments);//!!STOPPING POINT for tonight
+    refetch();
+
+    event.target.newComment.value = "";
   };
 
   return (
@@ -222,7 +224,7 @@ export default function SingleView({ cloudName, videoId }) {
           <h3>Comment Section</h3>
           <ul className="flex flex-col gap-2">
             {postData.comments.map((comment) => (
-              <li key={comment._id}>
+              <li key={`commentId_${comment._id}`}>
                 <div className="flex justify-between">
                   <h3>{comment.author}</h3>
                   <p>{comment.date}</p>
