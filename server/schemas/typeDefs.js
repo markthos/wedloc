@@ -108,7 +108,7 @@ const typeDefs = gql`
     addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
     upVote(capsuleId: ID!, postId: ID!): Post
     downVote(capsuleId: ID!, postId: ID!): Post
-    addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Comment
+    addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Post  
   }
 `;
 

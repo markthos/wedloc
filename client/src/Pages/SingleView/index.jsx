@@ -13,9 +13,14 @@ import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { IconButton } from "@mui/material";
-import { UPVOTE } from "../../utils/mutations";
+import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
 
-const LazyLoadingScreen = React.lazy(() => import('../../components/LoadingScreen'));
+import LoadingScreen from "../../components/LoadingScreen";
+import { set } from "../../../../server/models/LiveChat";
+
+const LazyLoadingScreen = React.lazy(() =>
+  import("../../components/LoadingScreen"),
+); // Lazy-loading screen
 
 const style = {
   height: "80vh",
@@ -41,30 +46,50 @@ export default function SingleView({ cloudName, videoId }) {
   const [name, setName] = useState(localStorage.getItem("name"));
   const [isImageLoaded, setImageLoaded] = useState(false);
 
+  // state of current user like status saved to local storage
   const [storedLike, setStoredLike] = useState(
     localStorage.getItem(`${postId}`) || false,
   );
 
+  // Set the view of the comments on or off
   const [commentView, setCommentView] = useState(false);
 
+  // states for upvote total
+  const [upvoteTotal, setUpvoteTotal] = useState(0);
+  // state for comment total
+  const [commentTotal, setCommentTotal] = useState(0);
+
+  // query for post data
   const { loading, data } = useQuery(GET_POST, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
+  // data from query
   const postData = data?.getPost || "";
 
-  console.log(postData.url);
-
+  // mutation for upvoting
   const [upVoteDatabase, { error }] = useMutation(UPVOTE, {
     variables: { capsuleId: eventId, postId: postId },
   });
 
-  const [upvoteTotal, setUpvoteTotal] = useState(0);
-  const [commentTotal, setCommentTotal] = useState(0);
+  // mutation for  downvoting
+  const [downVoteDatabase, { error2 }] = useMutation(DOWNVOTE, {
+    variables: { capsuleId: eventId, postId: postId },
+  });
+
+  // mustation for adding a comment
+  const [addCommentDatabase, { error3 }] = useMutation(ADD_COMMENT, {
+    variables: { capsuleId: eventId, postId: postId, author: name, text: "" },
+  });
 
   useEffect(() => {
     setUpvoteTotal(postData.upVotes);
   }, [postData]);
+
+  useEffect(() => {
+    setCommentTotal(postData.comment_count);
+  }, [postData]);
+
   //TODO save to database on like and unlike
 
   //TODO save commnet to database
@@ -86,10 +111,7 @@ export default function SingleView({ cloudName, videoId }) {
     }
   }, []);
 
-  // if (loading)
-  //   return (
-  //     <LazyLoadingScreen /> 
-  //   );
+  if (loading) return <LoadingScreen />;
 
   const handleForward = () => {
     console.log("forward");
@@ -105,24 +127,40 @@ export default function SingleView({ cloudName, videoId }) {
 
   const upVote = async () => {
     if (storedLike) {
+      const downvoted = await downVoteDatabase();
       localStorage.removeItem(`${postId}`);
+      setStoredLike(false);
+      setUpvoteTotal(downvoted.data.downVote.upVotes);
     } else {
-      const returned = await upVoteDatabase({
-        variables: { capsuleId: eventId, postId: postId },
-      });
-      setUpvoteTotal(returned.data.upVote.upVotes);
+      const upvoted = await upVoteDatabase();
       localStorage.setItem(`${postId}`, "True");
+      setStoredLike(true);
+      setUpvoteTotal(upvoted.data.upVote.upVotes);
     }
-    setStoredLike(!storedLike);
   };
 
   if (!name) {
     navigate(`/attendeesignup/${eventId}`);
   }
 
+  // Set the state to indicate that the image has loaded.
   const handleImageLoad = () => {
-    // Set the state to indicate that the image has loaded.
     setImageLoaded(true);
+  };
+
+  const handleNewComment = async (event) => {
+    event.preventDefault();
+
+    console.log(name);
+    console.log(event.target.newComment.value);
+    const text = event.target.newComment.value;
+    const newComments = await addCommentDatabase({
+      variables: {
+        text: text,
+      },
+    });
+
+    console.log(newComments);//!!STOPPING POINT for tonight
   };
 
   return (
@@ -165,20 +203,19 @@ export default function SingleView({ cloudName, videoId }) {
               <p className="absolute right-0 top-0">{upvoteTotal}</p>
             )}
           </div>
-          <div>
+          <div className="relative">
             <IconButton onClick={() => setCommentView(!commentView)}>
               <MessageIcon />
             </IconButton>
-            {commentTotal > 0 && (
+            {commentTotal && (
               <p className="absolute right-0 top-0">{commentTotal}</p>
             )}
           </div>
         </div>
 
-        <StyledButton
-          primaryColor
-          onClick={handleReturn}
-        >Back</StyledButton>
+        <StyledButton primaryColor onClick={handleReturn}>
+          Back
+        </StyledButton>
       </div>
       {commentView && (
         <div className="m-4 flex flex-col text-center">
@@ -202,14 +239,19 @@ export default function SingleView({ cloudName, videoId }) {
               </li>
             ))}
           </ul>
-          <form className="w-100% mb-6 mt-6 flex flex-col gap-6">
+          <form
+            className="w-100% mb-6 mt-6 flex flex-col gap-6"
+            onSubmit={handleNewComment}
+          >
             <input
               type="textarea"
               name="newComment"
               className="resize"
               placeholder="Comment..."
             />
-            <StyledButton type="submit" primaryColor displayText={"Submit"} />
+            <StyledButton type="submit" primaryColor>
+              Send
+            </StyledButton>
           </form>
         </div>
       )}
