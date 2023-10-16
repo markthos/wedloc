@@ -9,6 +9,7 @@ const typeDefs = gql`
     date: String!
     owner: String!
     location: String
+    eventPic: String
     posts_count: Int
     posts: [Post]
     chat_count: Int
@@ -94,7 +95,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createCapsule(title: String!, location: String!, date: String!): Capsule
+    createCapsule(title: String!, eventPic: String, location: String!, date: String!): Capsule
+    devDelCapsule(capsuleId: ID!): Capsule
     addPost(capsuleId: ID!, text: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth

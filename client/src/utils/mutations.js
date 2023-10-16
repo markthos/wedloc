@@ -44,12 +44,13 @@ export const UPLOAD_IMAGE = gql`
 `;
 
 export const ADD_CAPSULE = gql`
-  mutation CreateCapsule($title: String!, $date: String!, $location: String!) {
-    createCapsule(title: $title, date: $date, location: $location) {
+  mutation CreateCapsule($title: String!, $eventPic: String!, $date: String!, $location: String!) {
+    createCapsule(title: $title, date: $date, eventPic: $eventPic, location: $location) {
       _id
       title
       date
       location
+      eventPic
     }
   }
 `;
