@@ -69,13 +69,14 @@ const resolvers = {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
 
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date, location }, context) => {
+    createCapsule: async (parent, { title, date, location, eventPic }, context) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.create({
           title,
           date,
           location,
+          eventPic,
           owner: context.user.username,
         });
         await User.findOneAndUpdate(
@@ -87,6 +88,23 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
     },
+
+    devDelCapsule: async (parent, { capsuleId }) => {
+      try {
+        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+    
+        console.log("Capsule deleted", capsule);
+        return { success: true, message: "Capsule deleted successfully" };
+      } catch (error) {
+        console.error("Error deleting capsule", error);
+        return { success: false, message: "Error deleting capsule" };
+      }
+    },
+    
+
 
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { file }) => {
