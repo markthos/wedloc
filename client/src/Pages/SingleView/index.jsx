@@ -177,9 +177,8 @@ export default function SingleView({ cloudName, videoId }) {
 
         <StyledButton
           primaryColor
-          displayText={"Back"}
           onClick={handleReturn}
-        />
+        >Back</StyledButton>
       </div>
       {commentView && (
         <div className="m-4 flex flex-col text-center">
