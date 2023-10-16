@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
 import dayjs from "dayjs";
+import StyledButton from "../../components/StyledButton";
 
 // Create a Socket.IO client instance
 const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
@@ -152,64 +153,71 @@ export default function LiveChat() {
     }
   };
 
+  const handleReturn = () => {
+    navigate(`/eventspace/${eventId}`);
+  };
+
   // return the chat history and the form to send a message
   return (
-    <div className=" bg-main_bg">
-      <section className="container m-auto">
-        <h1 className="text-center font-extrabold">Live Chat</h1>
-        <div
-          className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
-          style={{ height: "70vh" }}
-        >
-          <ul id="messages" className="h-full">
-            {/* map over the chat history and display the messages */}
-            {chatHistory.chat.map((message) => (
-              <li key={message._id}>
-                <div className="flex justify-between gap-3">
-                  <h3>{message.author}</h3>
-                  <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
+    <section className="gap container m-auto flex w-96 flex-col justify-center">
+      <StyledButton primaryColor onClick={handleReturn}>
+        Back
+      </StyledButton>
+      <h1 className="text-center font-extrabold">Live Chat</h1>
+      <div
+        className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
+        style={{ height: "70vh" }}
+      >
+        <ul id="messages" className="h-full">
+          {/* map over the chat history and display the messages */}
+          {chatHistory.chat.map((message) => (
+            <li key={message._id}>
+              <div className="flex justify-between gap-3">
+                <h3>{message.author}</h3>
+                <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
+              </div>
+              {message.author === name ? (
+                <div
+                  className="flex justify-end bg-white font-extrabold"
+                  style={borderRadius}
+                >
+                  <p>{message.text}</p>
                 </div>
-                {message.author === name ? (
-                  <div
-                    className="flex justify-end bg-white font-extrabold"
-                    style={borderRadius}
-                  >
-                    <p>{message.text}</p>
-                  </div>
-                ) : (
-                  <div
-                    className="flex flex-col bg-white font-extrabold"
-                    style={borderRadius}
-                  >
-                    <p>{message.text}</p>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+              ) : (
+                <div
+                  className="flex flex-col bg-white font-extrabold"
+                  style={borderRadius}
+                >
+                  <p>{message.text}</p>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
 
-        <form className="m-6 flex flex-col" onSubmit={handleSendMessage}>
-          <input
-            type="text"
-            value={chatData.text}
-            required
-            placeholder="message to the event"
-            onChange={(e) =>
-              setChatData(() => ({
-                ...chatData,
-                text: e.target.value,
-              }))
-            }
-          />
-          <button
-            type="submit"
-            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          >
-            Send Message
-          </button>
-        </form>
-      </section>
-    </div>
+      <form
+        className="w-100% mb-6 mt-6 flex justify-between gap-3 p-6"
+        onSubmit={handleSendMessage}
+      >
+        <input
+          type="text"
+          value={chatData.text}
+          required
+          placeholder="message to the event"
+          style={borderRadius}
+          className="w-full resize"
+          onChange={(e) =>
+            setChatData(() => ({
+              ...chatData,
+              text: e.target.value,
+            }))
+          }
+        />
+        <StyledButton type="submit" primaryColor>
+          Send
+        </StyledButton>
+      </form>
+    </section>
   );
 }

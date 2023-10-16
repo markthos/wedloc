@@ -28,11 +28,12 @@ const style = {
   border: "0",
 };
 
-const styleADiv = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#E4DDD3",
+const borderRadius = {
+  borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
+  borderTopRightRadius: "15px",
+  padding: "3px",
+  paddingLeft: "10px",
+  paddingRight: "10px",
 };
 
 // DEMO VIDEO in there
@@ -40,7 +41,7 @@ export default function SingleView({ cloudName, videoId }) {
   const { eventId, postId } = useParams();
   const navigate = useNavigate();
 
-  const [imgFile, setImageFile] = useState(false); 
+  const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
   const [isImageLoaded, setImageLoaded] = useState(false);
@@ -111,7 +112,6 @@ export default function SingleView({ cloudName, videoId }) {
       }
     }
   }, [postData]);
-
 
   if (loading) return <LoadingScreen />;
 
@@ -230,11 +230,17 @@ export default function SingleView({ cloudName, videoId }) {
                   <p>{comment.date}</p>
                 </div>
                 {name === comment.author ? (
-                  <p className="flex justify-end bg-gray-300 text-center">
+                  <p
+                    className="flex justify-end  bg-white text-center font-extrabold"
+                    style={borderRadius}
+                  >
                     {comment.text}
                   </p>
                 ) : (
-                  <p className="flex justify-start bg-gray-300 text-center">
+                  <p
+                    className="flex justify-start bg-white text-center font-extrabold"
+                    style={borderRadius}
+                  >
                     {comment.text}
                   </p>
                 )}
@@ -242,14 +248,15 @@ export default function SingleView({ cloudName, videoId }) {
             ))}
           </ul>
           <form
-            className="w-100% mb-6 mt-6 flex flex-col gap-6"
+            className="w-100% mb-6 mt-6 flex justify-between gap-3"
             onSubmit={handleNewComment}
           >
             <input
               type="textarea"
               name="newComment"
-              className="resize"
+              className="w-full resize"
               placeholder="Comment..."
+              style={borderRadius}
             />
             <StyledButton type="submit" primaryColor>
               Send
