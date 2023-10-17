@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import './Payment.css';
+// import './Payment.css';
 import creditCardIcon from './icons/creditCard.png'; 
 import netBankingIcon from './icons/netBanking.png';
 import paypalIcon from './icons/paypal.png';
