@@ -8,6 +8,9 @@ import LoadingScreen from "../../components/LoadingScreen";
 import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
 import DefaultProfileImg from "./img/default_profile.png";
+import dayjs from "dayjs";
+
+import VideoPlayer from "../../components/VideoPlayer";
 
 import { ADD_POST } from "../../utils/mutations";
 
@@ -101,46 +104,34 @@ export default function EventSpace() {
       </div>
     );
 
-  // //!! TODO
   const checkFileType = (post) => {
     const extension = post.url.split(".").pop();
     console.log("extension", extension);
     if (extension === "jpg" || extension === "png") {
       return (
-        <img
-          className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
-          src={post.url}
-          alt={post._id} // Call the function when the image is loaded.
-        ></img>
+        <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+          <img
+            className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
+            src={post.url}
+            alt={post._id} // Call the function when the image is loaded.
+          ></img>
+        </Link>
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        // <iframe
-        //   src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-        //   width="360"
-        //   height="640"
-        //   style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
-        //   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-        //   allowFullScreen
-        //   frameBorder="0"
-        //   title={post._id}
-        // ></iframe>
-        //! Not sure if you have to use an iframe but this is a more modern way to embed videos - Edward
-        <video
-          controls
-          className="aspect-w-9 aspect-h-16 h-full w-full"
-          autoPlay
-          loop
-          muted
-          playsInline
-        >
-          <source
-            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            type="video/mp4"
-          />
-          Your browser does not support the video tag.
-        </video>
+        <div className="relative h-full w-full">
+          <iframe
+            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            className="z-5 h-full w-full" // hardcoded assumption of aspect ratio vert video
+            title={post._id}
+          ></iframe>
+          <Link
+            to={`/eventspace/${eventId}/singleview/${post._id}`}
+            className="absolute inset-0 z-10 h-full w-full"
+          ></Link>
+        </div>
       );
+      // return <VideoPlayer video={post.url} width="auto" height="auto" />
     } else {
       return <p>Invalid file type</p>;
     }
@@ -151,8 +142,8 @@ export default function EventSpace() {
       <EventHeader
         eventProfileImage={DefaultProfileImg}
         eventTitle={cap.title}
-        eventDate={"July 4, 2023"} // !PLACEHOLDER
-        eventLocation={"Sacramento, CA"} // !PLACEHOLDER
+        eventDate={cap.date}
+        eventLocation={cap.location}
       >
         <StyledButton outlined button>
           <Link to={`/eventspace/${eventId}/livechat`}>Live Chat</Link>
@@ -162,24 +153,20 @@ export default function EventSpace() {
         </StyledButton>
       </EventHeader>
 
-      <section className="container m-auto px-1 mb-5">
-        <div className="grid grid-cols-3 gap-1 md:gap-2">
+      <section className="container m-auto mb-5 px-1">
+        <Suspense fallback={<LazyLoadingScreen />}>
+          <div className="grid grid-cols-3 gap-1 md:gap-2">
             {cap.posts
               .slice()
               .reverse()
               .map((post) => (
-                <Suspense fallback={<LazyLoadingScreen />}>
-                  <div
-                    key={`postId_${post._id}`}
-                  >
-                    <h3>{post.title}</h3>
-                    <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
-                      {checkFileType(post)}
-                    </Link>
-                  </div>
-                </Suspense>
+                <div key={`postId_${post._id}`}>
+                  <h3>{post.title}</h3>
+                  {checkFileType(post)}
+                </div>
               ))}
-        </div>
+          </div>
+        </Suspense>
       </section>
     </>
   );

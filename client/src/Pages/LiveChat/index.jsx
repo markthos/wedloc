@@ -10,6 +10,7 @@ import { ADD_CHAT } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
+import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
 
@@ -74,7 +75,7 @@ export default function LiveChat() {
       item.innerHTML = `
       <div class="flex gap-3 justify-between">
         <h3>${message.author}</h3>
-        <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+        <p>${dayjs(message.date).format("hh:mm:ss A")}</p>
       </div>
       ${
         message.author === name
@@ -187,7 +188,7 @@ export default function LiveChat() {
             <li key={message._id}>
               <div className="flex justify-between gap-3">
                 <h3>{message.author}</h3>
-                <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
+                <UnixTimestampConverter unixTimestamp={message.date} type="livechat" />
               </div>
               {message.author === name ? (
                 <div

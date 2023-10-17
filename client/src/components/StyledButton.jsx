@@ -22,7 +22,7 @@ export default function StyledButton({
       "bg-gold hover:bg-white text-black py-2 px-4 rounded uppercase w-max";
   } else if (outlined) {
     buttonStyle =
-      "bg-transparent mb-5 hover:underline hover:border-darkgray hover:text-darkgray text-black py-2 px-4 rounded-2xl uppercase w-max border-2 border-black";
+      "bg-transparent mb-5 hover:border-darkgray hover:text-darkgray text-black py-2 px-4 rounded-2xl uppercase w-max border-2 border-black";
   }
 
   // Set the button type based on the props
