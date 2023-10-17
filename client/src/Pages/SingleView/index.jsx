@@ -161,7 +161,7 @@ export default function SingleView({ cloudName, videoId }) {
         )}
         {videoFile && (
           <iframe
-            src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${import.meta.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
             width="360"
             height="640"
             style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video

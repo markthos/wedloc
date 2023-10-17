@@ -6,7 +6,7 @@ import creditCardIcon from './icons/creditCard.png';
 import netBankingIcon from './icons/netBanking.png';
 import paypalIcon from './icons/paypal.png';
 
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const stripePromise = loadStripe(import.meta.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const PaymentOptions = ({ onSelect, selectedOption }) => (
   <div className="payment-options">

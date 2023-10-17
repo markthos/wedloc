@@ -11,7 +11,7 @@ const VideoPlayer = (props) => {
     if(cloudinaryRef.current) return;
     cloudinaryRef.current = window.cloudinary;
     cloudinaryRef.current.videoPlayer(videoRef.current, {
-      cloud_name: process.env.REACT_APP_CLOUD_NAME
+      cloud_name: import.meta.env.REACT_APP_CLOUD_NAME
     })
 
   }, []);

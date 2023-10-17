@@ -52,8 +52,8 @@ export default function EventSpace() {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
       {
-        cloudName: process.env.REACT_APP_CLOUD_NAME,
-        uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+        cloudName: import.meta.env.REACT_APP_CLOUD_NAME,
+        uploadPreset: import.meta.env.REACT_APP_UPLOAD_PRESET,
         folder: saveFolder,
       },
       function (error, result) {
@@ -121,7 +121,7 @@ export default function EventSpace() {
       return (
         <div className="relative h-full w-full overflow-hidden">
           <iframe
-            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${import.meta.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
             className="z-5 h-full w-full scale-125" // hardcoded assumption of aspect ratio vert video
             title={post._id}
           ></iframe>
