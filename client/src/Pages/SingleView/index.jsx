@@ -7,8 +7,6 @@ import { GET_POST } from "../../utils/queries";
 
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -20,13 +18,6 @@ import LoadingScreen from "../../components/LoadingScreen";
 const LazyLoadingScreen = React.lazy(() =>
   import("../../components/LoadingScreen"),
 ); // Lazy-loading screen
-
-const style = {
-  height: "80vh",
-  width: "500px",
-  aspectRatio: "2/1",
-  border: "0",
-};
 
 const borderRadius = {
   borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
@@ -115,14 +106,6 @@ export default function SingleView({ cloudName, videoId }) {
 
   if (loading) return <LoadingScreen />;
 
-  const handleForward = () => {
-    console.log("forward");
-  };
-
-  const handleBackward = () => {
-    console.log("backward");
-  };
-
   const handleReturn = () => {
     navigate(`/eventspace/${eventId}`);
   };
@@ -172,30 +155,30 @@ export default function SingleView({ cloudName, videoId }) {
         {dayjs(postData.date).format("MM-DD-YYYY")}
       </h1>
       <div className="m-4 flex justify-center gap-4 ">
-        <button onClick={handleForward}>
-          <ChevronLeftIcon />
-        </button>
-        <Suspense fallback={<LazyLoadingScreen />}>
-          <img
-            width="500px"
-            src={postData.url}
-            alt={postData._id}
-            onLoad={handleImageLoad} // Call the function when the image is loaded.
-          ></img>
-        </Suspense>
+        {imgFile && (
+          <Suspense fallback={<LazyLoadingScreen />}>
+            <img
+              width="500px"
+              src={postData.url}
+              alt={postData._id}
+              onLoad={handleImageLoad} // Call the function when the image is loaded.
+            ></img>
+          </Suspense>
+        )}
         {videoFile && (
           <iframe
-            title={postData._id}
-            src={postData.url}
-            style={style}
+            src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            width="360"
+            height="640"
+            style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowFullScreen
+            frameBorder="0"
+            title={postData._id}
           ></iframe>
         )}
-        <button onClick={handleBackward}>
-          <ChevronRightIcon />
-        </button>
       </div>
-      <div className="flex justify-between">
+      <div className="ml-3 mr-5 flex justify-between">
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <IconButton onClick={upVote}>
