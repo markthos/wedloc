@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
 
 // Create a Socket.IO client instance
-const socket = io("http://localhost:3000");
+const socket = io("http://localhost:3000"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
 
 const borderRadius = {
   borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
