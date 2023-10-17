@@ -88,19 +88,25 @@ const startApolloServer = async () => {
 
 startApolloServer();
 
-// Socket.IO server logic
+
 io.on("connection", (socket) => {
   console.log("A user connected");
 
-  // Send a message to all connected clients
-  socket.on("sendMessage", (message) => {
-    console.log("Received message:", message);
-    // socket.broadcast.emit("messageReceived", message);
-    io.emit("messageReceived", message);
+  // When a user joins an event room
+  socket.on("joinEventRoom", (eventRoom) => {
+    console.log("A user joined event room", eventRoom);
+    socket.join(eventRoom);
+  });
 
+  // Send a message to a specific event room
+  socket.on("sendMessageToEventRoom", (eventRoom, message) => {
+    console.log("Received message:", message);
+    io.to(eventRoom).emit("messageReceived", message);
   });
 
   socket.on("disconnect", () => {
     console.log("A user disconnected");
   });
 });
+
+
