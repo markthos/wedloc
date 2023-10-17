@@ -8,6 +8,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
 import DefaultProfileImg from "./img/default_profile.png";
+import FilterToggle from "./FilterToggle";
 import dayjs from "dayjs";
 
 import VideoPlayer from "../../components/VideoPlayer";
@@ -24,6 +25,8 @@ export default function EventSpace() {
   const navigate = useNavigate(); // the navigate function for redirecting
   const [name, setName] = useState(localStorage.getItem("name"));
   const [location, setLocation] = useState("");
+
+  const [sortByUpvotes, setSortByUpvotes] = useState(false); // State to track sorting method
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
@@ -75,7 +78,6 @@ export default function EventSpace() {
 
   // useEffect for uploading the image and refetching the data for the page
   useEffect(() => {
-    console.log("uploadImageData:");
     const uploadAndFetch = async () => {
       if (dataURL) {
         try {
@@ -106,7 +108,6 @@ export default function EventSpace() {
 
   const checkFileType = (post) => {
     const extension = post.url.split(".").pop();
-    console.log("extension", extension);
     if (extension === "jpg" || extension === "png") {
       return (
         <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
@@ -138,6 +139,12 @@ export default function EventSpace() {
     }
   };
 
+  // Handle the sorting change
+  const handleSortChange = (sortByUpvotes) => {
+    setSortByUpvotes(sortByUpvotes);
+    refetch();
+  };
+
   return (
     <>
       <EventHeader
@@ -154,12 +161,18 @@ export default function EventSpace() {
         </StyledButton>
       </EventHeader>
 
+      <div className="mb-3 flex justify-center">
+        <FilterToggle onChange={handleSortChange} />
+      </div>
+
       <section className="container m-auto mb-5 px-1">
         <Suspense fallback={<LazyLoadingScreen />}>
           <div className="grid grid-cols-3 gap-1 md:gap-2">
             {cap.posts
               .slice()
-              .reverse()
+              .sort((a, b) =>
+                sortByUpvotes ? b.upVotes - a.upVotes : b.date - a.date,
+              )
               .map((post) => (
                 <div key={`postId_${post._id}`}>
                   <h3>{post.title}</h3>
