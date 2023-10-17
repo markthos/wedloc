@@ -14,7 +14,9 @@ import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
 
 // Create a Socket.IO client instance
-const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
+const socket = io(
+  "https://wedloc-84c89e3ae29d.herokuapp.com/" || "http://localhost:3000",
+);
 
 const borderRadius = {
   borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
@@ -67,18 +69,29 @@ export default function LiveChat() {
       const messages = document.getElementById("messages");
       const item = document.createElement("li");
       item.innerHTML = `
-        <div class="flex gap-3 justify-between">
-          <h3>${message.author}</h3>
-          <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
-        </div>
-        <div class="flex justify-end bg-white font-extrabold" 
-          style="border-bottom-left-radius: 15px;
-          border-top-right-radius: 15px;
-          padding: 3px;
-          padding-left: 10px;
-          padding-right: 10px;">
-          <p>${message.text}</p>
-        </div>`;
+      <div class="flex gap-3 justify-between">
+        <h3>${message.author}</h3>
+        <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+      </div>
+      ${
+        message.author === name
+          ? `<div class="flex justify-end bg-white font-extrabold" 
+            style="border-bottom-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 3px;
+            padding-left: 10px;
+            padding-right: 10px;">
+            <p>${message.text}</p>
+          </div>`
+          : `<div class="flex justify-start bg-white font-extrabold" 
+            style="border-bottom-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 3px;
+            padding-left: 10px;
+            padding-right: 10px;">
+            <p>${message.text}</p>
+          </div>`
+      }`;
       messages.appendChild(item);
 
       scrollToBottom();
