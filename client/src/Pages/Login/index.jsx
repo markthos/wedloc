@@ -1,18 +1,19 @@
 // The Log In Page
+// !FIX: The background image is pushing the footer down in desktop view
 
-
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { LOGIN_USER } from '../../utils/mutations';
-import Auth from '../../utils/auth'
-import StyledButton from '../../components/StyledButton';
+import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../../utils/mutations";
+import Auth from "../../utils/auth";
+import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
+import loginBG from "./kyle_chloe_login_bg.jpg";
 
 export default function Login(props) {
-  const [formState, setFormState] = useState({username: '', password: ''});
-  const [login, { error, data}] = useMutation(LOGIN_USER);
-  
+  const [formState, setFormState] = useState({ username: "", password: "" });
+  const [login, { error, data }] = useMutation(LOGIN_USER);
+
   // update state based on form input changes
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -38,14 +39,20 @@ export default function Login(props) {
 
     // clear form values
     setFormState({
-      username: '',
-      password: '',
-    })
+      username: "",
+      password: "",
+    });
   };
 
   return (
     <section className="flex min-h-full">
-      <div className="hidden bg-darkgray md:block md:w-1/2">Picture Area</div>
+      <div className="hidden bg-darkgray md:block md:w-1/2">
+        <img
+          src={loginBG}
+          alt="Kyle and Chloe"
+          className="h-full w-full object-cover"
+        />
+      </div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           {data ? (
@@ -91,4 +98,4 @@ export default function Login(props) {
       </div>
     </section>
   );
-};
+}

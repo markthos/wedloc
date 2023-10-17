@@ -66,8 +66,6 @@ const resolvers = {
     },
   },
   Mutation: {
-    //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
-
     // Create a capsule with a title and date by a logged in user
     createCapsule: async (parent, { title, date, location, eventPic }, context) => {
       if (context.user) {
@@ -104,27 +102,31 @@ const resolvers = {
       }
     },
     
-
-
     // Add a post to a capsule by a logged in user
-    uploadPost: async (parent, { file }) => {
-      try {
-        console.log("uploading post...", file);
-        // Upload the image to Cloudinary
-        const uploadResult = await cloudinary.uploader.upload(file, {
-          folder: "wedloc", // Specify the folder in Cloudinary
-        });
+    uploadPost: async (parent, { capsuleId, url, owner }) => {
 
-        console.log("uploadResult", uploadResult);
-        // Return the result of the Cloudinary upload
-        return {
-          public_id: uploadResult.public_id,
-          secure_url: uploadResult.secure_url,
-        };
-      } catch (error) {
-        throw new Error("Error uploading image: " + error.message);
+      const newPost = {
+        url,
+        owner,
+      };
+
+      const updatedCapsule = await Capsule.findOneAndUpdate(
+        { _id: capsuleId },
+        { $push: { posts: newPost } },
+        { new: true }
+      );
+
+      if (!updatedCapsule) {
+        console.log("capsule not found");
+        return null; // Handle this as needed
       }
+
+      console.log("New Post Added");
+
+      return updatedCapsule.posts[updatedCapsule.posts.length - 1];
+
     },
+
     deletePost: async (parent, { postId }, context) => {
       if (context.user) {
         const post = await Post.findOneAndDelete({

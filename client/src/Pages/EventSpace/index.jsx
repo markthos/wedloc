@@ -1,28 +1,16 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useState, useRef, useEffect, Suspense } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
-import { Orbit } from "@uiball/loaders";
+import LoadingScreen from "../../components/LoadingScreen";
 
-//! Temporary styles for the images
-const eventStyles = {
-  display: "flex",
-  flexWrap: "wrap",
-  flex: "0 0 33.333333%",
-  flexWrap: "wrap",
-  gap: "1rem",
-};
+import { ADD_POST } from "../../utils/mutations";
 
-//! Temporary styles for the loading spinner
-const styleADiv = {
-  height: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#E4DDD3",
-};
+const LazyLoadingScreen = React.lazy(() =>
+  import("../../components/LoadingScreen"),
+); // Lazy-loading screen
 
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
@@ -33,6 +21,15 @@ export default function EventSpace() {
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
+
+  const [uploadImageData, setUploadImageData] = useState({
+    capsuleId: eventId,
+    owner: name,
+    url: dataURL,
+  });
+
+  const [uploadImage, { error }] = useMutation(ADD_POST); // the mutation for uploading an image
+
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
@@ -55,65 +52,112 @@ export default function EventSpace() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
           setDataURL(result.info.url);
+          setUploadImageData({
+            ...uploadImageData,
+            url: result.info.url,
+          });
         }
       },
     );
-  }, [saveFolder]);
+  }, [saveFolder, uploadImageData]);
 
   // Query for getting sinlge capsule data by passing in the id
-  const { loading, data } = useQuery(GET_CAPSULE, {
+  const { loading, data, refetch } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
+
+  // useEffect for uploading the image and refetching the data for the page
+  useEffect(() => {
+    console.log("uploadImageData:");
+    const uploadAndFetch = async () => {
+      if (dataURL) {
+        try {
+          await uploadImage({ variables: uploadImageData });
+          refetch();
+        } catch (error) {
+          console.error("Error from uploadImage mutation:", error);
+        }
+      }
+    };
+
+    uploadAndFetch();
+  }, [uploadImageData]);
 
   // Check for the capsule data
   const cap = data?.getCapsule || null;
 
-  console.log("cap", cap);
-
   // display loading screen
-  if (loading)
-    return (
-      <div style={styleADiv}>
-        <Orbit size={200} color="white" />
-      </div>
-    );
+  if (loading) return <LoadingScreen />;
 
   // if no cap, return a message
   if (!cap)
     return (
-      <div style={styleADiv}>
+      <div>
         <p>No capsule found</p>
       </div>
     );
 
-  //TODO - Use mutation to save URL into database then update the page with the new image at the top
+  // //!! TODO
+  const checkFileType = (post) => {
+    const extension = post.url.split(".").pop();
+    console.log("extension", extension);
+    if (extension === "jpg" || extension === "png") {
+      return (
+        <img
+          width="500px"
+          src={post.url}
+          alt={post._id} // Call the function when the image is loaded.
+        ></img>
+      );
+    } else if (extension === "mp4" || extension === "mov") {
+      return (
+        <iframe
+          src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+          width="360"
+          height="640"
+          style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowFullScreen
+          frameBorder="0"
+          title={post._id}
+        ></iframe>
+      );
+    } else {
+      return <p>Invalid file type</p>;
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-main_bg">
-      <section className="container m-auto">
-        <h1>{cap.title}</h1>
-        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-          <Link to={`/eventspace/${eventId}/livechat`}>LiveChat</Link>
-        </button>
-        <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => widgetRef.current.open()}
-        >
-          Upload
-        </button>
-        <ul style={eventStyles}>
-          {cap.posts.map((post) => (
-            <li key={post._id}>
-              <h3>{post.title}</h3>
-              <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
-                <img width="200px" src={post.url} alt={post._id} />
-              </Link>
+    <section className="container m-auto">
+      <h1>{cap.title}</h1>
+      <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
+        <Link to={`/eventspace/${eventId}/livechat`}>LiveChat</Link>
+      </button>
+      <button
+        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        onClick={() => widgetRef.current.open()}
+      >
+        Upload
+      </button>
+      <ul className="flex w-full flex-wrap">
+        {cap.posts
+          .slice()
+          .reverse()
+          .map((post) => (
+            <li
+              key={`postId_${post._id}`}
+              className="w-1/3 p-1 md:w-1/3 lg:w-1/4 xl:w-1/4"
+            >
+              <Suspense fallback={<LazyLoadingScreen />}>
+                <h3>{post.title}</h3>
+                <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+                  {checkFileType(post)}
+                </Link>
+              </Suspense>
             </li>
           ))}
-        </ul>
-      </section>
-    </main>
+      </ul>
+    </section>
   );
 }

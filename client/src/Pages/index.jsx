@@ -14,5 +14,6 @@ import EventCreator from './EventCreator';
 import AttendeeSignup from "./AttendeeSignup";
 import MyEvents from "./MyEvents";
 import PayMent from "./PayMent";
+import SignOut from "./SignOut"
 
-export { SingleView, EventSpace, Home, LiveChat, Login, Signup, Upload, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent };
+export { SingleView, EventSpace, Home, LiveChat, Login, Signup, SignOut, Upload, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent };
