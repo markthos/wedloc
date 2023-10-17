@@ -16,7 +16,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_MY_CAPSULES } from "../../utils/queries";
-// import { DELETE_CAPSULE } from "../../utils/mutations";
+import { DELETE_CAPSULE } from "../../utils/mutations";
 import { UPDATE_CAPSULE } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 
@@ -25,9 +25,13 @@ import { useState, useEffect, useRef } from "react";
 export default function MyEvents() {
   const { loading, data, error } = useQuery(GET_MY_CAPSULES);
   const [selectedCapsule, setSelectedCapsule] = useState(null);
+  // THIS IS EDIT MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [updateCapsule] = useMutation(UPDATE_CAPSULE);
+  const [deleteCapsule] = useMutation(DELETE_CAPSULE);
   const [formState, setFormState] = useState({title: '', location: '', eventPic: ''});
+
 
   const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // using this to display the image on the page
@@ -44,7 +48,6 @@ export default function MyEvents() {
     });
   };
 
-
   
   const openCloudinaryWidget = (event) => {
     event.preventDefault();
@@ -56,10 +59,31 @@ export default function MyEvents() {
     setIsModalOpen(true);
   }
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  }
+  const openDeleteModal = (capsule) => {
+    setSelectedCapsule(capsule);
+    setIsDeleteModalOpen(true);
+  };
 
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedCapsule(null);
+  };
+
+  const handleDelete = async () => {
+    if (selectedCapsule) {
+      // call the delete mutation here
+      await deleteCapsule({ variables: { capsuleId: selectedCapsule._id } });
+      // closeDeleteModal();
+      return 'DELETED'
+    }
+  };
+  
+
+
+  const handleDeleteModal = (capsule) => {
+    setSelectedCapsule(capsule);
+    console.log('deleting' + selectedCapsule.id);
+  }
   const handleCloseModal = () => {
     setIsModalOpen(false);
   }
@@ -135,19 +159,22 @@ export default function MyEvents() {
           ) : (
             capsules.map((capsule) => (
               <div className="flex w-full items-center justify-between" key={capsule._id}>
-                <RouterLink to={`/event/${capsule._id}`} className="hover:underline text-xl">
-                  {capsule.title}
-                </RouterLink>
-                <div className="flex gap-4">
-                <StyledButton onClick={(e) => {
-                  e.preventDefault();
-                  handleEdit(capsule);
-                }} outlined>
-                  <EditIcon />
-                </StyledButton>
-                  {/* <StyledButton onClick={() => handleDelete(capsule)} outlined>
-                    <DeleteIcon />
-                  </StyledButton> */}
+                  <RouterLink to={`/event/${capsule._id}`} className="hover:underline text-xl">
+                    {capsule.title}
+                  </RouterLink>
+                  <div className="flex gap-4">
+                  <StyledButton onClick={(e) => {
+                    e.preventDefault();
+                    handleEdit(capsule);
+                  }} outlined>
+                    <EditIcon />
+                  </StyledButton>
+                  <StyledButton onClick={(e) => {
+                    e.preventDefault();
+                    openDeleteModal(capsule)}} 
+                    outlined>
+                  <DeleteIcon />
+                  </StyledButton>
                 </div>
               </div>
             ))
@@ -157,6 +184,26 @@ export default function MyEvents() {
           <RouterLink to={"/eventcreator"}>Create Event</RouterLink>
         </StyledButton>
       </form>
+
+      {/* delete modal */}
+
+      {isDeleteModalOpen && (
+        <div className="flex flex-row justify-center items-center min-h-full w-screen">
+          <div className='flex flex-col items-center rounded-md bg-beige shadow-lg w-screen md:w-1/2'>
+            <h2 className="font-sans text-xl text-center font-medium mt-6 md:text-2xl">
+              Are you sure you want to delete {selectedCapsule.title}?
+            </h2>
+            <div className="flex gap-4 mt-4 mb-6">
+              <StyledButton onClick={handleDelete} primaryColor>
+                Confirm
+              </StyledButton>
+              <StyledButton onClick={closeDeleteModal} outlined>
+                Cancel
+              </StyledButton>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* edit modal */}
       {isModalOpen && (

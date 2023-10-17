@@ -21,8 +21,17 @@ export const UPDATE_CAPSULE = gql`
       title
     }
 }
+`;
 
-`
+export const DELETE_CAPSULE = gql`
+mutation Mutation($capsuleId: ID!) {
+  deleteCapsule(capsuleId: $capsuleId) {
+    _id
+    owner
+    title
+  }
+}
+`;
 export const REGISTER_USER = gql`
   mutation addUser($username: String!, $firstName: String!, $lastName: String!, $email: String!, $password: String!) {
     addUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, password: $password) {

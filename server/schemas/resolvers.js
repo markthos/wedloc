@@ -101,11 +101,31 @@ const resolvers = {
       }
     },
 
-    
+    deleteCapsule: async (parent, { capsuleId }, context) => {
+      if (context.user){
+        const capsule = await Capsule.findById(capsuleId);
+        
+        if (!capsule){
+          throw new Error("Capsule not found");
+        }
+        if (capsule.owner !== context.user.username){
+          throw new AuthenticationError("You don't have permissions to delete this capsule");
+        }
+
+        await Capsule.findOneAndDelete({ _id: capsuleId });
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { capsules: capsuleId } }
+        );
+      }
+
+    },
 
     devDelCapsule: async (parent, { capsuleId }) => {
       try {
-        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+        const capsule = await Capsule.findOneAndDelete({ 
+          _id: capsuleId
+         });
         if (!capsule) {
           throw new Error("Capsule not found");
         }
