@@ -179,7 +179,7 @@ export default function LiveChat() {
       </StyledButton>
       <h1 className="text-center font-extrabold">Live Chat</h1>
       <div
-        className="no-scrollbar scrollbar-none flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
+        className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
         style={{ height: "70vh" }}
       >
         <ul id="messages" className="h-full">
