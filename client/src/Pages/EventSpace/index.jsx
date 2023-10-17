@@ -103,22 +103,26 @@ export default function EventSpace() {
     const extension = post.url.split(".").pop();
     console.log("extension", extension);
     if (extension === "jpg" || extension === "png") {
-      return <img
-        width="500px"
-        src={post.url}
-        alt={post._id} // Call the function when the image is loaded.
-      ></img>;
+      return (
+        <img
+          width="500px"
+          src={post.url}
+          alt={post._id} // Call the function when the image is loaded.
+        ></img>
+      );
     } else if (extension === "mp4" || extension === "mov") {
-      return <iframe
-        src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-        width="360"
-        height="640"
-        style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
-        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-        allowFullScreen
-        frameBorder="0"
-        title={post._id}
-      ></iframe>;
+      return (
+        <iframe
+          src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+          width="360"
+          height="640"
+          style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+          allowFullScreen
+          frameBorder="0"
+          title={post._id}
+        ></iframe>
+      );
     } else {
       return <p>Invalid file type</p>;
     }
@@ -141,17 +145,17 @@ export default function EventSpace() {
           .slice()
           .reverse()
           .map((post) => (
-            <Suspense fallback={<LazyLoadingScreen />}>
-              <li
-                key={`postId_${post._id}`}
-                className="w-1/3 p-1 md:w-1/3 lg:w-1/4 xl:w-1/4"
-              >
+            <li
+              key={`postId_${post._id}`}
+              className="w-1/3 p-1 md:w-1/3 lg:w-1/4 xl:w-1/4"
+            >
+              <Suspense fallback={<LazyLoadingScreen />}>
                 <h3>{post.title}</h3>
                 <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
                   {checkFileType(post)}
                 </Link>
-              </li>
-            </Suspense>
+              </Suspense>
+            </li>
           ))}
       </ul>
     </section>
