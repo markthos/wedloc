@@ -42,12 +42,10 @@ export default function Signup() {
 
   return (
     <section className="flex min-h-full">
-      <div className="hidden bg-darkgray md:block md:w-1/2">
-        <img
-          src={signupBG}
-          alt="Ben and Jane"
-          className="object-cover w-full h-full"
-        />
+      <div
+        className="min-h-full bg-cover bg-center md:w-1/2"
+        style={{ backgroundImage: `url(${signupBG})` }}
+      >
       </div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
@@ -97,7 +95,9 @@ export default function Signup() {
               placeholder={"Password"}
               required
             />
-            <StyledButton submit primaryColor>Sign Up</StyledButton>
+            <StyledButton submit primaryColor>
+              Sign Up
+            </StyledButton>
           </form>
           <p className="text-right">
             Already a member?{" "}
