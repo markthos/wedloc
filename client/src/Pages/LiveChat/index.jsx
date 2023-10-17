@@ -10,11 +10,12 @@ import { ADD_CHAT } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
+import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
 
 // Create a Socket.IO client instance
-const socket = io("http://localhost:3000"); // Change the URL to match your Socket.IO server URL
+const socket = io("http://localhost:3000"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
 
 const borderRadius = {
   borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
@@ -28,6 +29,11 @@ const borderRadius = {
 export default function LiveChat() {
   // Get the event ID from the URL
   const { eventId } = useParams();
+
+  useEffect(() => {
+    socket.emit("joinEventRoom", eventId);
+  }, [eventId]);
+
   const [name, setName] = useState(localStorage.getItem("name"));
   const navigate = useNavigate();
 
@@ -67,26 +73,34 @@ export default function LiveChat() {
       const messages = document.getElementById("messages");
       const item = document.createElement("li");
       item.innerHTML = `
-        <div class="flex gap-3 justify-between">
-          <h3>${message.author}</h3>
-          <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
-        </div>
-        <div class="flex justify-end bg-white font-extrabold" 
-          style="border-bottom-left-radius: 15px;
-          border-top-right-radius: 15px;
-          padding: 3px;
-          padding-left: 10px;
-          padding-right: 10px;">
-          <p>${message.text}</p>
-        </div>`;
+      <div class="flex gap-3 justify-between">
+        <h3>${message.author}</h3>
+        <p>${dayjs(message.date).format("hh:mm:ss A")}</p>
+      </div>
+      ${
+        message.author === name
+          ? `<div class="flex justify-end bg-white font-extrabold" 
+            style="border-bottom-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 3px;
+            padding-left: 10px;
+            padding-right: 10px;">
+            <p>${message.text}</p>
+          </div>`
+          : `<div class="flex justify-start bg-white font-extrabold" 
+            style="border-bottom-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 3px;
+            padding-left: 10px;
+            padding-right: 10px;">
+            <p>${message.text}</p>
+          </div>`
+      }`;
       messages.appendChild(item);
 
       scrollToBottom();
 
-      setChatData({
-        ...chatData,
-        text: "",
-      });
+
     });
 
     if (!name) {
@@ -132,7 +146,7 @@ export default function LiveChat() {
       console.log("Sending message:", chatData);
 
       // Emit the same message to the Socket.IO server immediately
-      socket.emit("sendMessage", chatData);
+      socket.emit("sendMessageToEventRoom", eventId, chatData);
 
       // use the mutation function toe create a new message on the server
       const newMessage = await createMessage({
@@ -174,7 +188,7 @@ export default function LiveChat() {
             <li key={message._id}>
               <div className="flex justify-between gap-3">
                 <h3>{message.author}</h3>
-                <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
+                <UnixTimestampConverter unixTimestamp={message.date} type="livechat" />
               </div>
               {message.author === name ? (
                 <div

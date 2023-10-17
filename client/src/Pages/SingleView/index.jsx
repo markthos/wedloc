@@ -5,10 +5,8 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
 
-import dayjs from "dayjs";
+import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import StyledButton from "../../components/StyledButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -20,13 +18,6 @@ import LoadingScreen from "../../components/LoadingScreen";
 const LazyLoadingScreen = React.lazy(() =>
   import("../../components/LoadingScreen"),
 ); // Lazy-loading screen
-
-const style = {
-  height: "80vh",
-  width: "500px",
-  aspectRatio: "2/1",
-  border: "0",
-};
 
 const borderRadius = {
   borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
@@ -94,8 +85,6 @@ export default function SingleView({ cloudName, videoId }) {
     setCommentTotal(postData.comment_count);
   }, [postData]);
 
-  //TODO save commnet to database
-
   useEffect(() => {
     if (postData) {
       const extension = postData.url.split(".").pop();
@@ -114,14 +103,6 @@ export default function SingleView({ cloudName, videoId }) {
   }, [postData]);
 
   if (loading) return <LoadingScreen />;
-
-  const handleForward = () => {
-    console.log("forward");
-  };
-
-  const handleBackward = () => {
-    console.log("backward");
-  };
 
   const handleReturn = () => {
     navigate(`/eventspace/${eventId}`);
@@ -167,35 +148,37 @@ export default function SingleView({ cloudName, videoId }) {
 
   return (
     <section className="gap container m-auto flex w-96 flex-col justify-center">
-      <h1 className="center flex justify-center ">
-        posted by: {postData.owner} on
-        {dayjs(postData.date).format("MM-DD-YYYY")}
-      </h1>
-      <div className="m-4 flex justify-center gap-4 ">
-        <button onClick={handleForward}>
-          <ChevronLeftIcon />
-        </button>
-        <Suspense fallback={<LazyLoadingScreen />}>
-          <img
-            width="500px"
-            src={postData.url}
-            alt={postData._id}
-            onLoad={handleImageLoad} // Call the function when the image is loaded.
-          ></img>
-        </Suspense>
+      <div className="mt-4 flex justify-center">
+        {imgFile && (
+          <Suspense fallback={<LazyLoadingScreen />}>
+            <img
+              width="500px"
+              src={postData.url}
+              alt={postData._id}
+              onLoad={handleImageLoad} // Call the function when the image is loaded.
+            ></img>
+          </Suspense>
+        )}
         {videoFile && (
           <iframe
-            title={postData._id}
-            src={postData.url}
-            style={style}
+            src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            width="360"
+            height="640"
+            style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
             allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowFullScreen
+            frameBorder="0"
+            title={postData._id}
           ></iframe>
         )}
-        <button onClick={handleBackward}>
-          <ChevronRightIcon />
-        </button>
       </div>
-      <div className="flex justify-between">
+
+      <div className="center flex justify-end gap-1 mr-1 my-2">
+        <h1>{postData.owner} on </h1>
+        <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
+      </div>
+
+      <div className="ml-1 mr-2 flex justify-between">
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <IconButton onClick={upVote}>
@@ -215,6 +198,8 @@ export default function SingleView({ cloudName, videoId }) {
           </div>
         </div>
 
+        
+
         <StyledButton primaryColor onClick={handleReturn}>
           Back
         </StyledButton>
@@ -227,7 +212,10 @@ export default function SingleView({ cloudName, videoId }) {
               <li key={`commentId_${comment._id}`}>
                 <div className="flex justify-between">
                   <h3>{comment.author}</h3>
-                  <p>{comment.date}</p>
+                  <UnixTimestampConverter
+                    unixTimestamp={comment.date}
+                    type="comment"
+                  />
                 </div>
                 {name === comment.author ? (
                   <p

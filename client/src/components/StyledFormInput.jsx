@@ -1,6 +1,5 @@
 // Form Input Components used in the project
 
-
 export default function StyledFormInput({
   onChange,
   type,
@@ -14,7 +13,6 @@ export default function StyledFormInput({
   fullWidthStyle,
   value,
 }) {
-  
   let inputStyle = "";
 
   if (halfWidthStyle) {

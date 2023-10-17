@@ -1,28 +1,22 @@
 // The Event Space Page where all of the videos and photos will be displayed
 
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useState, useRef, useEffect, Suspense } from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
-import { Orbit } from "@uiball/loaders";
+import LoadingScreen from "../../components/LoadingScreen";
+import EventHeader from "../../components/EventHeader";
+import StyledButton from "../../components/StyledButton";
+import DefaultProfileImg from "./img/default_profile.png";
+import dayjs from "dayjs";
 
-//! Temporary styles for the images
-const eventStyles = {
-  display: "flex",
-  flexWrap: "wrap",
-  flex: "0 0 33.333333%",
-  flexWrap: "wrap",
-  gap: "1rem",
-};
+import VideoPlayer from "../../components/VideoPlayer";
 
-//! Temporary styles for the loading spinner
-const styleADiv = {
-  height: "100vh",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: "#E4DDD3",
-};
+import { ADD_POST } from "../../utils/mutations";
+
+const LazyLoadingScreen = React.lazy(() =>
+  import("../../components/LoadingScreen"),
+); // Lazy-loading screen
 
 //* The Event Space Page where all of the videos and photos will be displayed for a single event
 export default function EventSpace() {
@@ -33,6 +27,15 @@ export default function EventSpace() {
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
+
+  const [uploadImageData, setUploadImageData] = useState({
+    capsuleId: eventId,
+    owner: name,
+    url: dataURL,
+  });
+
+  const [uploadImage, { error }] = useMutation(ADD_POST); // the mutation for uploading an image
+
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
@@ -55,65 +58,117 @@ export default function EventSpace() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
           setDataURL(result.info.url);
+          setUploadImageData({
+            ...uploadImageData,
+            url: result.info.url,
+          });
         }
       },
     );
-  }, [saveFolder]);
+  }, [saveFolder, uploadImageData]);
 
   // Query for getting sinlge capsule data by passing in the id
-  const { loading, data } = useQuery(GET_CAPSULE, {
+  const { loading, data, refetch } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
+
+  // useEffect for uploading the image and refetching the data for the page
+  useEffect(() => {
+    console.log("uploadImageData:");
+    const uploadAndFetch = async () => {
+      if (dataURL) {
+        try {
+          await uploadImage({ variables: uploadImageData });
+          refetch();
+        } catch (error) {
+          console.error("Error from uploadImage mutation:", error);
+        }
+      }
+    };
+
+    uploadAndFetch();
+  }, [uploadImageData]);
 
   // Check for the capsule data
   const cap = data?.getCapsule || null;
 
-  console.log("cap", cap);
-
   // display loading screen
-  if (loading)
-    return (
-      <div style={styleADiv}>
-        <Orbit size={200} color="white" />
-      </div>
-    );
+  if (loading) return <LoadingScreen />;
 
   // if no cap, return a message
   if (!cap)
     return (
-      <div style={styleADiv}>
+      <div>
         <p>No capsule found</p>
       </div>
     );
 
-  //TODO - Use mutation to save URL into database then update the page with the new image at the top
+  const checkFileType = (post) => {
+    const extension = post.url.split(".").pop();
+    console.log("extension", extension);
+    if (extension === "jpg" || extension === "png") {
+      return (
+        <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+          <img
+            className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
+            src={post.url}
+            alt={post._id} // Call the function when the image is loaded.
+          ></img>
+        </Link>
+      );
+    } else if (extension === "mp4" || extension === "mov") {
+      return (
+        <div className="relative h-full w-full overflow-hidden">
+          <iframe
+            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            className="z-5 h-full w-full scale-125" // hardcoded assumption of aspect ratio vert video
+            title={post._id}
+          ></iframe>
+
+          <Link
+            to={`/eventspace/${eventId}/singleview/${post._id}`}
+            className="absolute inset-0 z-10 h-full w-full"
+          ></Link>
+        </div>
+      );
+      // return <VideoPlayer video={post.url} width="auto" height="auto" />
+    } else {
+      return <p>Invalid file type</p>;
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-main_bg">
-      <section className="container m-auto">
-        <h1>{cap.title}</h1>
-        <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-          <Link to={`/eventspace/${eventId}/livechat`}>LiveChat</Link>
-        </button>
-        <button
-          className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-          onClick={() => widgetRef.current.open()}
-        >
+    <>
+      <EventHeader
+        eventProfileImage={DefaultProfileImg}
+        eventTitle={cap.title}
+        eventDate={cap.date}
+        eventLocation={cap.location}
+      >
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/livechat`}>Live Chat</Link>
+        </StyledButton>
+        <StyledButton outlined button onClick={() => widgetRef.current.open()}>
           Upload
-        </button>
-        <ul style={eventStyles}>
-          {cap.posts.map((post) => (
-            <li key={post._id}>
-              <h3>{post.title}</h3>
-              <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
-                <img width="200px" src={post.url} alt={post._id} />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        </StyledButton>
+      </EventHeader>
+
+      <section className="container m-auto mb-5 px-1">
+        <Suspense fallback={<LazyLoadingScreen />}>
+          <div className="grid grid-cols-3 gap-1 md:gap-2">
+            {cap.posts
+              .slice()
+              .reverse()
+              .map((post) => (
+                <div key={`postId_${post._id}`}>
+                  <h3>{post.title}</h3>
+                  {checkFileType(post)}
+                </div>
+              ))}
+          </div>
+        </Suspense>
       </section>
-    </main>
+    </>
   );
 }

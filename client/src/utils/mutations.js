@@ -99,3 +99,17 @@ export const ADD_COMMENT = gql`
     }
   }
 `
+
+export const ADD_POST = gql`
+  mutation uploadPost($capsuleId: ID!, $url: String!, $owner: String!) {
+    uploadPost(capsuleId: $capsuleId, url: $url, owner: $owner) {
+      _id
+      url
+      thumbnail
+      date
+      upVotes
+      comment_count
+      owner
+    }
+}
+`
