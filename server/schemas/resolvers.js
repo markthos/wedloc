@@ -60,7 +60,7 @@ const resolvers = {
         return null; // Post not found
       }
 
-      console.log("post found");
+      console.log("Post Found");
 
       return post;
     },
@@ -69,13 +69,14 @@ const resolvers = {
     //!! ADD ATTENDEES  and req.session.name saved (maybe token and not session)
 
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date, location }, context) => {
+    createCapsule: async (parent, { title, date, location, eventPic }, context) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.create({
           title,
           date,
           location,
+          eventPic,
           owner: context.user.username,
         });
         await User.findOneAndUpdate(
@@ -87,6 +88,23 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
     },
+
+    devDelCapsule: async (parent, { capsuleId }) => {
+      try {
+        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+    
+        console.log("Capsule deleted", capsule);
+        return { success: true, message: "Capsule deleted successfully" };
+      } catch (error) {
+        console.error("Error deleting capsule", error);
+        return { success: false, message: "Error deleting capsule" };
+      }
+    },
+    
+
 
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { file }) => {
@@ -277,49 +295,41 @@ const resolvers = {
         return null;
       }
 
-      const upvotes = await cap.posts.find(
-        (post) => post._id.equals(postIdObject)
+      const upvotes = await cap.posts.find((post) =>
+        post._id.equals(postIdObject)
       );
       // cap now contains the updated document
-      console.log("post found: " + upvotes.upVotes);
+      console.log("post found: upvote: " + upvotes.upVotes);
 
       return upvotes;
     },
 
     downVote: async (parent, { capsuleId, postId }) => {
-      const capsule = await Capsule.findById({ _id: capsuleId });
-
+      const capsuleIdObject = new ObjectId(capsuleId);
       const postIdObject = new ObjectId(postId);
-      const post = capsule.posts.find((post) => post._id.equals(postIdObject));
-      if (!post) {
-        console.log("post not found");
-        return null;
-      }
 
-      console.log("post found");
-
-      const upVote = post.upVotes + 1;
-
-      const updatedPost = await Capsule.findOneAndUpdate(
-        { _id: capsuleId, "posts._id": postIdObject },
-        { $set: { "posts.$.downVotes": upVote } },
+      const cap = await Capsule.findOneAndUpdate(
+        { _id: capsuleIdObject, "posts._id": postIdObject },
+        { $inc: { "posts.$.upVotes": -1 } },
         { new: true }
       );
 
-      return updatedPost;
-    },
-
-    addComment: async (parent, { capsuleId, postId, text, author }) => {
-      const capsule = await Capsule.findById({ _id: capsuleId });
-
-      const postIdObject = new ObjectId(postId);
-      const post = capsule.posts.find((post) => post._id.equals(postIdObject));
-      if (!post) {
+      if (!cap) {
         console.log("post not found");
         return null;
       }
 
-      console.log("post found");
+      const downVotes = await cap.posts.find((post) =>
+        post._id.equals(postIdObject)
+      );
+      // cap now contains the updated document
+      console.log("post found: downvote: " + downVotes.upVotes);
+
+      return downVotes;
+    },
+
+    addComment: async (parent, { capsuleId, postId, text, author }) => {
+      const postIdObject = new ObjectId(postId);
 
       const newComment = {
         text,
@@ -332,7 +342,18 @@ const resolvers = {
         { new: true }
       );
 
-      return updatedPost;
+      if (!updatedPost) {
+        console.log("post not found");
+        return null; // Handle this as needed
+      }
+
+      const post = updatedPost.posts.find((post) =>
+        post._id.equals(postIdObject)
+      );
+
+      console.log("New Comment Added");
+
+      return post;
     },
   },
 };
