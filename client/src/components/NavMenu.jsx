@@ -32,6 +32,16 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       document.removeEventListener("mousedown", handler);
     };
   });
+
+  // const handleSignOut = (e) => {
+  //   if (e.target.id === 'signOut') {
+  //     console.log("signing out");
+  //     AuthService.logout();
+  //     window.location.assign("/");
+  //   }
+  // };
+
+
   // Storing the labels and routes in an array to loop through
 const menuItemsAuthenticated = [
   { label: 'Home', route: '/' },
@@ -40,7 +50,7 @@ const menuItemsAuthenticated = [
   { label: 'My Profile', route: '/profile' },
   { label: 'About Us', route: '/about' },
   { label: 'Payment', route: '/payment' },
-  { label: 'Sign Out', route: '/' },
+  { label: 'Sign Out', route: '/signout'},
 ];
 
 const menuItemsUnauthenticated = [
@@ -52,22 +62,6 @@ const menuItemsUnauthenticated = [
 ];
 
 const menuItemsToRender = isAuthenticated ? menuItemsAuthenticated : menuItemsUnauthenticated;
-
-
-  // const menuItems = [
-  //     { label: 'Home', route: '/' },
-  //     { label: 'Sign Up', route: '/signup' },
-  //     { label: 'Log In', route: '/login' },
-  //     { label: 'About Us', route: '/about' },
-  //     { label: 'Event Creator', route: '/eventcreator' },
-  //     { label: 'My Events', route: '/myevents' },
-  //     { label: 'Event Space', route: '/eventspace' },
-  //     { label: 'Live Chat', route: '/livechat' },
-  //     { label: 'My Profile', route: '/profile' },
-  //     { label: 'Single View', route: '/singleview' },
-  //     { label: 'Upload', route: '/upload' },
-  //     { label: 'Payment', route: '/payment' },
-  // ];
 
   return (
     <div
@@ -100,12 +94,6 @@ const menuItemsToRender = isAuthenticated ? menuItemsAuthenticated : menuItemsUn
               </NavLink>
             </li>
           ))}
-          {/* Separating this link so that it shows at the bottom once the login functionality works */}
-          <li>
-            <RouterLink to={"/"} className="block p-3 hover:bg-lightgray">
-              Sign Out
-            </RouterLink>
-          </li>
         </ul>
       </div>
     </div>
