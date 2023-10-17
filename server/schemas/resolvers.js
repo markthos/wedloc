@@ -40,6 +40,14 @@ const resolvers = {
       }
       throw new AuthenticationError("Authentication error");
     },
+
+    getUserPic: async (parent, args, context) => {
+      if (context.user) {
+        return await User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError("Authentication error");
+    },
+
     getChat: async (parent, { capsuleId }) => {
       const capsule = await Capsule.findById({ _id: capsuleId });
 

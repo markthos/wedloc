@@ -4,34 +4,24 @@ import React, { useState, useEffect } from 'react';
 import NavMenu from "./NavMenu";
 import { Link as RouterLink } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import AuthService from '../utils/auth';
-// import { GET_ME } from '../../utils/queries';
-// import axios from 'axios'; // Import Axios
+import { useQuery } from '@apollo/client';
+import { GET_USER_PIC } from '../utils/queries';
 
 export default function Header() {
-  const [userProfile, setUserProfile] = useState(null);
-
+  const [userProfilePic, setUserProfilePic] = useState(null);
+  const { loading, data } = useQuery(GET_USER_PIC);
+  console.log(data);
+  // pull the user profilePic from the query
   useEffect(() => {
-    console.log('Fetching user profile');
-    // Check if the user is authenticated
-    if (AuthService.loggedIn()) {
-      // Fetch user profile data using the JWT token
-      console.log('Is Logged In');
-      
-      // axios.get('/api/get_me', {
-      //   headers: {
-      //     Authorization: `Bearer ${AuthService.getToken()}`,
-      //   },
-      // })
-      // .then((response) => {
-      //   setUserProfile(response.data)
-
-      // })
-      // .catch((error) => {
-      //   console.error('Error fetching user profile:', error);
-      // });
+    if (data) {
+      setUserProfilePic(data);
     }
-  }, []);
+  }, [data]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
 
   return (
     <header className="relative bg-white">
@@ -41,9 +31,9 @@ export default function Header() {
       </span>
       {/* Profile Icon or Image */}
       <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
-        {userProfile ? (
+        {userProfilePic ? (
           <RouterLink to="/profile">
-            <img src={userProfile.profilePic} alt="Profile" />
+            <img src={userProfilePic} alt="Profile" />
           </RouterLink>
         ) : (
           <RouterLink to="/profile">
