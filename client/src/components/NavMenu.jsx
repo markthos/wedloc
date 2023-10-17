@@ -10,9 +10,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link as RouterLink, NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import AuthService from "../utils/auth";
 
 export default function NavMenu({ currentPage, handlePageChange }) {
   const [open, setOpen] = useState(false);
+  const isAuthenticated = AuthService.loggedIn();
+
+  console.log(isAuthenticated);
+
 
   let menuRef = useRef();
 
@@ -27,21 +32,36 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       document.removeEventListener("mousedown", handler);
     };
   });
+
+  // const handleSignOut = (e) => {
+  //   if (e.target.id === 'signOut') {
+  //     console.log("signing out");
+  //     AuthService.logout();
+  //     window.location.assign("/");
+  //   }
+  // };
+
+
   // Storing the labels and routes in an array to loop through
-  const menuItems = [
-      { label: 'Home', route: '/' },
-      { label: 'Sign Up', route: '/signup' },
-      { label: 'Log In', route: '/login' },
-      { label: 'About Us', route: '/about' },
-      { label: 'Event Creator', route: '/eventcreator' },
-      { label: 'My Events', route: '/myevents' },
-      { label: 'Event Space', route: '/eventspace' },
-      { label: 'Live Chat', route: '/livechat' },
-      { label: 'My Profile', route: '/profile' },
-      { label: 'Single View', route: '/singleview' },
-      { label: 'Upload', route: '/upload' },
-      { label: 'Payment', route: '/payment' },
-  ];
+const menuItemsAuthenticated = [
+  { label: 'Home', route: '/' },
+  { label: 'Event Creator', route: '/eventcreator' },
+  { label: 'My Events', route: '/myevents' },
+  { label: 'My Profile', route: '/profile' },
+  { label: 'About Us', route: '/about' },
+  { label: 'Payment', route: '/payment' },
+  { label: 'Sign Out', route: '/signout'},
+];
+
+const menuItemsUnauthenticated = [
+  { label: 'Home', route: '/' },
+  { label: 'Sign Up', route: '/signup' },
+  { label: 'Log In', route: '/login' },
+  { label: 'About Us', route: '/about' },
+  { label: 'Payment', route: '/payment'},
+];
+
+const menuItemsToRender = isAuthenticated ? menuItemsAuthenticated : menuItemsUnauthenticated;
 
   return (
     <div
@@ -64,7 +84,7 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       >
         <ul>
           {/* Looping through the menuItems array so you don't have to repeat all the styles for each link */}
-          {menuItems.map((item) => (
+          {menuItemsToRender.map((item) => (
             <li key={item.label}>
               <NavLink
                 to={item.route}
@@ -74,12 +94,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
               </NavLink>
             </li>
           ))}
-          {/* Separating this link so that it shows at the bottom once the login functionality works */}
-          <li>
-            <RouterLink to={"/"} className="block p-3 hover:bg-lightgray">
-              Sign Out
-            </RouterLink>
-          </li>
         </ul>
       </div>
     </div>

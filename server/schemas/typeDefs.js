@@ -17,6 +17,7 @@ const typeDefs = gql`
     attendant_count: Int
     attendants: [Attendees]
   }
+
   type Post {
     _id: ID
     url: String
@@ -27,6 +28,7 @@ const typeDefs = gql`
     comments: [Comment]
     owner: String
   }
+
   type User {
     _id: ID
     username: String
@@ -36,6 +38,7 @@ const typeDefs = gql`
     password: String
     profilePic: String
     capsules: [Capsule]
+
   }
   type Auth {
     token: ID!
@@ -97,7 +100,7 @@ const typeDefs = gql`
   type Mutation {
     createCapsule(title: String!, eventPic: String, location: String!, date: String!): Capsule
     devDelCapsule(capsuleId: ID!): Capsule
-    addPost(capsuleId: ID!, text: String!): Post
+    uploadPost(capsuleId: ID!, url: String!, owner: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
     addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
@@ -106,7 +109,6 @@ const typeDefs = gql`
     uploadFile(file: Upload!): File!
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
-    uploadPost(file: Upload!): ImageUploadResponse # trying this out for cloudinary  - Will
     addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
     upVote(capsuleId: ID!, postId: ID!): Post
     downVote(capsuleId: ID!, postId: ID!): Post

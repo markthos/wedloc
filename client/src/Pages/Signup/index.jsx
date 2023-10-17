@@ -1,4 +1,5 @@
 // The Sign Up page
+// !FIX: The background image is pushing the footer down in desktop view
 
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
@@ -6,6 +7,7 @@ import { REGISTER_USER } from "../../utils/mutations";
 import { Link as RouterLink } from "react-router-dom";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
+import signupBG from "./ben_jane_signup_bg.jpg";
 
 export default function Signup() {
   const [userData, setUserData] = useState({
@@ -40,7 +42,13 @@ export default function Signup() {
 
   return (
     <section className="flex min-h-full">
-      <div className="hidden bg-darkgray md:block md:w-1/2">Picture Area</div>
+      <div className="hidden bg-darkgray md:block md:w-1/2">
+        <img
+          src={signupBG}
+          alt="Ben and Jane"
+          className="object-cover w-full h-full"
+        />
+      </div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           <form

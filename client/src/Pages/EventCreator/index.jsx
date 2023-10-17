@@ -9,16 +9,18 @@ import React, { useState, useEffect, useRef} from 'react';
 
 import { useMutation } from '@apollo/client';
 import { ADD_CAPSULE } from '../../utils/mutations';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function EventCreator() {
   const [formState, setFormState] = useState({title: '', location: '', date: '', eventPic: ''});
-  const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
+  const [dataURL, setDataURL] = useState(""); // THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // using this to display the image on the page
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/userimages`;
+  const navigate = useNavigate();
 
   const [addCapsule, { error, data}] = useMutation(ADD_CAPSULE);
 
@@ -43,19 +45,23 @@ export default function EventCreator() {
 
       const { data } = await addCapsule({
         variables: { ...formState, eventPic:dataURL },
-      })
-      console.log(data)
-    } catch (error) {
-      console.error(error);
-    }
-
-    setFormState({
-      title: '',
-      location: '',
-      date: '',
-      eventPic: '',
-    })
-  };
+      }); 
+      if (data && data.createCapsule && data.createCapsule._id) {
+        navigate(`/event/${data.createCapsule._id}`);
+      } else {
+        throw new Error('something went wrong!');
+      }
+      } catch (error) {
+        console.error(error);
+      }
+  
+      setFormState({
+        title: '',
+        location: '',
+        date: '',
+        eventPic: '',
+      });
+    };
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
