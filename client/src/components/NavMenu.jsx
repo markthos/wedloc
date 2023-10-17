@@ -33,15 +33,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
     };
   });
 
-  // const handleSignOut = (e) => {
-  //   if (e.target.id === 'signOut') {
-  //     console.log("signing out");
-  //     AuthService.logout();
-  //     window.location.assign("/");
-  //   }
-  // };
-
-
   // Storing the labels and routes in an array to loop through
 const menuItemsAuthenticated = [
   { label: 'Home', route: '/' },
