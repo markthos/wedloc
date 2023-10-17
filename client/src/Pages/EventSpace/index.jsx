@@ -5,6 +5,9 @@ import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
 import LoadingScreen from "../../components/LoadingScreen";
+import EventHeader from "../../components/EventHeader";
+import StyledButton from "../../components/StyledButton";
+import DefaultProfileImg from "./img/default_profile.png";
 
 import { ADD_POST } from "../../utils/mutations";
 
@@ -103,57 +106,81 @@ export default function EventSpace() {
     const extension = post.url.split(".").pop();
     console.log("extension", extension);
     if (extension === "jpg" || extension === "png") {
-      return <img
-        width="500px"
-        src={post.url}
-        alt={post._id} // Call the function when the image is loaded.
-      ></img>;
+      return (
+        <img
+          className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
+          src={post.url}
+          alt={post._id} // Call the function when the image is loaded.
+        ></img>
+      );
     } else if (extension === "mp4" || extension === "mov") {
-      return <iframe
-        src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-        width="360"
-        height="640"
-        style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
-        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-        allowFullScreen
-        frameBorder="0"
-        title={post._id}
-      ></iframe>;
+      return (
+        // <iframe
+        //   src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+        //   width="360"
+        //   height="640"
+        //   style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
+        //   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+        //   allowFullScreen
+        //   frameBorder="0"
+        //   title={post._id}
+        // ></iframe>
+        //! Not sure if you have to use an iframe but this is a more modern way to embed videos - Edward
+        <video
+          controls
+          className="aspect-w-9 aspect-h-16 h-full w-full"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source
+            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
+      );
     } else {
       return <p>Invalid file type</p>;
     }
   };
 
   return (
-    <section className="container m-auto">
-      <h1>{cap.title}</h1>
-      <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-        <Link to={`/eventspace/${eventId}/livechat`}>LiveChat</Link>
-      </button>
-      <button
-        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={() => widgetRef.current.open()}
+    <>
+      <EventHeader
+        eventProfileImage={DefaultProfileImg}
+        eventTitle={cap.title}
+        eventDate={"July 4, 2023"} // !PLACEHOLDER
+        eventLocation={"Sacramento, CA"} // !PLACEHOLDER
       >
-        Upload
-      </button>
-      <ul className="flex w-full flex-wrap">
-        {cap.posts
-          .slice()
-          .reverse()
-          .map((post) => (
-            <Suspense fallback={<LazyLoadingScreen />}>
-              <li
-                key={`postId_${post._id}`}
-                className="w-1/3 p-1 md:w-1/3 lg:w-1/4 xl:w-1/4"
-              >
-                <h3>{post.title}</h3>
-                <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
-                  {checkFileType(post)}
-                </Link>
-              </li>
-            </Suspense>
-          ))}
-      </ul>
-    </section>
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/livechat`}>Live Chat</Link>
+        </StyledButton>
+        <StyledButton outlined button onClick={() => widgetRef.current.open()}>
+          Upload
+        </StyledButton>
+      </EventHeader>
+
+      <section className="container m-auto px-1 mb-5">
+        <div className="grid grid-cols-3 gap-1 md:gap-2">
+            {cap.posts
+              .slice()
+              .reverse()
+              .map((post) => (
+                <Suspense fallback={<LazyLoadingScreen />}>
+                  <div
+                    key={`postId_${post._id}`}
+                  >
+                    <h3>{post.title}</h3>
+                    <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+                      {checkFileType(post)}
+                    </Link>
+                  </div>
+                </Suspense>
+              ))}
+        </div>
+      </section>
+    </>
   );
 }
