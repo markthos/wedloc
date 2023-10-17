@@ -90,7 +90,7 @@ export default function EventCreator() {
             {
               uploadedPhoto ? 
               <img src={uploadedPhoto} alt="Uploaded event" className="w-24 h-24" /> :
-              <CameraAltOutlinedIcon fontSize="large" className="w-24 h-24" />
+              <CameraAltOutlinedIcon fontSize="large" className="w-32 h-32 rounded-full" />
             }
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
