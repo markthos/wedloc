@@ -173,13 +173,13 @@ export default function LiveChat() {
 
   // return the chat history and the form to send a message
   return (
-    <section className="gap container m-auto flex w-96 flex-col justify-center">
+    <section className="gap container m-auto flex w-full flex-col justify-center md:w-1/2">
       <StyledButton primaryColor onClick={handleReturn}>
         Back
       </StyledButton>
       <h1 className="text-center font-extrabold">Live Chat</h1>
       <div
-        className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
+        className="no-scrollbar scrollbar-none flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
         style={{ height: "70vh" }}
       >
         <ul id="messages" className="h-full">
@@ -211,7 +211,7 @@ export default function LiveChat() {
       </div>
 
       <form
-        className="w-100% mb-6 mt-6 flex justify-between gap-3 p-6"
+        className="w-100% mb-6 mt-6 flex flex-col justify-between gap-3 p-6 md:flex-row"
         onSubmit={handleSendMessage}
       >
         <input
