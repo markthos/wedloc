@@ -49,13 +49,7 @@ export default function Login(props) {
       <div
         className="min-h-full bg-cover bg-center md:w-1/2"
         style={{ backgroundImage: `url(${loginBG})` }}
-      >
-        {/* <img
-          src={loginBG}
-          alt="Kyle and Chloe"
-          className="h-full w-full object-cover"
-        /> */}
-      </div>
+      ></div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           {data ? (
