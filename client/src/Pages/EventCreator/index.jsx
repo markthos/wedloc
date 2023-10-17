@@ -1,5 +1,4 @@
 // The Event Creator page where the event is first made
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import StyledButton from '../../components/StyledButton';
 import StyledFormInput from '../../components/StyledFormInput';
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
@@ -110,7 +109,7 @@ export default function EventCreator() {
                 onChange={handleChange}
                 value={formState.title}
                 placeholder={"Event Title"}
-                required={require}
+                required={true}
               />
             </div>
           </div>
@@ -127,7 +126,6 @@ export default function EventCreator() {
                 onChange={handleChange}
                 value={formState.location}
                 placeholder={"City, State"}
-                required={require}
               />
             </div>
           </div>
@@ -143,7 +141,6 @@ export default function EventCreator() {
                 name={"date"}
                 onChange={handleChange}
                 value={formState.date}
-                required={require}
               />
             </div>
           </div>
