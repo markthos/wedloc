@@ -5,27 +5,31 @@ import NavMenu from "./NavMenu";
 import { Link as RouterLink } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AuthService from '../utils/auth';
-import axios from 'axios'; // Import Axios
+// import { GET_ME } from '../../utils/queries';
+// import axios from 'axios'; // Import Axios
 
 export default function Header() {
   const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
+    console.log('Fetching user profile');
     // Check if the user is authenticated
     if (AuthService.loggedIn()) {
       // Fetch user profile data using the JWT token
-      axios.get('/api/user/profile', {
-        headers: {
-          Authorization: `Bearer ${AuthService.getToken()}`,
-        },
-      })
-      .then((response) => {
-        setUserProfile(response.data)
-        console.log(setUserProfile);
-      })
-      .catch((error) => {
-        console.error('Error fetching user profile:', error);
-      });
+      console.log('Is Logged In');
+      
+      // axios.get('/api/get_me', {
+      //   headers: {
+      //     Authorization: `Bearer ${AuthService.getToken()}`,
+      //   },
+      // })
+      // .then((response) => {
+      //   setUserProfile(response.data)
+
+      // })
+      // .catch((error) => {
+      //   console.error('Error fetching user profile:', error);
+      // });
     }
   }, []);
 

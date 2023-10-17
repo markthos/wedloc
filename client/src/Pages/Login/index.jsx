@@ -46,18 +46,15 @@ export default function Login(props) {
 
   return (
     <section className="flex min-h-full">
-      <div className="hidden bg-darkgray md:block md:w-1/2">
-        <img
-          src={loginBG}
-          alt="Kyle and Chloe"
-          className="h-full w-full object-cover"
-        />
-      </div>
+      <div
+        className="min-h-full bg-cover bg-center md:w-1/2"
+        style={{ backgroundImage: `url(${loginBG})` }}
+      ></div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           {data ? (
             <p>
-              <RouterLink to={"/"}>Home</RouterLink>
+              <RouterLink to={"/myevents"}>MyEvents</RouterLink>
             </p>
           ) : (
             <form
