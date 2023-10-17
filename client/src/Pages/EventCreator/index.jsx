@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function EventCreator() {
   const [formState, setFormState] = useState({title: '', location: '', date: '', eventPic: ''});
-  const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
+  const [dataURL, setDataURL] = useState(""); // THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // using this to display the image on the page
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
