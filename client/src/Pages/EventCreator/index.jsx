@@ -46,7 +46,7 @@ export default function EventCreator() {
         variables: { ...formState, eventPic:dataURL },
       }); 
       if (data && data.createCapsule && data.createCapsule._id) {
-        navigate(`/event/${data.createCapsule._id}`);
+        navigate(`/eventspace/${data.createCapsule._id}`);
       } else {
         throw new Error('something went wrong!');
       }
