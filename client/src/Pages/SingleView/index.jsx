@@ -5,7 +5,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
 
-import dayjs from "dayjs";
+import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import StyledButton from "../../components/StyledButton";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -85,8 +85,6 @@ export default function SingleView({ cloudName, videoId }) {
     setCommentTotal(postData.comment_count);
   }, [postData]);
 
-  //TODO save commnet to database
-
   useEffect(() => {
     if (postData) {
       const extension = postData.url.split(".").pop();
@@ -150,11 +148,7 @@ export default function SingleView({ cloudName, videoId }) {
 
   return (
     <section className="gap container m-auto flex w-96 flex-col justify-center">
-      <h1 className="center flex justify-center ">
-        posted by: {postData.owner} on
-        {dayjs(postData.date).format("MM-DD-YYYY")}
-      </h1>
-      <div className="m-4 flex justify-center gap-4 ">
+      <div className="mt-4 flex justify-center">
         {imgFile && (
           <Suspense fallback={<LazyLoadingScreen />}>
             <img
@@ -178,7 +172,13 @@ export default function SingleView({ cloudName, videoId }) {
           ></iframe>
         )}
       </div>
-      <div className="ml-3 mr-5 flex justify-between">
+
+      <div className="center flex justify-end gap-1 mr-1 my-2">
+        <h1>{postData.owner} on </h1>
+        <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
+      </div>
+
+      <div className="ml-1 mr-2 flex justify-between">
         <div className="flex flex-row items-center justify-center">
           <div className="relative">
             <IconButton onClick={upVote}>
@@ -198,6 +198,8 @@ export default function SingleView({ cloudName, videoId }) {
           </div>
         </div>
 
+        
+
         <StyledButton primaryColor onClick={handleReturn}>
           Back
         </StyledButton>
@@ -210,7 +212,10 @@ export default function SingleView({ cloudName, videoId }) {
               <li key={`commentId_${comment._id}`}>
                 <div className="flex justify-between">
                   <h3>{comment.author}</h3>
-                  <p>{comment.date}</p>
+                  <UnixTimestampConverter
+                    unixTimestamp={comment.date}
+                    type="comment"
+                  />
                 </div>
                 {name === comment.author ? (
                   <p

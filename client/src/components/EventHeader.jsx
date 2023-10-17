@@ -1,5 +1,6 @@
 // Event Header for event space, single view, and live chat pages
 // TODO: Fine tune the styles for this component
+import UnixTimestampConverter from "./UnixTimestampConverter";
 
 export default function EventHeader({
   eventProfileImage,
@@ -14,16 +15,22 @@ export default function EventHeader({
         <img
           src={eventProfileImage}
           alt={eventTitle}
-          className="mb-2 h-full w-full md:h-48 md:w-48 rounded-full object-cover m-auto"
+          className="m-auto mb-2 h-full w-full rounded-full object-cover md:h-48 md:w-48"
         />
       </div>
       <div className="w-full md:w-3/4">
-        <h1 className="mb-2 text-center md:text-left text-3xl md:text-5xl">{eventTitle}</h1>
+        <h1 className="mb-2 text-center text-3xl md:text-left md:text-5xl">
+          {eventTitle}
+        </h1>
         <div className="mb-4 flex justify-around md:justify-start md:gap-10">
-          <h2 className="md:text-lg">{eventDate}</h2>
+          <h2 className="md:text-lg">
+            <UnixTimestampConverter unixTimestamp={eventDate} type="none" />
+          </h2>
           <h2 className="md:text-lg">{eventLocation}</h2>
         </div>
-        <div className="flex justify-around md:justify-start md:gap-10">{children}</div>
+        <div className="flex justify-around md:justify-start md:gap-10">
+          {children}
+        </div>
       </div>
     </header>
   );
