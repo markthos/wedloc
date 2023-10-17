@@ -3,6 +3,7 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import StyledButton from '../../components/StyledButton';
 import StyledFormInput from '../../components/StyledFormInput';
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import DefaultProfileImg from "./img/default_profile.png";
 
 import React, { useState, useEffect, useRef} from 'react';
 
@@ -75,56 +76,78 @@ export default function EventCreator() {
 
   return (
     
-  <section className="flex flex-row justify-center items-center min-h-full w-screen">
-    <div className='mb-5 flex flex-col items-center rounded-md bg-beige shadow-lg w-screen md:w-1/2'>
-      <h1 className="font-sans text-2xl text-center font-medium mt-6 md:text-3xl">Event Creator</h1>
-      <div className='flex flex-col items-center w-full'>
-        <form onSubmit={handleFormSubmit} className="flex flex-col items-center w-full">
-          <div className="bg-lightgray rounded-full w-32 h-32 flex items-center justify-center">
+    <section className="container m-auto flex h-full items-center justify-center p-5">
+      <form onSubmit={handleFormSubmit} className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row">
+        <div className='text-center'>
+          <div className="mb-5">
             {
               uploadedPhoto ? 
-              <img src={uploadedPhoto} alt="Uploaded event" className="w-32 h-32 rounded-full" /> :
-              <CameraAltOutlinedIcon fontSize="large" className="w-32 h-32 rounded-full" />
+              <img src={uploadedPhoto} alt="Uploaded event" className="w-80 h-80 rounded-full object-cover shadow-lg" /> :
+              <img src={DefaultProfileImg} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
             }
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
           <AddAPhotoIcon className="mr-4" />
             Upload Picture
           </StyledButton>
-
-          <StyledFormInput 
-            fullWidthStyle
-            type="text"
-            name="title"
-            placeholder={'Event Name'}
-            onChange={handleChange}
-            value={formState.title}
-            required={require}
-          />
-          <StyledFormInput 
-            fullWidthStyle
-            type="text"
-            name="location"
-            placeholder={'City, State'}
-            onChange={handleChange}
-            value={formState.location}
-            required={require}
-          />
-          <StyledFormInput 
-            fullWidthStyle
-            type="date"
-            name="date"
-            placeholder={'Event Date'}
-            onChange={handleChange}
-            value={formState.date}
-            required={require}
-          />
-          <StyledButton type="submit" primaryColor>
-             Create Event
-          </StyledButton>
-        </form>
-      </div>
-    </div>
-  </section>
+        </div>
+        <div className="flex w-full flex-col md:w-2/3">
+          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
+            <div className="w-full md:w-1/6 md:text-right">
+              <label>Event</label>
+            </div>
+            <div className="w-full md:w-5/6">
+              <StyledFormInput
+                fullWidthStyle
+                type={"text"}
+                name={"title"}
+                onChange={handleChange}
+                value={formState.title}
+                placeholder={"Event Title"}
+                required={require}
+              />
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
+            <div className="w-full md:w-1/6 md:text-right">
+              <label>Location</label>
+            </div>
+            <div className="w-full md:w-5/6">
+              <StyledFormInput
+                fullWidthStyle
+                type={"text"}
+                name={"location"}
+                onChange={handleChange}
+                value={formState.location}
+                placeholder={"City, State"}
+                required={require}
+              />
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
+            <div className="w-full md:w-1/6 md:text-right">
+              <label>Date</label>
+            </div>
+            <div className="w-full md:w-5/6">
+              <StyledFormInput
+                fullWidthStyle
+                type={"date"}
+                name={"date"}
+                onChange={handleChange}
+                value={formState.date}
+                required={require}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <StyledButton submit primaryColor>
+              Create Event
+            </StyledButton> 
+          </div>
+        </div>
+      </form>
+    </section>
   );
 }
