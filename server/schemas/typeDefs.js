@@ -66,6 +66,7 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    getUserPic: User
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule

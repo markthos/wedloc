@@ -73,11 +73,14 @@ export const GET_CHAT = gql`
 `;
 
 export const GET_USER = gql`
-  query getUser($username: String!) {
-    getUser(username: $username) {
+  query {
+    me {
       _id
       username
+      firstName
+      lastName
       email
+      profilePic
       capsules {
         _id
         title
@@ -107,6 +110,14 @@ export const GET_USER = gql`
           author
         }
       }
+    }
+  }
+`;
+
+export const GET_USER_PIC= gql`
+  query {
+    getUserPic {
+      profilePic
     }
   }
 `;
