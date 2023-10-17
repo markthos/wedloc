@@ -24,7 +24,7 @@ const resolvers = {
     getCapsulesDev: async () => {
       return await Capsule.find({});
     },
-    getCapsules: async (parent, args, context) => {
+    getUserCapsules: async (parent, args, context) => {
       if (context.user) {
         const user = await User.findOne({ _id: context.user._id }).populate(
           "capsules"
@@ -88,6 +88,22 @@ const resolvers = {
         throw new AuthenticationError("You need to be logged in!");
       }
     },
+
+    updateCapsule: async (parent, { capsuleId, title, location, eventPic }, context) => {
+      if (context.user) {
+        console.log("context.user", context.user);
+        const capsule = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { title, location, eventPic },
+          { new: true }
+        );
+        return capsule;
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+    },
+
+    
 
     devDelCapsule: async (parent, { capsuleId }) => {
       try {
