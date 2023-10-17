@@ -1,10 +1,9 @@
+// Event Header for event space, single view, and live chat pages
 
-const EventHeader = () => {
+export default function EventHeader() {
   return (
     <div>
       
     </div>
   )
 }
-
-export default EventHeader

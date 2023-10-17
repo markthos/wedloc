@@ -8,6 +8,7 @@ import React, { useState, useEffect, useRef} from 'react';
 
 import { useMutation } from '@apollo/client';
 import { ADD_CAPSULE } from '../../utils/mutations';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -18,6 +19,7 @@ export default function EventCreator() {
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/userimages`;
+  const navigate = useNavigate();
 
   const [addCapsule, { error, data}] = useMutation(ADD_CAPSULE);
 
@@ -42,19 +44,23 @@ export default function EventCreator() {
 
       const { data } = await addCapsule({
         variables: { ...formState, eventPic:dataURL },
-      })
-      console.log(data)
-    } catch (error) {
-      console.error(error);
-    }
-
-    setFormState({
-      title: '',
-      location: '',
-      date: '',
-      eventPic: '',
-    })
-  };
+      }); 
+      if (data && data.createCapsule && data.createCapsule._id) {
+        navigate(`/event/${data.createCapsule._id}`);
+      } else {
+        throw new Error('something went wrong!');
+      }
+      } catch (error) {
+        console.error(error);
+      }
+  
+      setFormState({
+        title: '',
+        location: '',
+        date: '',
+        eventPic: '',
+      });
+    };
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
@@ -83,8 +89,8 @@ export default function EventCreator() {
           <div className="bg-lightgray rounded-full w-32 h-32 flex items-center justify-center">
             {
               uploadedPhoto ? 
-              <img src={uploadedPhoto} alt="Uploaded event" className="w-24 h-24" /> :
-              <CameraAltOutlinedIcon fontSize="large" className="w-24 h-24" />
+              <img src={uploadedPhoto} alt="Uploaded event" className="w-32 h-32 rounded-full" /> :
+              <CameraAltOutlinedIcon fontSize="large" className="w-32 h-32 rounded-full" />
             }
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
@@ -99,7 +105,7 @@ export default function EventCreator() {
             placeholder={'Event Name'}
             onChange={handleChange}
             value={formState.title}
-            required={require}
+            required={true}
           />
           <StyledFormInput 
             fullWidthStyle
@@ -108,7 +114,8 @@ export default function EventCreator() {
             placeholder={'City, State'}
             onChange={handleChange}
             value={formState.location}
-            required={require}
+            
+            
           />
           <StyledFormInput 
             fullWidthStyle
@@ -117,7 +124,7 @@ export default function EventCreator() {
             placeholder={'Event Date'}
             onChange={handleChange}
             value={formState.date}
-            required={require}
+            // required={require}
           />
           <StyledButton type="submit" primaryColor>
              Create Event

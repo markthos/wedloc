@@ -1,0 +1,58 @@
+{
+  "team": [
+    {
+      "name": "Arun Ayyasamy",
+      "image": "./assets/img/arun.jpg",
+      "role": "Back-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/arundvp",
+      "linkedin_link": "https://www.linkedin.com/in/arunsaravanakumar-a-2753448/",
+      "portfolio_link": "https://arundvp.github.io/myPortfolio.1.x/"
+    },
+    {
+      "name": "Avery Myers",
+      "image": "./assets/img/avery.jpg",
+      "role": "Back-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/AveryJMyers",
+      "linkedin_link": "https://www.linkedin.com/in/avery-m-108704110/",
+      "portfolio_link": "https://averyjmyers.github.io/challenge_2_portfolio_website_design/"
+    },
+    {
+      "name": "Edward Von Schondorf",
+      "image": "./assets/img/edward.png",
+      "role": "Front-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/Torvec",
+      "linkedin_link": "https://www.linkedin.com/in/edward-von/",
+      "portfolio_link": "https://torvec.github.io/m2_my_portfolio/"
+    },
+    {
+      "name": "Jake Krauskopf",
+      "image": "./assets/img/jake.jpg",
+      "role": "Front-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/JaKrau",
+      "linkedin_link": "https://www.linkedin.com/in/jacob-krauskopf-b0a87190/",
+      "portfolio_link": "https://jakrau.github.io/Bogles/"
+    },
+    {
+      "name": "Mark Thostesen",
+      "image": "./assets/img/mark.jpg",
+      "role": "Back-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/markthos",
+      "linkedin_link": "https://www.linkedin.com/in/mark-thostesen-03192176/",
+      "portfolio_link": "https://markthos.github.io/Professional-Webpage-Portfolio/"
+    },
+    {
+      "name": "Will Cobb",
+      "image": "./assets/img/will.jpg",
+      "role": "Back-End Developer",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum.",
+      "github_link": "https://github.com/1willcobb",
+      "linkedin_link": "https://www.linkedin.com/in/1willcobb/",
+      "portfolio_link": "https://www.1willcobb.com/"
+    }
+  ]
+}
