@@ -33,7 +33,7 @@ export default function Signup() {
       const { data } = await addUser({ variables: { ...userData } });
       console.log("User successfully added:", data);
       // Redirect to home page after successful sign up
-      window.location.replace("/");
+      window.location.replace("/myevents");
     } catch (error) {
       console.error("Error during registration:", error);
       // Handle registration errors (like showing error messages to the user)
