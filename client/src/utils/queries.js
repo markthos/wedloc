@@ -34,6 +34,17 @@ export const GET_CAPSULE = gql`
   }
 `;
 
+export const GET_MY_CAPSULES = gql`
+query {
+  getUserCapsules {
+    _id
+    title
+    location
+    eventPic
+  }
+}
+`
+
 export const GET_POST = gql`
 query getPost($capsuleId: ID!, $postId: ID!) {
   getPost(capsuleId: $capsuleId, postId: $postId) {
