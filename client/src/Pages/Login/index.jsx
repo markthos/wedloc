@@ -54,7 +54,7 @@ export default function Login(props) {
         <div className="w-full px-10">
           {data ? (
             <p>
-              <RouterLink to={"/"}>Home</RouterLink>
+              <RouterLink to={"/myevents"}>MyEvents</RouterLink>
             </p>
           ) : (
             <form
