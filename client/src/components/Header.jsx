@@ -5,8 +5,8 @@ import NavMenu from "./NavMenu";
 import { Link as RouterLink } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AuthService from '../utils/auth';
-import { GET_ME } from '../../utils/queries';
-import axios from 'axios'; // Import Axios
+// import { GET_ME } from '../../utils/queries';
+// import axios from 'axios'; // Import Axios
 
 export default function Header() {
   const [userProfile, setUserProfile] = useState(null);
