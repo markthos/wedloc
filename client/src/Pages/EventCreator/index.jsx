@@ -89,7 +89,7 @@ export default function EventCreator() {
           <div className="bg-lightgray rounded-full w-32 h-32 flex items-center justify-center">
             {
               uploadedPhoto ? 
-              <img src={uploadedPhoto} alt="Uploaded event" className="w-24 h-24" /> :
+              <img src={uploadedPhoto} alt="Uploaded event" className="w-32 h-32 rounded-full" /> :
               <CameraAltOutlinedIcon fontSize="large" className="w-32 h-32 rounded-full" />
             }
           </div>
