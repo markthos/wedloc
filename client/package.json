@@ -67,7 +67,6 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
-    "tailwindcss": "^3.3.3",
-    "tailwindcss-no-scrollbar": "^1.0.1"
+    "tailwindcss": "^3.3.3"
   }
 }
