@@ -119,12 +119,13 @@ export default function EventSpace() {
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full overflow-hidden">
           <iframe
             src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            className="z-5 h-full w-full" // hardcoded assumption of aspect ratio vert video
+            className="z-5 h-full w-full scale-125" // hardcoded assumption of aspect ratio vert video
             title={post._id}
           ></iframe>
+
           <Link
             to={`/eventspace/${eventId}/singleview/${post._id}`}
             className="absolute inset-0 z-10 h-full w-full"
