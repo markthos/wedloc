@@ -162,6 +162,10 @@ export default function MyEvents() {
                   <RouterLink to={`/eventspace/${capsule._id}`} className="hover:underline text-xl">
                     {capsule.title}
                   </RouterLink>
+                   {
+                    capsule.eventPic &&
+                    <img src={capsule.eventPic} alt="Uploaded event" className="w-20 h-20 rounded-full" />
+                    }
                   <div className="flex gap-4">
                   <StyledButton onClick={(e) => {
                     e.preventDefault();
