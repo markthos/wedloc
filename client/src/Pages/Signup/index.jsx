@@ -15,8 +15,8 @@ export default function Signup() {
     username: "",
     email: "",
     password: "",
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
   });
   const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
@@ -32,6 +32,7 @@ export default function Signup() {
     e.preventDefault();
     try {
       const { data } = await addUser({ variables: { ...userData } });
+      localStorage.setItem("name", userData.firstName + " " + userData.lastName);
       Auth.login(data.addUser.token);
     } catch (error) {
       console.error("Error during registration:", error);
@@ -43,8 +44,7 @@ export default function Signup() {
       <div
         className="min-h-full bg-cover bg-center md:w-1/2"
         style={{ backgroundImage: `url(${signupBG})` }}
-      >
-      </div>
+      ></div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           <form
