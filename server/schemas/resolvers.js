@@ -1,10 +1,7 @@
 const { User, Capsule, Post, Payment } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-const { createWriteStream } = require("fs");
-const path = require("path");
 const cloudinary = require("cloudinary").v2;
-const multer = require("multer");
-const { signToken, authMiddleware } = require("../utils/auth");
+const { signToken } = require("../utils/auth");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
@@ -24,7 +21,7 @@ const resolvers = {
     getCapsulesDev: async () => {
       return await Capsule.find({});
     },
-    getCapsules: async (parent, args, context) => {
+    getUserCapsules: async (parent, args, context) => {
       if (context.user) {
         const user = await User.findOne({ _id: context.user._id }).populate(
           "capsules"
@@ -40,6 +37,14 @@ const resolvers = {
       }
       throw new AuthenticationError("Authentication error");
     },
+
+    getUserPic: async (parent, args, context) => {
+      if (context.user) {
+        return await User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError("Authentication error");
+    },
+
     getChat: async (parent, { capsuleId }) => {
       const capsule = await Capsule.findById({ _id: capsuleId });
 
@@ -64,10 +69,23 @@ const resolvers = {
 
       return post;
     },
+    getCreditCard: async (_, { _id }) => {
+      return await CreditCard.findById(_id);
+    },
+    getUserCreditCards: async (_, __, context) => {
+        if (context.user) {
+            return await CreditCard.find({ user: context.user._id });
+        }
+        throw new AuthenticationError("Authentication error");
+    },
   },
   Mutation: {
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date, location, eventPic }, context) => {
+    createCapsule: async (
+      parent,
+      { title, date, location, eventPic },
+      context
+    ) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.create({
@@ -87,13 +105,54 @@ const resolvers = {
       }
     },
 
-    devDelCapsule: async (parent, { capsuleId }) => {
-      try {
-        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+    updateCapsule: async (
+      parent,
+      { capsuleId, title, location, eventPic },
+      context
+    ) => {
+      if (context.user) {
+        console.log("context.user", context.user);
+        const capsule = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { title, location, eventPic },
+          { new: true }
+        );
+        return capsule;
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+    },
+
+    deleteCapsule: async (parent, { capsuleId }, context) => {
+      if (context.user) {
+        const capsule = await Capsule.findById(capsuleId);
+
         if (!capsule) {
           throw new Error("Capsule not found");
         }
-    
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
+        }
+
+        await Capsule.findOneAndDelete({ _id: capsuleId });
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { capsules: capsuleId } }
+        );
+      }
+    },
+
+    devDelCapsule: async (parent, { capsuleId }) => {
+      try {
+        const capsule = await Capsule.findOneAndDelete({
+          _id: capsuleId,
+        });
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+
         console.log("Capsule deleted", capsule);
         return { success: true, message: "Capsule deleted successfully" };
       } catch (error) {
@@ -101,10 +160,9 @@ const resolvers = {
         return { success: false, message: "Error deleting capsule" };
       }
     },
-    
+
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { capsuleId, url, owner }) => {
-
       const newPost = {
         url,
         owner,
@@ -124,23 +182,41 @@ const resolvers = {
       console.log("New Post Added");
 
       return updatedCapsule.posts[updatedCapsule.posts.length - 1];
-
     },
 
-    deletePost: async (parent, { postId }, context) => {
+    deletePost: async (parent, { capsuleId, postId }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndDelete({
-          _id: postId,
-          user: context.user._id,
-        });
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { posts: postId } }
+        const capsule = await Capsule.findById(capsuleId);
+
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
+        }
+
+
+        console.log(postId)
+
+        const updated = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { $pull: { posts: { _id: postId } } },
+          { new: true }
         );
-        return post;
+
+        if (!updated) {
+          throw new Error("Post not found in the capsule or unable to remove it.");
+        }
+        
+        console.log(updated)
+
+        return updated;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+
     // Add a Live to the database without being logged in
     addChat: async (parent, { text, author, capsuleId }) => {
       console.log("adding chat...", text, author, capsuleId);
@@ -180,24 +256,22 @@ const resolvers = {
 
     updateUser: async (
       parent,
-      { firstName, lastName, email, profilePic },
-      context
-    ) => {
-      const contextUserId = context.user._id;
-      try {
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: contextUserId },
-          { firstName, lastName, email, profilePic },
-          { new: true }
+      { firstName, lastName, username, email, profilePic },
+      context) => {
+        if (context.user){
+          const contextUserId = context.user._id;
+
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: contextUserId },
+            { firstName, lastName, username, email, profilePic },
+            { new: true }
         );
-        console.log("updatedUser", updatedUser);
-        console.log("contextUserId", contextUserId);
-        return { updatedUser };
-      } catch (error) {
-        console.error("Error updating user:", error);
+        return  updatedUser ;
+      } else {
         throw new Error("Error updating user");
       }
     },
+
     deleteUser: async (parent, { username }, context) => {
       const contextUserId = context.user._id;
       try {
@@ -250,37 +324,47 @@ const resolvers = {
         throw new Error(err);
       }
     },
-
-    uploadFile: async (_, { file }) => {
-      try {
-        const { createReadStream, filename, mimetype } = await file;
-
-        // Convert Buffer to Stream
-        const fileStream = createReadStream();
-
-        // Upload to Cloudinary
-        const result = await new Promise((resolve, reject) => {
-          const cloudStream = cloudinary.uploader.upload_stream(
-            { resource_type: "auto" },
-            (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
-            }
+    addCreditCard: async (_, { cardNumber, expiryDate, CVV, cardHolderName }, context) => {
+      if (context.user) {
+          const creditCard = await CreditCard.create({
+              cardNumber,
+              expiryDate,
+              CVV,
+              cardHolderName,
+              user: context.user._id
+          });
+          await User.findOneAndUpdate(
+              { _id: context.user._id },
+              { $addToSet: { creditCards: creditCard._id } }
           );
-          fileStream.pipe(cloudStream);
-        });
-
-        // Return metadata and URL
-        return {
-          filename,
-          mimetype,
-          encoding: "base64",
-          url: result.secure_url,
-        };
-      } catch (error) {
-        throw new Error(`Failed to upload file: ${error}`);
+          return creditCard;
       }
-    },
+      throw new AuthenticationError("Authentication error");
+  },
+  deleteCreditCard: async (_, { _id }, context) => {
+      if (context.user) {
+          const creditCard = await CreditCard.findOneAndDelete({ _id, user: context.user._id });
+          if (creditCard) {
+              await User.findOneAndUpdate(
+                  { _id: context.user._id },
+                  { $pull: { creditCards: creditCard._id } }
+              );
+              return creditCard;
+          }
+          throw new Error("Credit card not found");
+      }
+      throw new AuthenticationError("Authentication error");
+  },
+  updateCreditCard: async (_, { _id, cardNumber, expiryDate, CVV, cardHolderName }, context) => {
+      if (context.user) {
+          return await CreditCard.findOneAndUpdate(
+              { _id, user: context.user._id },
+              { cardNumber, expiryDate, CVV, cardHolderName },
+              { new: true }
+          );
+      }
+      throw new AuthenticationError("Authentication error");
+  },
 
     upVote: async (parent, { capsuleId, postId }) => {
       const capsuleIdObject = new ObjectId(capsuleId);

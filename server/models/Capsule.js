@@ -22,7 +22,7 @@ const capsuleSchema = new Schema({
   },
   eventPic: {
     type: String,
-    default: "https://i.imgur.com/1q6QXyv.png",
+    default: "https://res.cloudinary.com/dp0h5vpsz/image/upload/v1697055967/wedloc/test/n4nxmtrfe3forwcjsyzr.png",
   },
   posts: [postSchema],
   chat: [liveChatSchema],

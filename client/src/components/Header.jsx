@@ -1,27 +1,66 @@
-// The site header where the navigation and logo/profile pic live
-
-
+import React, { useState, useEffect } from 'react';
 import NavMenu from "./NavMenu";
 import { Link as RouterLink } from 'react-router-dom';
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useQuery } from '@apollo/client';
+import { GET_USER } from '../utils/queries';
 
 export default function Header() {
+  const [userProfilePic, setUserProfilePic] = useState(null);
+  const { loading, data } = useQuery(GET_USER);
+
+  // Update userProfilePic when data is available
+  useEffect(() => {
+    if (!loading && data) {
+      setUserProfilePic(data.me.profilePic);
+    }
+  }, [loading, data]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <header className="relative bg-white">
       {/* Site Logo */}
       <span className="pt-3 text-center font-logo text-4xl md:text-6xl block">
-        <RouterLink to={"/"}>WedLoc</RouterLink>
+        <RouterLink to="/">WedLoc</RouterLink>
       </span>
-      {/* Profile Icon, if logged in it will be an image */}
+      {/* Profile Icon or Image */}
       <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
-        <RouterLink to={"/profile"}>
-          <AccountCircleIcon fontSize="large" />
-        </RouterLink>
+        {userProfilePic ? (
+          <RouterLink to="/profile">
+            <img src={userProfilePic} alt="Profile" className="h-10 w-10 rounded-full self-center" />
+          </RouterLink>
+        ) : (
+          <RouterLink to="/login">
+            <AccountCircleIcon fontSize="large" />
+          </RouterLink>
+        )}
       </div>
       {/* Navigation Menu */}
       <NavMenu />
-
     </header>
   );
 }
+
+
+
+
+  // return (
+  //   <header className="relative bg-white">
+  //     {/* Site Logo */}
+  //     <span className="pt-3 text-center font-logo text-4xl md:text-6xl block">
+  //       <RouterLink to={"/"}>WedLoc</RouterLink>
+  //     </span>
+  //     {/* Profile Icon, if logged in it will be an image */}
+  //     <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
+  //       <RouterLink to={"/profile"}>
+  //         <AccountCircleIcon fontSize="large" />
+  //       </RouterLink>
+  //     </div>
+  //     {/* Navigation Menu */}
+  //     <NavMenu />
+
+  //   </header>
+  // );

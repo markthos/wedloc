@@ -9,6 +9,7 @@ export const GET_CAPSULE = gql`
       location
       posts_count
       chat_count
+      eventPic
       posts {
         _id
         url
@@ -33,6 +34,17 @@ export const GET_CAPSULE = gql`
     }
   }
 `;
+
+export const GET_MY_CAPSULES = gql`
+query {
+  getUserCapsules {
+    _id
+    title
+    location
+    eventPic
+  }
+}
+`
 
 export const GET_POST = gql`
 query getPost($capsuleId: ID!, $postId: ID!) {
@@ -68,6 +80,27 @@ export const GET_CHAT = gql`
         date
         author
       }
+    }
+  }
+`;
+
+export const GET_USER = gql`
+  query {
+    me {
+      _id
+      username
+      firstName
+      lastName
+      email
+      profilePic
+    }
+  }
+`;
+
+export const GET_USER_PIC= gql`
+  query {
+    getUserPic {
+      profilePic
     }
   }
 `;

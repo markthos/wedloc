@@ -8,14 +8,15 @@ import { Link as RouterLink } from "react-router-dom";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
 import signupBG from "./ben_jane_signup_bg.jpg";
+import Auth from "../../utils/auth";
 
 export default function Signup() {
   const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
   });
   const [addUser, { loading, error, data }] = useMutation(REGISTER_USER);
 
@@ -31,24 +32,19 @@ export default function Signup() {
     e.preventDefault();
     try {
       const { data } = await addUser({ variables: { ...userData } });
-      console.log("User successfully added:", data);
-      // Redirect to home page after successful sign up
-      window.location.replace("/");
+      localStorage.setItem("name", userData.firstName + " " + userData.lastName);
+      Auth.login(data.addUser.token);
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle registration errors (like showing error messages to the user)
     }
   };
 
   return (
     <section className="flex min-h-full">
-      <div className="hidden bg-darkgray md:block md:w-1/2">
-        <img
-          src={signupBG}
-          alt="Ben and Jane"
-          className="object-cover w-full h-full"
-        />
-      </div>
+      <div
+        className="min-h-full bg-cover bg-center md:w-1/2"
+        style={{ backgroundImage: `url(${signupBG})` }}
+      ></div>
       <div className="flex w-screen items-center justify-center md:w-1/2">
         <div className="w-full px-10">
           <form
@@ -97,7 +93,9 @@ export default function Signup() {
               placeholder={"Password"}
               required
             />
-            <StyledButton submit primaryColor>Sign Up</StyledButton>
+            <StyledButton submit primaryColor>
+              Sign Up
+            </StyledButton>
           </form>
           <p className="text-right">
             Already a member?{" "}

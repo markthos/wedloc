@@ -7,7 +7,6 @@ import {
   LiveChat,
   Login,
   Signup,
-  Upload,
   Profile,
   About,
   EventCreator,
@@ -15,9 +14,9 @@ import {
   MyEvents,
   PayMent,
   SignOut,
+  QRCode,
 } from "./Pages";
 import "./App.css";
-import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -27,14 +26,11 @@ const client = new ApolloClient({
   uri: "/graphql",
   cache: new InMemoryCache(),
   headers: {
-    authorization: `Bearer ${localStorage.getItem('id_token')}`
-  }
+    authorization: `Bearer ${localStorage.getItem("id_token")}`,
+  },
 });
 
 export default function App() {
-  const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } }); // Create a Cloudinary instance
-  const cloudName = "dp0h5vpsz"; // Our Cloudinary cloud name
-
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -59,12 +55,9 @@ export default function App() {
                 path="/eventspace/:eventId/livechat"
                 element={<LiveChat />}
               />
+              <Route path="/eventspace/:eventId/qrcode" element={<QRCode/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route
-                path="/eventspace/:eventId/upload"
-                element={<Upload cloudName={cloudName} />}
-              />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
               <Route path="/eventcreator" element={<EventCreator />} />

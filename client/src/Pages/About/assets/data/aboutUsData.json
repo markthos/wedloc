@@ -1,0 +1,112 @@
+{
+  "team": [
+    {
+      "name": "Arun Ayyasamy",
+      "role": "Back-End Developer, Payments Integration, Server Routes",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/arundvp"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/arunsaravanakumar-a-2753448/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://arundvp.github.io/myPortfolio.1.x/"
+        }
+      ]
+    },
+    {
+      "name": "Avery Myers",
+      "role": "Back-End Developer, GraphQL Schema, Server Routes",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/AveryJMyers"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/avery-m-108704110/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://averyjmyers.github.io/challenge_2_portfolio_website_design/"
+        }
+      ]
+    },
+    {
+      "name": "Edward Von Schondorf",
+      "role": "Front-End Developer, React Components, UI/UX Design",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/Torvec"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/edward-von/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://torvec.github.io/m20_react_portfolio/"
+        }
+      ]
+    },
+    {
+      "name": "Jake Krauskopf",
+      "role": "Front-End Developer, React Components, Authentication",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/JaKrau"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/jacob-krauskopf-b0a87190/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://jakrau.github.io/Bogles/"
+        }
+      ]
+    },
+    {
+      "name": "Mark Thostesen",
+      "role": "Back-End Developer, GraphQL, Mongoose, Server Routes, Heroku Deployment",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/markthos"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/mark-thostesen-03192176/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://markthos.github.io/Professional-Webpage-Portfolio/"
+        }
+      ]
+    },
+    {
+      "name": "Will Cobb",
+      "role": "Back-End Developer, Cloudinary Integration, Server Routes",
+      "social_links": [
+        {
+          "name": "GitHub",
+          "link": "https://github.com/1willcobb"
+        },
+        {
+          "name": "LinkedIn",
+          "link": "https://www.linkedin.com/in/1willcobb/"
+        },
+        {
+          "name": "Portfolio",
+          "link": "https://www.1willcobb.com/"
+        }
+      ]
+    }
+  ]
+}

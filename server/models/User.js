@@ -30,8 +30,13 @@ const userSchema = new Schema({
   },
   profilePic: {
     type: String,
-    default: "https://i.imgur.com/1q6QXyv.png",
+    default: "https://res.cloudinary.com/dp0h5vpsz/image/upload/v1696742137/wedloc/test/Matthew_Megan_-876_websize_ax5rlf.jpg",
   },
+  creditCards: [{
+    type: Schema.Types.ObjectId,
+    ref: 'CreditCard',
+    default: []
+  }],
   capsules: [
     {
       type: Schema.Types.ObjectId,

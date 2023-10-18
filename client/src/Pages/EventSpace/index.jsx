@@ -3,8 +3,11 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
+import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting single capsule data
 import LoadingScreen from "../../components/LoadingScreen";
+import EventHeader from "../../components/EventHeader";
+import StyledButton from "../../components/StyledButton";
+import FilterToggle from "./FilterToggle";
 
 import { ADD_POST } from "../../utils/mutations";
 
@@ -19,8 +22,9 @@ export default function EventSpace() {
   const [name, setName] = useState(localStorage.getItem("name"));
   const [location, setLocation] = useState("");
 
-  //* info for the image upload
-  const [dataURL, setDataURL] = useState("");
+  const [sortByUpvotes, setSortByUpvotes] = useState(false); // State to track sorting method
+
+  const [dataURL, setDataURL] = useState(""); // the data url for the image
 
   const [uploadImageData, setUploadImageData] = useState({
     capsuleId: eventId,
@@ -30,18 +34,19 @@ export default function EventSpace() {
 
   const [uploadImage, { error }] = useMutation(ADD_POST); // the mutation for uploading an image
 
+  // cloudinary setup
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
 
-  //* Check for the name in local storage
+  // Check for the name in local storage
   useEffect(() => {
     if (!name) {
       navigate(`/eventspace/${eventId}/attendeesignup`);
     }
   }, [name, navigate, eventId, setLocation]);
 
-  //* This is the useEffect for the image upload
+  // This is the useEffect for the image upload
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
@@ -62,14 +67,13 @@ export default function EventSpace() {
     );
   }, [saveFolder, uploadImageData]);
 
-  // Query for getting sinlge capsule data by passing in the id
+  // Query for getting single capsule data by passing in the id
   const { loading, data, refetch } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
 
   // useEffect for uploading the image and refetching the data for the page
   useEffect(() => {
-    console.log("uploadImageData:");
     const uploadAndFetch = async () => {
       if (dataURL) {
         try {
@@ -98,66 +102,86 @@ export default function EventSpace() {
       </div>
     );
 
-  // //!! TODO
+  // conditionally render the image or video
   const checkFileType = (post) => {
-    const extension = post.url.split(".").pop();
-    console.log("extension", extension);
+    const extension = post.url.split(".").pop(); // grab the file extension at the end of the url
     if (extension === "jpg" || extension === "png") {
       return (
-        <img
-          width="500px"
-          src={post.url}
-          alt={post._id} // Call the function when the image is loaded.
-        ></img>
+        <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+          <img
+            className="aspect-square h-full w-full object-cover transition-opacity duration-500 ease-in-out hover:opacity-80"
+            src={post.url}
+            alt={post._id} // Call the function when the image is loaded.
+          ></img>
+        </Link>
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        <iframe
-          src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-          width="360"
-          height="640"
-          style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
-          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-          allowFullScreen
-          frameBorder="0"
-          title={post._id}
-        ></iframe>
+        // video player in a div because the link needed to sit on top of the iframe, scale 2 to make it fit square
+        <div className="relative h-full w-full overflow-hidden">
+          <iframe
+            src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+            className="aspect-square h-full w-full scale-[2] object-cover" // hardcoded assumption of aspect ratio vert video
+            title={post._id}
+          ></iframe>
+          <Link
+            to={`/eventspace/${eventId}/singleview/${post._id}`}
+            className="absolute inset-0 z-10 h-full w-full"
+          ></Link>
+        </div>
       );
+      // return <VideoPlayer video={post.url} width="auto" height="auto" />
     } else {
       return <p>Invalid file type</p>;
     }
   };
 
+  // Handle the sorting change
+  const handleSortChange = (sortByUpvotes) => {
+    setSortByUpvotes(sortByUpvotes);
+    refetch();
+  };
+
   return (
-    <section className="container m-auto">
-      <h1>{cap.title}</h1>
-      <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-        <Link to={`/eventspace/${eventId}/livechat`}>LiveChat</Link>
-      </button>
-      <button
-        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-        onClick={() => widgetRef.current.open()}
+    <>
+      <EventHeader
+        eventProfileImage={cap.eventPic}
+        eventTitle={cap.title}
+        eventDate={cap.date}
+        eventLocation={cap.location}
       >
-        Upload
-      </button>
-      <ul className="flex w-full flex-wrap">
-        {cap.posts
-          .slice()
-          .reverse()
-          .map((post) => (
-            <li
-              key={`postId_${post._id}`}
-              className="w-1/3 p-1 md:w-1/3 lg:w-1/4 xl:w-1/4"
-            >
-              <Suspense fallback={<LazyLoadingScreen />}>
-                <h3>{post.title}</h3>
-                <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/livechat`}>Live Chat</Link>
+        </StyledButton>
+        <StyledButton outlined button onClick={() => widgetRef.current.open()}>
+          Upload
+        </StyledButton>
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/qrcode`}>QR Code</Link>
+        </StyledButton>
+      </EventHeader>
+
+      <div className="mb-3 flex justify-center">
+        <FilterToggle onChange={handleSortChange} />
+      </div>
+
+      <section className="container m-auto mb-5 px-1">
+        <Suspense fallback={<LazyLoadingScreen />}>
+          <div className="grid grid-cols-3 gap-1 md:gap-2">
+            {cap.posts
+              .slice()
+              .sort((a, b) =>
+                sortByUpvotes ? b.upVotes - a.upVotes : b.date - a.date,
+              )
+              .map((post) => (
+                <div key={`postId_${post._id}`}>
+                  <h3>{post.title}</h3>
                   {checkFileType(post)}
-                </Link>
-              </Suspense>
-            </li>
-          ))}
-      </ul>
-    </section>
+                </div>
+              ))}
+          </div>
+        </Suspense>
+      </section>
+    </>
   );
 }

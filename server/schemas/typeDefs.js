@@ -63,15 +63,26 @@ const typeDefs = gql`
     name: String!
   }
 
+  type CreditCard {
+    _id: ID!
+    cardNumber: String!
+    expiryDate: String!
+    CVV: String!
+    cardHolderName: String!
+    user: User!
+}
 
   type Query {
     me: User
+    getUserPic: User
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
-    getCapsules: [Capsule]
+    getUserCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
+    getCreditCard(_id: ID!): CreditCard
+    getUserCreditCards: [CreditCard]!
   }
 
   type File {
@@ -97,29 +108,30 @@ const typeDefs = gql`
     createdAt: String!
   }
 
+
   type Mutation {
     createCapsule(title: String!, eventPic: String, location: String!, date: String!): Capsule
+    updateCapsule(capsuleId: ID!, title: String!, eventPic: String, location: String!): Capsule
+    deleteCapsule(capsuleId: ID!): Capsule
     devDelCapsule(capsuleId: ID!): Capsule
-    uploadPost(capsuleId: ID!, url: String!, owner: String!): Post
-    deletePost(postId: ID!): Post
+    uploadPost(capsuleId: ID!, url: String!, owner: String): Post
+    deletePost(capsuleId: ID!, postId: ID!): Post
     login(username: String!, password: String!): Auth
-    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
-    updateUser(firstName: String!, lastName: String!, email: String!, profilePic: String!): Auth
+    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
+    updateUser(firstName: String!, lastName: String!, username: String!, email: String!, profilePic: String!): User
     addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
+    addCreditCard(cardNumber: String!, expiryDate: String!, CVV: String!, cardHolderName: String!): CreditCard
+    deleteCreditCard(_id: ID!): CreditCard
+    updateCreditCard(_id: ID!, cardNumber: String, expiryDate: String, CVV: String, cardHolderName: String): CreditCard
+    validateAndStoreCard(number: String!, exp_month: Int!, exp_year: Int!, cvc: String!): CreditCard
     upVote(capsuleId: ID!, postId: ID!): Post
     downVote(capsuleId: ID!, postId: ID!): Post
     addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Post  
   }
 `;
-
-// TRACKING BASIC USER FLOW
-
-// make account WORKS (small error issue, but saves to db regardless)
-// delete account WORKS
-//
 
 module.exports = typeDefs;

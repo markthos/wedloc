@@ -16,8 +16,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
   const [open, setOpen] = useState(false);
   const isAuthenticated = AuthService.loggedIn();
 
-  console.log(isAuthenticated);
-
 
   let menuRef = useRef();
 
@@ -32,15 +30,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
       document.removeEventListener("mousedown", handler);
     };
   });
-
-  // const handleSignOut = (e) => {
-  //   if (e.target.id === 'signOut') {
-  //     console.log("signing out");
-  //     AuthService.logout();
-  //     window.location.assign("/");
-  //   }
-  // };
-
 
   // Storing the labels and routes in an array to loop through
 const menuItemsAuthenticated = [

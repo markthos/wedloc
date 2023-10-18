@@ -10,26 +10,23 @@ import { ADD_CHAT } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Orbit } from "@uiball/loaders";
+import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
+import StyledFormInput from "../../components/StyledFormInput";
 
 // Create a Socket.IO client instance
-const socket = io(
-  "https://wedloc-84c89e3ae29d.herokuapp.com/" || "http://localhost:3000",
-);
-
-const borderRadius = {
-  borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
-  borderTopRightRadius: "15px",
-  padding: "3px",
-  paddingLeft: "10px",
-  paddingRight: "10px",
-};
+const socket = io("http://localhost:3000"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
 
 //* This is the LiveChat component
 export default function LiveChat() {
   // Get the event ID from the URL
   const { eventId } = useParams();
+
+  useEffect(() => {
+    socket.emit("joinEventRoom", eventId);
+  }, [eventId]);
+
   const [name, setName] = useState(localStorage.getItem("name"));
   const navigate = useNavigate();
 
@@ -57,6 +54,7 @@ export default function LiveChat() {
     },
   });
 
+  // scroll to the bottom on load
   useEffect(() => {
     scrollToBottom();
   }, []);
@@ -71,7 +69,7 @@ export default function LiveChat() {
       item.innerHTML = `
       <div class="flex gap-3 justify-between">
         <h3>${message.author}</h3>
-        <p>${dayjs(message.date).format("YYYY-MM-DD HH:mm:ss")}</p>
+        <p>${dayjs(message.date).format("hh:mm:ss A")}</p>
       </div>
       ${
         message.author === name
@@ -95,13 +93,9 @@ export default function LiveChat() {
       messages.appendChild(item);
 
       scrollToBottom();
-
-      setChatData({
-        ...chatData,
-        text: "",
-      });
     });
 
+    // check name and navigate to signup if no name
     if (!name) {
       navigate(`/eventspace/${eventId}/attendeesignup`);
     }
@@ -112,6 +106,7 @@ export default function LiveChat() {
     };
   }, []);
 
+  // function to scroll to the bottom
   const scrollToBottom = () => {
     const chatBox = document.querySelector(".no-scrollbar");
     if (chatBox) {
@@ -145,7 +140,7 @@ export default function LiveChat() {
       console.log("Sending message:", chatData);
 
       // Emit the same message to the Socket.IO server immediately
-      socket.emit("sendMessage", chatData);
+      socket.emit("sendMessageToEventRoom", eventId, chatData);
 
       // use the mutation function toe create a new message on the server
       const newMessage = await createMessage({
@@ -166,59 +161,50 @@ export default function LiveChat() {
     }
   };
 
+  // handle back button return
   const handleReturn = () => {
     navigate(`/eventspace/${eventId}`);
   };
 
   // return the chat history and the form to send a message
   return (
-    <section className="gap container m-auto flex w-96 flex-col justify-center">
-      <StyledButton primaryColor onClick={handleReturn}>
-        Back
-      </StyledButton>
+    <section className="container m-auto flex w-96 flex-col items-center justify-center mb-4">
       <h1 className="text-center font-extrabold">Live Chat</h1>
-      <div
-        className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
-        style={{ height: "70vh" }}
-      >
+      <div className="no-scrollbar flex h-[70vh] flex-col items-center justify-center overflow-y-scroll p-6">
         <ul id="messages" className="h-full">
           {/* map over the chat history and display the messages */}
           {chatHistory.chat.map((message) => (
             <li key={message._id}>
               <div className="flex justify-between gap-3">
                 <h3>{message.author}</h3>
-                <p>{dayjs(message.date).format("MM-DD HH:mm")}</p>
+                <UnixTimestampConverter
+                  unixTimestamp={message.date}
+                  type="livechat"
+                />
               </div>
               {message.author === name ? (
-                <div
-                  className="flex justify-end bg-white font-extrabold"
-                  style={borderRadius}
-                >
-                  <p>{message.text}</p>
-                </div>
+                <p className="flex justify-end rounded-xl bg-lightgray px-4 py-1 font-bold">
+                  {message.text}
+                </p>
               ) : (
-                <div
-                  className="flex flex-col bg-white font-extrabold"
-                  style={borderRadius}
-                >
-                  <p>{message.text}</p>
-                </div>
+                <p className="flex flex-col rounded-xl bg-white px-4 py-1.5">
+                  {message.text}
+                </p>
               )}
             </li>
           ))}
         </ul>
       </div>
-
       <form
-        className="w-100% mb-6 mt-6 flex justify-between gap-3 p-6"
+        className="flex w-full justify-between items-baseline gap-3 px-6 pt-3"
         onSubmit={handleSendMessage}
       >
-        <input
+        <StyledFormInput
+          fullWidthStyle
           type="text"
           value={chatData.text}
           required
-          placeholder="message to the event"
-          style={borderRadius}
+          placeholder="Message the Event"
           className="w-full resize"
           onChange={(e) =>
             setChatData(() => ({
@@ -231,6 +217,9 @@ export default function LiveChat() {
           Send
         </StyledButton>
       </form>
+      <StyledButton primaryColor onClick={handleReturn}>
+        Back
+      </StyledButton>
     </section>
   );
 }
