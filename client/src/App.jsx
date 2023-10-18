@@ -14,6 +14,7 @@ import {
   MyEvents,
   PayMent,
   SignOut,
+  QRCode,
 } from "./Pages";
 import "./App.css";
 import Header from "./components/Header";
@@ -25,12 +26,11 @@ const client = new ApolloClient({
   uri: "/graphql",
   cache: new InMemoryCache(),
   headers: {
-    authorization: `Bearer ${localStorage.getItem('id_token')}`
-  }
+    authorization: `Bearer ${localStorage.getItem("id_token")}`,
+  },
 });
 
 export default function App() {
-
   return (
     <ApolloProvider client={client}>
       <Router>
@@ -55,6 +55,7 @@ export default function App() {
                 path="/eventspace/:eventId/livechat"
                 element={<LiveChat />}
               />
+              <Route path="/eventspace/:eventId/qrcode" element={<QRCode/>} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />

@@ -14,5 +14,6 @@ import AttendeeSignup from "./AttendeeSignup";
 import MyEvents from "./MyEvents";
 import PayMent from "./PayMent";
 import SignOut from "./SignOut"
+import QRCode from "./QRCodePage";
 
-export { SingleView, EventSpace, Home, LiveChat, Login, Signup, SignOut, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent };
+export { SingleView, EventSpace, Home, LiveChat, Login, Signup, SignOut, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent, QRCode };

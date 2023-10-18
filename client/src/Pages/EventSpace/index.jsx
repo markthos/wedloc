@@ -7,9 +7,7 @@ import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting single 
 import LoadingScreen from "../../components/LoadingScreen";
 import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
-import DefaultProfileImg from "./img/default_profile.png";
 import FilterToggle from "./FilterToggle";
-import QRCodeGenerator from "../../components/QRCodeGenerator";
 
 
 import VideoPlayer from "../../components/VideoPlayer"; // Video player component for potential future use
@@ -145,11 +143,12 @@ export default function EventSpace() {
     refetch();
   };
 
+  //<QRCodeGenerator website={`${process.env.REACT_APP_HEROKU_URL}/eventspace/${eventId}`
+
   return (
     <>
-    <QRCodeGenerator website={`${process.env.REACT_APP_HEROKU_URL}/eventspace/${eventId}`} />
       <EventHeader
-        eventProfileImage={DefaultProfileImg}
+        eventProfileImage={cap.eventPic}
         eventTitle={cap.title}
         eventDate={cap.date}
         eventLocation={cap.location}
