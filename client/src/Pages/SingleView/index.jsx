@@ -9,10 +9,11 @@ import StyledButton from "../../components/StyledButton";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { IconButton } from "@mui/material";
+import { Icon, IconButton } from "@mui/material";
 import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
 import LoadingScreen from "../../components/LoadingScreen";
 import StyledFormInput from "../../components/StyledFormInput";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 // Lazy-loading screen
 const LazyLoadingScreen = React.lazy(() =>
@@ -137,15 +138,19 @@ export default function SingleView({ cloudName, videoId }) {
     event.target.newComment.value = "";
   };
 
+  const handleDelete = async () => {
+    console.log("Delete This Post")
+  }
+
   return (
     <>
-    {/* Image/Video section */}
-      <section className="flex flex-col justify-center">
-        <div className="flex justify-center bg-black py-5">
+      <section className="flex flex-col bg-beige">
+        {/* Image/Video section */}
+        <div className="m-auto md:w-[60vw] lg:w-[40vw] px-2 md:px-0 py-5">
           {imgFile && (
             <Suspense fallback={<LazyLoadingScreen />}>
               <img
-                className="h-full w-[40vw] object-cover"
+                className="mb-4 h-full w-full object-cover shadow-xl"
                 src={postData.url}
                 alt={postData._id}
                 onLoad={handleImageLoad} // Call the function when the image is loaded.
@@ -168,41 +173,53 @@ export default function SingleView({ cloudName, videoId }) {
               title={postData._id}
             ></iframe>
           )}
+          {/* Posted By / On Date */}
+          <div className="flex justify-end gap-1">
+            <p>Posted by {postData.owner} on </p>
+            <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
+          </div>
         </div>
       </section>
 
-      <section>
-        {/* Posted By Section */}
-        <div className="my-2 mr-1 flex justify-end gap-1">
-          <p>{postData.owner} on </p>
-          <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
-        </div>
-
-        {/* Like, and comment section */}
-        <div className="ml-1 mr-2 flex justify-between">
-          <div className="flex flex-row items-center justify-center">
+      <section className="mb-4 flex flex-col items-start md:items-center">
+        {/* Like, Comment, Delete Icons */}
+        <div className="flex w-full md:w-[40vw] lg:w-[40vw] justify-between">
+          <div className="flex">
+            {/* Like Icon */}
             <div className="relative">
               <IconButton onClick={upVote}>
-                {storedLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                {storedLike ? (
+                  <FavoriteIcon fontSize="large" />
+                ) : (
+                  <FavoriteBorderIcon fontSize="large" />
+                )}
               </IconButton>
               {upvoteTotal > 0 && (
                 <p className="absolute right-0 top-0">{upvoteTotal}</p>
               )}
             </div>
+            {/* Comment Icon to open comments view */}
             <div className="relative">
               <IconButton onClick={() => setCommentView(!commentView)}>
-                <MessageIcon />
+                <MessageIcon fontSize="large" />
               </IconButton>
               {commentTotal && (
                 <p className="absolute right-0 top-0">{commentTotal}</p>
               )}
             </div>
           </div>
+          {/* Delete Icon */}
+          <div>
+            <IconButton onClick={handleDelete}>
+              <DeleteOutlineIcon fontSize="large" />
+            </IconButton>
+          </div>
         </div>
+        {/* Comment Section */}
         {commentView && (
-          <div className="m-4 flex flex-col text-center">
-            <h3>Comment Section</h3>
-            <ul className="flex flex-col gap-2">
+          <div className="flex flex-col w-full px-2 md:px-0 md:w-[60vw] lg:w-[40vw]">
+            <h3 className="font-bold text-center">Comment Section</h3>
+            <ul className="flex flex-col gap-2 mb-4">
               {postData.comments.map((comment) => (
                 <li key={`commentId_${comment._id}`}>
                   <div className="flex justify-between">
@@ -226,7 +243,7 @@ export default function SingleView({ cloudName, videoId }) {
             </ul>
             {/* Comment Form */}
             <form
-              className="mb-6 mt-6 flex items-center justify-between gap-3"
+              className="flex items-baseline gap-3"
               onSubmit={handleNewComment}
             >
               <StyledFormInput
@@ -242,9 +259,11 @@ export default function SingleView({ cloudName, videoId }) {
             </form>
           </div>
         )}
-        <StyledButton primaryColor onClick={handleReturn}>
-          Back
-        </StyledButton>
+        <div className="flex justify-center w-full">
+          <StyledButton primaryColor onClick={handleReturn}>
+            Back
+          </StyledButton>
+        </div>
       </section>
     </>
   );
