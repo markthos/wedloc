@@ -13,6 +13,8 @@ import { IconButton } from "@mui/material";
 import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
 import LoadingScreen from "../../components/LoadingScreen";
 import StyledFormInput from "../../components/StyledFormInput";
+import DeleteButton from "./DeleteButton";
+import DeleteForever from "@mui/icons-material/DeleteForever";
 
 // Lazy-loading screen
 const LazyLoadingScreen = React.lazy(() =>
@@ -137,11 +139,17 @@ export default function SingleView({ cloudName, videoId }) {
     event.target.newComment.value = "";
   };
 
+  const deletePost = async () => {
+    await DeleteButton(eventId, postId);
+    navigate(`/eventspace/${eventId}`);
+  };
+
   return (
     <>
     {/* Image/Video section */}
       <section className="flex flex-col justify-center">
         <div className="flex justify-center bg-black py-5">
+        
           {imgFile && (
             <Suspense fallback={<LazyLoadingScreen />}>
               <img
@@ -196,6 +204,11 @@ export default function SingleView({ cloudName, videoId }) {
               {commentTotal && (
                 <p className="absolute right-0 top-0">{commentTotal}</p>
               )}
+            </div>
+            <div className="relative">
+              <IconButton onClick={deletePost}>
+                <DeleteForever />
+              </IconButton>
             </div>
           </div>
         </div>

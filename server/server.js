@@ -8,9 +8,6 @@ const socketIo = require("socket.io"); // Import Socket.IO
 const bodyParser = require("body-parser");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY); // Updated to use dotenv
 
-// const { v2: cloud } = require('cloudinary'); // Cloudinary setup
-
-// const { graphqlUploadExpress } = require('graphql-upload');
 
 const { typeDefs, resolvers } = require("./schemas");
 const db = require("./config/connection");
@@ -20,7 +17,6 @@ const app = express();
 const apolloServer = new ApolloServer({
   typeDefs,
   resolvers,
-  // still needs testing
   context: authMiddleware,
 });
 
@@ -37,12 +33,7 @@ app.use(express.json());
 // This is for parsing the body of POST requests, which we will use when the client sends the token to the server
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// // Configure Cloud setup
-// cloud.config({
-//   cloud_name: process.env.CLOUD_NAME,
-//   api_key: process.env.API_KEY,
-//   api_secret: process.env.API_SECRET,
-// });
+
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
@@ -70,7 +61,6 @@ app.post("/api/payment", async (req, res) => {
   }
 });
 
-// app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 })); // Adjust max file size and max number of files as needed
 
 const startApolloServer = async () => {
   await apolloServer.start();

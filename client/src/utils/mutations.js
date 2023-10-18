@@ -123,3 +123,5 @@ export const ADD_POST = gql`
     }
 }
 `
+
+// export const DELETE_POST = gql``

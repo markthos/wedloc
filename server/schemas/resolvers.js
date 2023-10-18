@@ -75,7 +75,11 @@ const resolvers = {
   },
   Mutation: {
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date, location, eventPic }, context) => {
+    createCapsule: async (
+      parent,
+      { title, date, location, eventPic },
+      context
+    ) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.create({
@@ -95,7 +99,11 @@ const resolvers = {
       }
     },
 
-    updateCapsule: async (parent, { capsuleId, title, location, eventPic }, context) => {
+    updateCapsule: async (
+      parent,
+      { capsuleId, title, location, eventPic },
+      context
+    ) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.findOneAndUpdate(
@@ -110,14 +118,16 @@ const resolvers = {
     },
 
     deleteCapsule: async (parent, { capsuleId }, context) => {
-      if (context.user){
+      if (context.user) {
         const capsule = await Capsule.findById(capsuleId);
-        
-        if (!capsule){
+
+        if (!capsule) {
           throw new Error("Capsule not found");
         }
-        if (capsule.owner !== context.user.username){
-          throw new AuthenticationError("You don't have permissions to delete this capsule");
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
         }
 
         await Capsule.findOneAndDelete({ _id: capsuleId });
@@ -126,18 +136,17 @@ const resolvers = {
           { $pull: { capsules: capsuleId } }
         );
       }
-
     },
 
     devDelCapsule: async (parent, { capsuleId }) => {
       try {
-        const capsule = await Capsule.findOneAndDelete({ 
-          _id: capsuleId
-         });
+        const capsule = await Capsule.findOneAndDelete({
+          _id: capsuleId,
+        });
         if (!capsule) {
           throw new Error("Capsule not found");
         }
-    
+
         console.log("Capsule deleted", capsule);
         return { success: true, message: "Capsule deleted successfully" };
       } catch (error) {
@@ -145,10 +154,9 @@ const resolvers = {
         return { success: false, message: "Error deleting capsule" };
       }
     },
-    
+
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { capsuleId, url, owner }) => {
-
       const newPost = {
         url,
         owner,
@@ -168,22 +176,32 @@ const resolvers = {
       console.log("New Post Added");
 
       return updatedCapsule.posts[updatedCapsule.posts.length - 1];
-
     },
 
-    deletePost: async (parent, { postId }, context) => {
-      if (context.user) {
-        const post = await Post.findOneAndDelete({
-          _id: postId,
-          user: context.user._id,
-        });
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { posts: postId } }
-        );
-        return post;
-      }
-      throw new AuthenticationError("You need to be logged in!");
+    deletePost: async (parent, { capsuleId, postId, owner }, context) => {
+      const postData = await Capsule.findById(capsuleId, {
+        posts: {
+          $elemMatch: {
+            _id: postId,
+          },
+        },
+      });
+
+      console.log(postData.posts);
+      return postData;
+
+      // if (context.user) {
+      //   const post = await Post.findOneAndDelete({
+      //     _id: postId,
+      //   });
+
+      //   await Capsule.findOneAndUpdate(
+      //     { _id: context.user._id },
+      //     { $pull: { posts: postId } }
+      //   );
+      //   return post;
+      // } else if (owner) {
+      // throw new AuthenticationError("You need to be logged in!");
     },
     // Add a Live to the database without being logged in
     addChat: async (parent, { text, author, capsuleId }) => {
