@@ -8,6 +8,7 @@ import { Link as RouterLink } from "react-router-dom";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
 import signupBG from "./ben_jane_signup_bg.jpg";
+import Auth from "../../utils/auth";
 
 export default function Signup() {
   const [userData, setUserData] = useState({
@@ -31,12 +32,9 @@ export default function Signup() {
     e.preventDefault();
     try {
       const { data } = await addUser({ variables: { ...userData } });
-      console.log("User successfully added:", data);
-      // Redirect to home page after successful sign up
-      window.location.replace("/myevents");
+      Auth.login(data.addUser.token);
     } catch (error) {
       console.error("Error during registration:", error);
-      // Handle registration errors (like showing error messages to the user)
     }
   };
 

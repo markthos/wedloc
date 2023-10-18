@@ -106,7 +106,7 @@ const typeDefs = gql`
     uploadPost(capsuleId: ID!, url: String!, owner: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
-    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
+    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     updateUser(firstName: String!, lastName: String!, email: String!, profilePic: String!): Auth
     addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!
