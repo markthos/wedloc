@@ -9,8 +9,6 @@ import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
 import FilterToggle from "./FilterToggle";
 
-import VideoPlayer from "../../components/VideoPlayer"; // Video player component for potential future use
-
 import { ADD_POST } from "../../utils/mutations";
 
 const LazyLoadingScreen = React.lazy(() =>
@@ -26,8 +24,7 @@ export default function EventSpace() {
 
   const [sortByUpvotes, setSortByUpvotes] = useState(false); // State to track sorting method
 
-  //* info for the image upload
-  const [dataURL, setDataURL] = useState("");
+  const [dataURL, setDataURL] = useState(""); // the data url for the image
 
   const [uploadImageData, setUploadImageData] = useState({
     capsuleId: eventId,
@@ -37,18 +34,19 @@ export default function EventSpace() {
 
   const [uploadImage, { error }] = useMutation(ADD_POST); // the mutation for uploading an image
 
+  // cloudinary setup
   const cloudinaryRef = useRef(null);
   const widgetRef = useRef(null);
   const saveFolder = `wedloc/${eventId}`;
 
-  //* Check for the name in local storage
+  // Check for the name in local storage
   useEffect(() => {
     if (!name) {
       navigate(`/eventspace/${eventId}/attendeesignup`);
     }
   }, [name, navigate, eventId, setLocation]);
 
-  //* This is the useEffect for the image upload
+  // This is the useEffect for the image upload
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
@@ -104,8 +102,9 @@ export default function EventSpace() {
       </div>
     );
 
+  // conditionally render the image or video
   const checkFileType = (post) => {
-    const extension = post.url.split(".").pop();
+    const extension = post.url.split(".").pop(); // grab the file extension at the end of the url
     if (extension === "jpg" || extension === "png") {
       return (
         <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
@@ -118,6 +117,7 @@ export default function EventSpace() {
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
+        // video player in a div because the link needed to sit on top of the iframe, scale 2 to make it fit square
         <div className="relative h-full w-full overflow-hidden">
           <iframe
             src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
@@ -141,8 +141,6 @@ export default function EventSpace() {
     setSortByUpvotes(sortByUpvotes);
     refetch();
   };
-
-  //<QRCodeGenerator website={`${process.env.REACT_APP_HEROKU_URL}/eventspace/${eventId}`
 
   return (
     <>

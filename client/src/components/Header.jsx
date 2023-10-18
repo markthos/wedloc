@@ -10,7 +10,7 @@ import { GET_USER_PIC } from '../utils/queries';
 export default function Header() {
   const [userProfilePic, setUserProfilePic] = useState(null);
   const { loading, data } = useQuery(GET_USER_PIC);
-  console.log(data);
+  console.log(data)
   // pull the user profilePic from the query
   useEffect(() => {
     if (data) {

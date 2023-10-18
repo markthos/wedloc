@@ -54,6 +54,7 @@ export default function LiveChat() {
     },
   });
 
+  // scroll to the bottom on load
   useEffect(() => {
     scrollToBottom();
   }, []);
@@ -94,6 +95,7 @@ export default function LiveChat() {
       scrollToBottom();
     });
 
+    // check name and navigate to signup if no name
     if (!name) {
       navigate(`/eventspace/${eventId}/attendeesignup`);
     }
@@ -104,6 +106,7 @@ export default function LiveChat() {
     };
   }, []);
 
+  // function to scroll to the bottom
   const scrollToBottom = () => {
     const chatBox = document.querySelector(".no-scrollbar");
     if (chatBox) {
@@ -158,6 +161,7 @@ export default function LiveChat() {
     }
   };
 
+  // handle back button return
   const handleReturn = () => {
     navigate(`/eventspace/${eventId}`);
   };
