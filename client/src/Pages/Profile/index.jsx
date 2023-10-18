@@ -50,8 +50,8 @@ export default function Profile() {
     const { data } = await updateUser({
       variables: { ...formState, profilePic:dataURL },
     });
-      if (data && data.updateUser && data.updateUser._id) {
-        navigate(`/profile`);
+      if (data && data.updateUser) {
+        navigate(`/myevents`);
       } else {
         throw new Error('something went wrong!');
       }
@@ -102,7 +102,7 @@ export default function Profile() {
             {
               uploadedPhoto ? 
               <img src={uploadedPhoto} alt="Uploaded event" className="w-80 h-80 rounded-full object-cover shadow-lg" /> :
-              <img src={DefaultProfileImg} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
+              <img src={User.profilePic} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
             }
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
@@ -122,7 +122,7 @@ export default function Profile() {
                 type={"text"}
                 name={"firstName"}
                 onChange={handleChange}
-                placeholder={ User.firstName }
+                placeholder={User.firstName}
                 value={formState.firstName}
               />
             </div>
@@ -175,20 +175,6 @@ export default function Profile() {
               />
             </div>
           </div>
-
-          {/* <div className="flex flex-col items-baseline md:flex-row md:gap-4">
-            <div className="w-full md:w-1/6 md:text-right">
-              <label htmlFor="password">Password</label>
-            </div>
-            <div className="w-full md:w-5/6">
-              <StyledFormInput
-                fullWidthStyle
-                type={"password"}
-                name={"password"}
-                placeholder={"INSERT PASSWORD FROM DB"}
-              />
-            </div>
-          </div> */}
           <div className="flex justify-center">
             <StyledButton submit primaryColor>
               Save Changes
