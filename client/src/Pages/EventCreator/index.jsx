@@ -81,8 +81,10 @@ export default function EventCreator() {
 
   return (
     
-    <section className="container m-auto flex h-full items-center justify-center p-5">
-      <form onSubmit={handleFormSubmit} className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row">
+    <section className="container m-auto flex flex-col h-full items-center justify-center p-5">
+      
+      <form onSubmit={handleFormSubmit} className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg ">
+      <h1 className='text-4xl'> CREATE AN EVENT </h1>
         <div className='text-center'>
           <div className="mb-5">
             {
