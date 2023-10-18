@@ -77,6 +77,19 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const UPDATE_USER = gql`
+  mutation Mutation($username: String!, $firstName: String!, $lastName: String!, $email: String!, $profilePic: String!) { 
+    updateUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, profilePic: $profilePic) {
+      username
+      firstName
+      lastName
+      email
+      profilePic
+    }
+  }
+`;
+
+
 export const UPLOAD_IMAGE = gql`
   mutation uploadPost($file: Upload!) {
     uploadPost(file: $file) {
