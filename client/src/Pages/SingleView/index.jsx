@@ -1,21 +1,33 @@
 // Single View for any video or photo with a comment section
-
-import { useMutation, useQuery } from "@apollo/client";
 import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { GET_POST } from "../../utils/queries";
+
+import auth from "../../utils/auth";
+
+//timestamp converter
 import UnixTimestampConverter from "../../components/UnixTimestampConverter";
+
+// Components
 import StyledButton from "../../components/StyledButton";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { Icon, IconButton } from "@mui/material";
-import { UPVOTE, DOWNVOTE, ADD_COMMENT, DELETE_POST } from "../../utils/mutations";
-import LoadingScreen from "../../components/LoadingScreen";
+import { IconButton } from "@mui/material";
 import StyledFormInput from "../../components/StyledFormInput";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
-// Lazy-loading screen
+// Mutations and Queries
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_POST } from "../../utils/queries";
+import {
+  UPVOTE,
+  DOWNVOTE,
+  ADD_COMMENT,
+  DELETE_POST,
+} from "../../utils/mutations";
+
+// loading screens
+import LoadingScreen from "../../components/LoadingScreen";
 const LazyLoadingScreen = React.lazy(() =>
   import("../../components/LoadingScreen"),
 );
@@ -27,7 +39,6 @@ export default function SingleView({ cloudName, videoId }) {
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
-  const [isImageLoaded, setImageLoaded] = useState(false);
 
   // state of current user like status saved to local storage
   const [storedLike, setStoredLike] = useState(
@@ -48,6 +59,12 @@ export default function SingleView({ cloudName, videoId }) {
   });
 
   const [postData, setPostData] = useState("");
+
+  // useEffect(() => {
+  //   if (auth.loggedIn) {
+  //     console.log("logged in"); //! use this to set the name state to user name
+  //   }
+  // }, []);
 
   useEffect(() => {
     setPostData(data?.getPost || "");
@@ -74,18 +91,16 @@ export default function SingleView({ cloudName, videoId }) {
     variables: { capsuleId: eventId, postId: postId },
   });
 
+  // set upvote total on load
   useEffect(() => {
     setUpvoteTotal(postData.upVotes);
-  }, [postData]);
-
-  useEffect(() => {
     setCommentTotal(postData.comment_count);
   }, [postData]);
 
+  // set image or video file on load
   useEffect(() => {
     if (postData) {
       const extension = postData.url.split(".").pop();
-      console.log("extension", extension);
       if (extension === "jpg" || extension === "png") {
         setImageFile(true);
         setVideoFile(false);
@@ -99,19 +114,24 @@ export default function SingleView({ cloudName, videoId }) {
     }
   }, [postData]);
 
+  // if loading return loading screen
   if (loading) return <LoadingScreen />;
 
+  // if error return error
   const handleReturn = () => {
     navigate(`/eventspace/${eventId}`);
   };
 
+  // upvote function
   const upVote = async () => {
+    // if user has already liked the post (saved on local storage), remove like
     if (storedLike) {
       const downvoted = await downVoteDatabase();
       localStorage.removeItem(`${postId}`);
       setStoredLike(false);
       setUpvoteTotal(downvoted.data.downVote.upVotes);
     } else {
+      // else add like
       const upvoted = await upVoteDatabase();
       localStorage.setItem(`${postId}`, "True");
       setStoredLike(true);
@@ -119,18 +139,16 @@ export default function SingleView({ cloudName, videoId }) {
     }
   };
 
+  // if no name in local storage, navigate to sign up page
   if (!name) {
     navigate(`/attendeesignup/${eventId}`);
   }
 
-  // Set the state to indicate that the image has loaded.
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-  };
-
+  // add comment function
   const handleNewComment = async (event) => {
     event.preventDefault();
 
+    // grab text and save it to the database
     const text = event.target.newComment.value;
     await addCommentDatabase({
       variables: {
@@ -138,14 +156,16 @@ export default function SingleView({ cloudName, videoId }) {
       },
     });
 
+    // update the comments
     refetch();
 
     event.target.newComment.value = "";
   };
 
+  // delete post function
   const handleDelete = async () => {
     console.log("Delete This Post");
-    await deletePostDatabase()
+    await deletePostDatabase();
     navigate(`/eventspace/${eventId}`);
   };
 
@@ -160,7 +180,6 @@ export default function SingleView({ cloudName, videoId }) {
                 className="mb-4 h-full w-full object-cover shadow-xl"
                 src={postData.url}
                 alt={postData._id}
-                onLoad={handleImageLoad} // Call the function when the image is loaded.
               ></img>
             </Suspense>
           )}
@@ -193,7 +212,7 @@ export default function SingleView({ cloudName, videoId }) {
         <div className="flex w-full justify-between md:w-[40vw] lg:w-[40vw]">
           <div className="flex">
             {/* Like Icon */}
-            <div className="relative">
+            <div className="relative ">
               <IconButton onClick={upVote}>
                 {storedLike ? (
                   <FavoriteIcon fontSize="large" />
@@ -217,9 +236,11 @@ export default function SingleView({ cloudName, videoId }) {
           </div>
           {/* Delete Icon */}
           <div>
-            <IconButton onClick={handleDelete}>
-              <DeleteOutlineIcon fontSize="large" />
-            </IconButton>
+            {auth.loggedIn() && (
+              <IconButton onClick={handleDelete}>
+                <DeleteOutlineIcon fontSize="large" />
+              </IconButton>
+            )}
           </div>
         </div>
         {/* Comment Section */}
