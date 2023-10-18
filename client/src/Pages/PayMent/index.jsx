@@ -39,7 +39,16 @@ const NetbankingForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Netbanking details submitted:", bankDetails);
-    // Implement further logic here
+    
+    fetch("/api/netbanking-payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(bankDetails)
+    }).then(response => {
+      // Handle response from server here
+    });
   };
 
   return (
