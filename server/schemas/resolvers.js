@@ -1,10 +1,7 @@
 const { User, Capsule, Post, Payment } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
-const { createWriteStream } = require("fs");
-const path = require("path");
 const cloudinary = require("cloudinary").v2;
-const multer = require("multer");
-const { signToken, authMiddleware } = require("../utils/auth");
+const { signToken } = require("../utils/auth");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");

@@ -134,10 +134,4 @@ const typeDefs = gql`
   }
 `;
 
-// TRACKING BASIC USER FLOW
-
-// make account WORKS (small error issue, but saves to db regardless)
-// delete account WORKS
-//
-
 module.exports = typeDefs;
