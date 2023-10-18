@@ -10,7 +10,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Icon, IconButton } from "@mui/material";
-import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
+import { UPVOTE, DOWNVOTE, ADD_COMMENT, DELETE_POST } from "../../utils/mutations";
 import LoadingScreen from "../../components/LoadingScreen";
 import StyledFormInput from "../../components/StyledFormInput";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -67,6 +67,11 @@ export default function SingleView({ cloudName, videoId }) {
   // mustation for adding a comment
   const [addCommentDatabase, { error3 }] = useMutation(ADD_COMMENT, {
     variables: { capsuleId: eventId, postId: postId, author: name, text: "" },
+  });
+
+  // mutation for deleting a post
+  const [deletePostDatabase, { error4 }] = useMutation(DELETE_POST, {
+    variables: { capsuleId: eventId, postId: postId },
   });
 
   useEffect(() => {
@@ -140,6 +145,8 @@ export default function SingleView({ cloudName, videoId }) {
 
   const handleDelete = async () => {
     console.log("Delete This Post");
+    await deletePostDatabase()
+    navigate(`/eventspace/${eventId}`);
   };
 
   return (

@@ -104,7 +104,7 @@ const typeDefs = gql`
     deleteCapsule(capsuleId: ID!): Capsule
     devDelCapsule(capsuleId: ID!): Capsule
     uploadPost(capsuleId: ID!, url: String!, owner: String): Post
-    deletePost(capsuleId: ID!, postId: ID!, owner: String): Post
+    deletePost(capsuleId: ID!, postId: ID!): Post
     login(username: String!, password: String!): Auth
     addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     updateUser(firstName: String!, lastName: String!, email: String!, profilePic: String!): Auth

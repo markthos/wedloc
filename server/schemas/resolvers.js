@@ -178,31 +178,39 @@ const resolvers = {
       return updatedCapsule.posts[updatedCapsule.posts.length - 1];
     },
 
-    deletePost: async (parent, { capsuleId, postId, owner }, context) => {
-      const postData = await Capsule.findById(capsuleId, {
-        posts: {
-          $elemMatch: {
-            _id: postId,
-          },
-        },
-      });
+    deletePost: async (parent, { capsuleId, postId }, context) => {
+      if (context.user) {
+        const capsule = await Capsule.findById(capsuleId);
 
-      console.log(postData.posts);
-      return postData;
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
+        }
 
-      // if (context.user) {
-      //   const post = await Post.findOneAndDelete({
-      //     _id: postId,
-      //   });
 
-      //   await Capsule.findOneAndUpdate(
-      //     { _id: context.user._id },
-      //     { $pull: { posts: postId } }
-      //   );
-      //   return post;
-      // } else if (owner) {
-      // throw new AuthenticationError("You need to be logged in!");
+        console.log(postId)
+
+        const updated = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { $pull: { posts: { _id: postId } } },
+          { new: true }
+        );
+
+        if (!updated) {
+          throw new Error("Post not found in the capsule or unable to remove it.");
+        }
+        
+        console.log(updated)
+
+        return updated;
+      }
+      throw new AuthenticationError("You need to be logged in!");
     },
+
     // Add a Live to the database without being logged in
     addChat: async (parent, { text, author, capsuleId }) => {
       console.log("adding chat...", text, author, capsuleId);
@@ -310,37 +318,6 @@ const resolvers = {
         return payment;
       } catch (err) {
         throw new Error(err);
-      }
-    },
-
-    uploadFile: async (_, { file }) => {
-      try {
-        const { createReadStream, filename, mimetype } = await file;
-
-        // Convert Buffer to Stream
-        const fileStream = createReadStream();
-
-        // Upload to Cloudinary
-        const result = await new Promise((resolve, reject) => {
-          const cloudStream = cloudinary.uploader.upload_stream(
-            { resource_type: "auto" },
-            (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
-            }
-          );
-          fileStream.pipe(cloudStream);
-        });
-
-        // Return metadata and URL
-        return {
-          filename,
-          mimetype,
-          encoding: "base64",
-          url: result.secure_url,
-        };
-      } catch (error) {
-        throw new Error(`Failed to upload file: ${error}`);
       }
     },
 
