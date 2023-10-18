@@ -9,6 +9,7 @@ export const GET_CAPSULE = gql`
       location
       posts_count
       chat_count
+      eventPic
       posts {
         _id
         url

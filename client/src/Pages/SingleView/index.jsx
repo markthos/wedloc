@@ -10,7 +10,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Icon, IconButton } from "@mui/material";
-import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
+import { UPVOTE, DOWNVOTE, ADD_COMMENT, DELETE_POST } from "../../utils/mutations";
 import LoadingScreen from "../../components/LoadingScreen";
 import StyledFormInput from "../../components/StyledFormInput";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -67,6 +67,11 @@ export default function SingleView({ cloudName, videoId }) {
   // mustation for adding a comment
   const [addCommentDatabase, { error3 }] = useMutation(ADD_COMMENT, {
     variables: { capsuleId: eventId, postId: postId, author: name, text: "" },
+  });
+
+  // mutation for deleting a post
+  const [deletePostDatabase, { error4 }] = useMutation(DELETE_POST, {
+    variables: { capsuleId: eventId, postId: postId },
   });
 
   useEffect(() => {
@@ -139,14 +144,16 @@ export default function SingleView({ cloudName, videoId }) {
   };
 
   const handleDelete = async () => {
-    console.log("Delete This Post")
-  }
+    console.log("Delete This Post");
+    await deletePostDatabase()
+    navigate(`/eventspace/${eventId}`);
+  };
 
   return (
     <>
       <section className="flex flex-col bg-beige">
         {/* Image/Video section */}
-        <div className="m-auto md:w-[60vw] lg:w-[40vw] px-2 md:px-0 py-5">
+        <div className="m-auto px-2 py-5 md:w-[60vw] md:px-0 lg:w-[40vw]">
           {imgFile && (
             <Suspense fallback={<LazyLoadingScreen />}>
               <img
@@ -183,7 +190,7 @@ export default function SingleView({ cloudName, videoId }) {
 
       <section className="mb-4 flex flex-col items-start md:items-center">
         {/* Like, Comment, Delete Icons */}
-        <div className="flex w-full md:w-[40vw] lg:w-[40vw] justify-between">
+        <div className="flex w-full justify-between md:w-[40vw] lg:w-[40vw]">
           <div className="flex">
             {/* Like Icon */}
             <div className="relative">
@@ -217,9 +224,9 @@ export default function SingleView({ cloudName, videoId }) {
         </div>
         {/* Comment Section */}
         {commentView && (
-          <div className="flex flex-col w-full px-2 md:px-0 md:w-[60vw] lg:w-[40vw]">
-            <h3 className="font-bold text-center">Comment Section</h3>
-            <ul className="flex flex-col gap-2 mb-4">
+          <div className="flex w-full flex-col px-2 md:w-[60vw] md:px-0 lg:w-[40vw]">
+            <h3 className="text-center font-bold">Comment Section</h3>
+            <ul className="mb-4 flex flex-col gap-2">
               {postData.comments.map((comment) => (
                 <li key={`commentId_${comment._id}`}>
                   <div className="flex justify-between">
@@ -259,7 +266,7 @@ export default function SingleView({ cloudName, videoId }) {
             </form>
           </div>
         )}
-        <div className="flex justify-center w-full">
+        <div className="flex w-full justify-center">
           <StyledButton primaryColor onClick={handleReturn}>
             Back
           </StyledButton>

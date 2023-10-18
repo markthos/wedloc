@@ -9,7 +9,6 @@ import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
 import FilterToggle from "./FilterToggle";
 
-
 import VideoPlayer from "../../components/VideoPlayer"; // Video player component for potential future use
 
 import { ADD_POST } from "../../utils/mutations";
@@ -119,10 +118,10 @@ export default function EventSpace() {
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full overflow-hidden">
           <iframe
             src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            className="aspect-square h-full w-full object-cover" // hardcoded assumption of aspect ratio vert video
+            className="aspect-square h-full w-full scale-[2] object-cover" // hardcoded assumption of aspect ratio vert video
             title={post._id}
           ></iframe>
           <Link

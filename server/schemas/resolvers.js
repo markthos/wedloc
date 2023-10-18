@@ -84,7 +84,11 @@ const resolvers = {
   },
   Mutation: {
     // Create a capsule with a title and date by a logged in user
-    createCapsule: async (parent, { title, date, location, eventPic }, context) => {
+    createCapsule: async (
+      parent,
+      { title, date, location, eventPic },
+      context
+    ) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.create({
@@ -104,7 +108,11 @@ const resolvers = {
       }
     },
 
-    updateCapsule: async (parent, { capsuleId, title, location, eventPic }, context) => {
+    updateCapsule: async (
+      parent,
+      { capsuleId, title, location, eventPic },
+      context
+    ) => {
       if (context.user) {
         console.log("context.user", context.user);
         const capsule = await Capsule.findOneAndUpdate(
@@ -119,14 +127,16 @@ const resolvers = {
     },
 
     deleteCapsule: async (parent, { capsuleId }, context) => {
-      if (context.user){
+      if (context.user) {
         const capsule = await Capsule.findById(capsuleId);
-        
-        if (!capsule){
+
+        if (!capsule) {
           throw new Error("Capsule not found");
         }
-        if (capsule.owner !== context.user.username){
-          throw new AuthenticationError("You don't have permissions to delete this capsule");
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
         }
 
         await Capsule.findOneAndDelete({ _id: capsuleId });
@@ -135,18 +145,17 @@ const resolvers = {
           { $pull: { capsules: capsuleId } }
         );
       }
-
     },
 
     devDelCapsule: async (parent, { capsuleId }) => {
       try {
-        const capsule = await Capsule.findOneAndDelete({ 
-          _id: capsuleId
-         });
+        const capsule = await Capsule.findOneAndDelete({
+          _id: capsuleId,
+        });
         if (!capsule) {
           throw new Error("Capsule not found");
         }
-    
+
         console.log("Capsule deleted", capsule);
         return { success: true, message: "Capsule deleted successfully" };
       } catch (error) {
@@ -154,10 +163,9 @@ const resolvers = {
         return { success: false, message: "Error deleting capsule" };
       }
     },
-    
+
     // Add a post to a capsule by a logged in user
     uploadPost: async (parent, { capsuleId, url, owner }) => {
-
       const newPost = {
         url,
         owner,
@@ -177,23 +185,41 @@ const resolvers = {
       console.log("New Post Added");
 
       return updatedCapsule.posts[updatedCapsule.posts.length - 1];
-
     },
 
-    deletePost: async (parent, { postId }, context) => {
+    deletePost: async (parent, { capsuleId, postId }, context) => {
       if (context.user) {
-        const post = await Post.findOneAndDelete({
-          _id: postId,
-          user: context.user._id,
-        });
-        await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { posts: postId } }
+        const capsule = await Capsule.findById(capsuleId);
+
+        if (!capsule) {
+          throw new Error("Capsule not found");
+        }
+        if (capsule.owner !== context.user.username) {
+          throw new AuthenticationError(
+            "You don't have permissions to delete this capsule"
+          );
+        }
+
+
+        console.log(postId)
+
+        const updated = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { $pull: { posts: { _id: postId } } },
+          { new: true }
         );
-        return post;
+
+        if (!updated) {
+          throw new Error("Post not found in the capsule or unable to remove it.");
+        }
+        
+        console.log(updated)
+
+        return updated;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
+
     // Add a Live to the database without being logged in
     addChat: async (parent, { text, author, capsuleId }) => {
       console.log("adding chat...", text, author, capsuleId);
@@ -342,37 +368,6 @@ const resolvers = {
       }
       throw new AuthenticationError("Authentication error");
   },
-
-    uploadFile: async (_, { file }) => {
-      try {
-        const { createReadStream, filename, mimetype } = await file;
-
-        // Convert Buffer to Stream
-        const fileStream = createReadStream();
-
-        // Upload to Cloudinary
-        const result = await new Promise((resolve, reject) => {
-          const cloudStream = cloudinary.uploader.upload_stream(
-            { resource_type: "auto" },
-            (error, result) => {
-              if (error) reject(error);
-              else resolve(result);
-            }
-          );
-          fileStream.pipe(cloudStream);
-        });
-
-        // Return metadata and URL
-        return {
-          filename,
-          mimetype,
-          encoding: "base64",
-          url: result.secure_url,
-        };
-      } catch (error) {
-        throw new Error(`Failed to upload file: ${error}`);
-      }
-    },
 
     upVote: async (parent, { capsuleId, postId }) => {
       const capsuleIdObject = new ObjectId(capsuleId);
