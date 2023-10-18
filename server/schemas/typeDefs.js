@@ -66,10 +66,11 @@ const typeDefs = gql`
 
   type Query {
     me: User
+    getUserPic: User
     getChat: [LiveChat]
     getCapsulesDev: [Capsule]
     getCapsule(_id: ID!): Capsule
-    getCapsules: [Capsule]
+    getUserCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
   }
@@ -99,11 +100,13 @@ const typeDefs = gql`
 
   type Mutation {
     createCapsule(title: String!, eventPic: String, location: String!, date: String!): Capsule
+    updateCapsule(capsuleId: ID!, title: String!, eventPic: String, location: String!): Capsule
+    deleteCapsule(capsuleId: ID!): Capsule
     devDelCapsule(capsuleId: ID!): Capsule
     uploadPost(capsuleId: ID!, url: String!, owner: String!): Post
     deletePost(postId: ID!): Post
     login(username: String!, password: String!): Auth
-    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): User
+    addUser(username: String!, firstName: String!, lastName: String!, email: String!, password: String!): Auth
     updateUser(firstName: String!, lastName: String!, email: String!, profilePic: String!): Auth
     addChat(text: String!, author: String!, capsuleId: ID!): LiveChat
     uploadFile(file: Upload!): File!

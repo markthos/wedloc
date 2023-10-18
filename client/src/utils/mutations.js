@@ -11,13 +11,35 @@ export const ADD_CHAT = gql`
   }
 `;
 
+
+export const UPDATE_CAPSULE = gql`
+  mutation Mutation($capsuleId: ID!, $title: String!, $location: String!, $eventPic: String) {
+    updateCapsule(capsuleId: $capsuleId, title: $title, location: $location, eventPic: $eventPic) {
+      _id
+      eventPic
+      location
+      title
+    }
+}
+`;
+
+export const DELETE_CAPSULE = gql`
+mutation Mutation($capsuleId: ID!) {
+  deleteCapsule(capsuleId: $capsuleId) {
+    _id
+    owner
+    title
+  }
+}
+`;
 export const REGISTER_USER = gql`
   mutation addUser($username: String!, $firstName: String!, $lastName: String!, $email: String!, $password: String!) {
     addUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
-      _id
-      username
-      email
-      # ... other fields you want to query
+      token
+      user {
+        _id
+        username
+      }
     }
   }
 `;

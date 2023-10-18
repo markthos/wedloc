@@ -24,7 +24,7 @@ const resolvers = {
     getCapsulesDev: async () => {
       return await Capsule.find({});
     },
-    getCapsules: async (parent, args, context) => {
+    getUserCapsules: async (parent, args, context) => {
       if (context.user) {
         const user = await User.findOne({ _id: context.user._id }).populate(
           "capsules"
@@ -40,6 +40,14 @@ const resolvers = {
       }
       throw new AuthenticationError("Authentication error");
     },
+
+    getUserPic: async (parent, args, context) => {
+      if (context.user) {
+        return await User.findOne({ _id: context.user._id });
+      }
+      throw new AuthenticationError("Authentication error");
+    },
+
     getChat: async (parent, { capsuleId }) => {
       const capsule = await Capsule.findById({ _id: capsuleId });
 
@@ -87,9 +95,45 @@ const resolvers = {
       }
     },
 
+    updateCapsule: async (parent, { capsuleId, title, location, eventPic }, context) => {
+      if (context.user) {
+        console.log("context.user", context.user);
+        const capsule = await Capsule.findOneAndUpdate(
+          { _id: capsuleId },
+          { title, location, eventPic },
+          { new: true }
+        );
+        return capsule;
+      } else {
+        throw new AuthenticationError("You need to be logged in!");
+      }
+    },
+
+    deleteCapsule: async (parent, { capsuleId }, context) => {
+      if (context.user){
+        const capsule = await Capsule.findById(capsuleId);
+        
+        if (!capsule){
+          throw new Error("Capsule not found");
+        }
+        if (capsule.owner !== context.user.username){
+          throw new AuthenticationError("You don't have permissions to delete this capsule");
+        }
+
+        await Capsule.findOneAndDelete({ _id: capsuleId });
+        await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { capsules: capsuleId } }
+        );
+      }
+
+    },
+
     devDelCapsule: async (parent, { capsuleId }) => {
       try {
-        const capsule = await Capsule.findOneAndDelete({ _id: capsuleId });
+        const capsule = await Capsule.findOneAndDelete({ 
+          _id: capsuleId
+         });
         if (!capsule) {
           throw new Error("Capsule not found");
         }
