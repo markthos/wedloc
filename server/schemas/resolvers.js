@@ -224,24 +224,22 @@ const resolvers = {
 
     updateUser: async (
       parent,
-      { firstName, lastName, email, profilePic },
-      context
-    ) => {
-      const contextUserId = context.user._id;
-      try {
-        const updatedUser = await User.findOneAndUpdate(
-          { _id: contextUserId },
-          { firstName, lastName, email, profilePic },
-          { new: true }
+      { firstName, lastName, username, email, profilePic },
+      context) => {
+        if (context.user){
+          const contextUserId = context.user._id;
+
+          const updatedUser = await User.findOneAndUpdate(
+            { _id: contextUserId },
+            { firstName, lastName, username, email, profilePic },
+            { new: true }
         );
-        console.log("updatedUser", updatedUser);
-        console.log("contextUserId", contextUserId);
-        return { updatedUser };
-      } catch (error) {
-        console.error("Error updating user:", error);
+        return  updatedUser ;
+      } else {
         throw new Error("Error updating user");
       }
     },
+
     deleteUser: async (parent, { username }, context) => {
       const contextUserId = context.user._id;
       try {
