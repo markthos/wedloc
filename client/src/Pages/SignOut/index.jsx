@@ -5,6 +5,7 @@ import AuthService from '../../utils/auth';
 
 const SignOut = () => {
   useEffect(() => {
+    localStorage.removeItem("name");
     // Perform the sign-out logic in this component
     AuthService.logout();
     // Redirect to the home page or any other desired page

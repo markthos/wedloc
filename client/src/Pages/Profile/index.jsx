@@ -9,10 +9,15 @@ import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USER } from "../../utils/mutations";
 import { GET_USER } from "../../utils/queries";
 
-
 export default function Profile() {
   const { loading, data, error } = useQuery(GET_USER);
-  const [formState, setFormState] = useState({firstName: '', lastName: '', username: '', email: '', profilePic: ''});
+  const [formState, setFormState] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    profilePic: "",
+  });
   //* info for the image upload
   const [dataURL, setDataURL] = useState(""); //! THIS dataURL is the image url that is returned from cloudinary to be saved into the DB
   const [uploadedPhoto, setUploadedPhoto] = useState(null); // using this to display the image on the page
@@ -36,7 +41,7 @@ export default function Profile() {
   const openCloudinaryWidget = (event) => {
     event.preventDefault();
     widgetRef.current.open();
- };
+  };
 
  const handleFormSubmit = async (event) => {
   event.preventDefault();
@@ -44,20 +49,23 @@ export default function Profile() {
     const { data } = await updateUser({
       variables: { ...formState, profilePic:dataURL },
     });
-    navigate(`/myevents`);
+      if (data && data.updateUser) {
+        navigate(`/myevents`);
+      } else {
+        throw new Error('something went wrong!');
+      }
     } catch (error) {
       console.error(error);
     }
 
     setFormState({
-      firstName: '',
-      lastName: '',
-      username: '',
-      email: '',
-      profilePic: '',
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      profilePic: "",
     });
   };
-    
 
   //* This is the useEffect for the image upload
   useEffect(() => {
@@ -72,7 +80,7 @@ export default function Profile() {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
           setDataURL(result.info.url);
-          setUploadedPhoto(result.info.url); 
+          setUploadedPhoto(result.info.url);
         }
       },
     );
@@ -98,18 +106,29 @@ export default function Profile() {
 
   return (
     <section className="container m-auto flex h-full items-center justify-center p-5">
-      <form onSubmit={handleFormSubmit} className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row">
+      <form
+        onSubmit={handleFormSubmit}
+        className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row"
+      >
         {/* 1 col in mobile, 2 columns above the md breakpoint (profile image col is 1/3 width, inputs col is 2/3 width) */}
         <div className="w-full text-center md:w-1/3">
-        <div className="m-auto mb-5 h-80 w-80 rounded-full object-cover shadow-lg">
-            {
-              uploadedPhoto ? 
-              <img src={uploadedPhoto} alt="Uploaded event" className="w-80 h-80 rounded-full object-cover shadow-lg" /> :
-              <img src={User.profilePic} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
-            }
+          <div className="m-auto mb-5 h-80 w-80 rounded-full object-cover shadow-lg">
+            {uploadedPhoto ? (
+              <img
+                src={uploadedPhoto}
+                alt="Uploaded event"
+                className="h-80 w-80 rounded-full object-cover shadow-lg"
+              />
+            ) : (
+              <img
+                src={User.profilePic}
+                alt="Default photo"
+                className="h-80 w-80 rounded-full object-cover shadow-lg"
+              />
+            )}
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
-          <AddAPhotoIcon className="mr-4" />
+            <AddAPhotoIcon className="mr-4" />
             Upload Picture
           </StyledButton>
         </div>
