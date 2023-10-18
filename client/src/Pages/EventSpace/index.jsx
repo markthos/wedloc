@@ -3,7 +3,7 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
+import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting single capsule data
 import LoadingScreen from "../../components/LoadingScreen";
 import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
@@ -72,7 +72,7 @@ export default function EventSpace() {
     );
   }, [saveFolder, uploadImageData]);
 
-  // Query for getting sinlge capsule data by passing in the id
+  // Query for getting single capsule data by passing in the id
   const { loading, data, refetch } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
@@ -113,7 +113,7 @@ export default function EventSpace() {
       return (
         <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
           <img
-            className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
+            className="aspect-square h-full w-full object-cover transition-opacity duration-500 ease-in-out hover:opacity-80"
             src={post.url}
             alt={post._id} // Call the function when the image is loaded.
           ></img>
@@ -121,13 +121,12 @@ export default function EventSpace() {
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        <div className="relative h-full w-full overflow-hidden">
+        <div className="relative h-full w-full">
           <iframe
             src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            className="z-5 h-full w-full scale-125" // hardcoded assumption of aspect ratio vert video
+            className="aspect-square h-full w-full object-cover" // hardcoded assumption of aspect ratio vert video
             title={post._id}
           ></iframe>
-
           <Link
             to={`/eventspace/${eventId}/singleview/${post._id}`}
             className="absolute inset-0 z-10 h-full w-full"
@@ -160,6 +159,9 @@ export default function EventSpace() {
         </StyledButton>
         <StyledButton outlined button onClick={() => widgetRef.current.open()}>
           Upload
+        </StyledButton>
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/qrcode`}>QR Code</Link>
         </StyledButton>
       </EventHeader>
 
