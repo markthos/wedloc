@@ -73,8 +73,8 @@ export default function MyEvents() {
     if (selectedCapsule) {
       // call the delete mutation here
       await deleteCapsule({ variables: { capsuleId: selectedCapsule._id } });
-      // closeDeleteModal();
-      return 'DELETED'
+      closeDeleteModal();
+      return;
     }
   };
   
@@ -92,19 +92,18 @@ export default function MyEvents() {
     event.preventDefault();
 
     // not even sure this was the best way to do this but here we are..
-
-    const variables = {
-      ...formState,
-      eventPic: dataURL,
-      capsuleId: selectedCapsule._id
-    };
-
     if (formState.title === "") {
       formState.title = selectedCapsule.title;
     }
     if (formState.location === "") {
       formState.location = selectedCapsule.location;
     }
+
+    const variables = {
+      ...formState,
+      eventPic: dataURL,
+      capsuleId: selectedCapsule._id
+    };
 
     const { data } = await updateCapsule({
       variables: variables
@@ -115,6 +114,7 @@ export default function MyEvents() {
       location: '',
       eventPic: '',
     });
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
