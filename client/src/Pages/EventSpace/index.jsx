@@ -3,14 +3,14 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting sinlge capsule data
+import { GET_CAPSULE } from "../../utils/queries"; //  Query for getting single capsule data
 import LoadingScreen from "../../components/LoadingScreen";
 import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
-import DefaultProfileImg from "./img/default_profile.png";
-import dayjs from "dayjs";
+import FilterToggle from "./FilterToggle";
 
-import VideoPlayer from "../../components/VideoPlayer";
+
+import VideoPlayer from "../../components/VideoPlayer"; // Video player component for potential future use
 
 import { ADD_POST } from "../../utils/mutations";
 
@@ -24,6 +24,8 @@ export default function EventSpace() {
   const navigate = useNavigate(); // the navigate function for redirecting
   const [name, setName] = useState(localStorage.getItem("name"));
   const [location, setLocation] = useState("");
+
+  const [sortByUpvotes, setSortByUpvotes] = useState(false); // State to track sorting method
 
   //* info for the image upload
   const [dataURL, setDataURL] = useState("");
@@ -68,14 +70,13 @@ export default function EventSpace() {
     );
   }, [saveFolder, uploadImageData]);
 
-  // Query for getting sinlge capsule data by passing in the id
+  // Query for getting single capsule data by passing in the id
   const { loading, data, refetch } = useQuery(GET_CAPSULE, {
     variables: { id: eventId },
   });
 
   // useEffect for uploading the image and refetching the data for the page
   useEffect(() => {
-    console.log("uploadImageData:");
     const uploadAndFetch = async () => {
       if (dataURL) {
         try {
@@ -106,12 +107,11 @@ export default function EventSpace() {
 
   const checkFileType = (post) => {
     const extension = post.url.split(".").pop();
-    console.log("extension", extension);
     if (extension === "jpg" || extension === "png") {
       return (
         <Link to={`/eventspace/${eventId}/singleview/${post._id}`}>
           <img
-            className="aspect-w-1 aspect-h-1 h-full w-full object-cover"
+            className="aspect-square h-full w-full object-cover transition-opacity duration-500 ease-in-out hover:opacity-80"
             src={post.url}
             alt={post._id} // Call the function when the image is loaded.
           ></img>
@@ -119,13 +119,12 @@ export default function EventSpace() {
       );
     } else if (extension === "mp4" || extension === "mov") {
       return (
-        <div className="relative h-full w-full overflow-hidden">
+        <div className="relative h-full w-full">
           <iframe
             src={`https://player.cloudinary.com/embed/?public_id=${post.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[controls]=false&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            className="z-5 h-full w-full scale-125" // hardcoded assumption of aspect ratio vert video
+            className="aspect-square h-full w-full object-cover" // hardcoded assumption of aspect ratio vert video
             title={post._id}
           ></iframe>
-
           <Link
             to={`/eventspace/${eventId}/singleview/${post._id}`}
             className="absolute inset-0 z-10 h-full w-full"
@@ -138,10 +137,18 @@ export default function EventSpace() {
     }
   };
 
+  // Handle the sorting change
+  const handleSortChange = (sortByUpvotes) => {
+    setSortByUpvotes(sortByUpvotes);
+    refetch();
+  };
+
+  //<QRCodeGenerator website={`${process.env.REACT_APP_HEROKU_URL}/eventspace/${eventId}`
+
   return (
     <>
       <EventHeader
-        eventProfileImage={DefaultProfileImg}
+        eventProfileImage={cap.eventPic}
         eventTitle={cap.title}
         eventDate={cap.date}
         eventLocation={cap.location}
@@ -152,14 +159,23 @@ export default function EventSpace() {
         <StyledButton outlined button onClick={() => widgetRef.current.open()}>
           Upload
         </StyledButton>
+        <StyledButton outlined button>
+          <Link to={`/eventspace/${eventId}/qrcode`}>QR Code</Link>
+        </StyledButton>
       </EventHeader>
+
+      <div className="mb-3 flex justify-center">
+        <FilterToggle onChange={handleSortChange} />
+      </div>
 
       <section className="container m-auto mb-5 px-1">
         <Suspense fallback={<LazyLoadingScreen />}>
           <div className="grid grid-cols-3 gap-1 md:gap-2">
             {cap.posts
               .slice()
-              .reverse()
+              .sort((a, b) =>
+                sortByUpvotes ? b.upVotes - a.upVotes : b.date - a.date,
+              )
               .map((post) => (
                 <div key={`postId_${post._id}`}>
                   <h3>{post.title}</h3>

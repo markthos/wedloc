@@ -72,6 +72,15 @@ const resolvers = {
 
       return post;
     },
+    getCreditCard: async (_, { _id }) => {
+      return await CreditCard.findById(_id);
+    },
+    getUserCreditCards: async (_, __, context) => {
+        if (context.user) {
+            return await CreditCard.find({ user: context.user._id });
+        }
+        throw new AuthenticationError("Authentication error");
+    },
   },
   Mutation: {
     // Create a capsule with a title and date by a logged in user
@@ -292,6 +301,47 @@ const resolvers = {
         throw new Error(err);
       }
     },
+    addCreditCard: async (_, { cardNumber, expiryDate, CVV, cardHolderName }, context) => {
+      if (context.user) {
+          const creditCard = await CreditCard.create({
+              cardNumber,
+              expiryDate,
+              CVV,
+              cardHolderName,
+              user: context.user._id
+          });
+          await User.findOneAndUpdate(
+              { _id: context.user._id },
+              { $addToSet: { creditCards: creditCard._id } }
+          );
+          return creditCard;
+      }
+      throw new AuthenticationError("Authentication error");
+  },
+  deleteCreditCard: async (_, { _id }, context) => {
+      if (context.user) {
+          const creditCard = await CreditCard.findOneAndDelete({ _id, user: context.user._id });
+          if (creditCard) {
+              await User.findOneAndUpdate(
+                  { _id: context.user._id },
+                  { $pull: { creditCards: creditCard._id } }
+              );
+              return creditCard;
+          }
+          throw new Error("Credit card not found");
+      }
+      throw new AuthenticationError("Authentication error");
+  },
+  updateCreditCard: async (_, { _id, cardNumber, expiryDate, CVV, cardHolderName }, context) => {
+      if (context.user) {
+          return await CreditCard.findOneAndUpdate(
+              { _id, user: context.user._id },
+              { cardNumber, expiryDate, CVV, cardHolderName },
+              { new: true }
+          );
+      }
+      throw new AuthenticationError("Authentication error");
+  },
 
     uploadFile: async (_, { file }) => {
       try {

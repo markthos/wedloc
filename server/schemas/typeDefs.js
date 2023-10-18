@@ -63,6 +63,14 @@ const typeDefs = gql`
     name: String!
   }
 
+  type CreditCard {
+    _id: ID!
+    cardNumber: String!
+    expiryDate: String!
+    CVV: String!
+    cardHolderName: String!
+    user: User!
+}
 
   type Query {
     me: User
@@ -73,6 +81,8 @@ const typeDefs = gql`
     getUserCapsules: [Capsule]
     getUsers: [User]
     getPost(capsuleId: ID!, postId: ID!): Post
+    getCreditCard(_id: ID!): CreditCard
+    getUserCreditCards: [CreditCard]!
   }
 
   type File {
@@ -98,6 +108,7 @@ const typeDefs = gql`
     createdAt: String!
   }
 
+
   type Mutation {
     createCapsule(title: String!, eventPic: String, location: String!, date: String!): Capsule
     updateCapsule(capsuleId: ID!, title: String!, eventPic: String, location: String!): Capsule
@@ -113,6 +124,10 @@ const typeDefs = gql`
     devDelUser(userId: ID!): User
     deleteUser(username:String!): Auth
     addPayment(userId: ID!, chargeId: String!, amount: Float!, currency: String!, description: String): Payment
+    addCreditCard(cardNumber: String!, expiryDate: String!, CVV: String!, cardHolderName: String!): CreditCard
+    deleteCreditCard(_id: ID!): CreditCard
+    updateCreditCard(_id: ID!, cardNumber: String, expiryDate: String, CVV: String, cardHolderName: String): CreditCard
+    validateAndStoreCard(number: String!, exp_month: Int!, exp_year: Int!, cvc: String!): CreditCard
     upVote(capsuleId: ID!, postId: ID!): Post
     downVote(capsuleId: ID!, postId: ID!): Post
     addComment(capsuleId: ID!, postId: ID!, text: String!, author: String!): Post  

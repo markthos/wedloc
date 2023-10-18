@@ -13,17 +13,10 @@ import { Orbit } from "@uiball/loaders";
 import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import dayjs from "dayjs";
 import StyledButton from "../../components/StyledButton";
+import StyledFormInput from "../../components/StyledFormInput";
 
 // Create a Socket.IO client instance
 const socket = io("http://localhost:3000"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
-
-const borderRadius = {
-  borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
-  borderTopRightRadius: "15px",
-  padding: "3px",
-  paddingLeft: "10px",
-  paddingRight: "10px",
-};
 
 //* This is the LiveChat component
 export default function LiveChat() {
@@ -99,8 +92,6 @@ export default function LiveChat() {
       messages.appendChild(item);
 
       scrollToBottom();
-
-
     });
 
     if (!name) {
@@ -173,53 +164,43 @@ export default function LiveChat() {
 
   // return the chat history and the form to send a message
   return (
-    <section className="gap container m-auto flex w-full flex-col justify-center md:w-1/2">
-      <StyledButton primaryColor onClick={handleReturn}>
-        Back
-      </StyledButton>
+    <section className="container m-auto flex w-96 flex-col items-center justify-center mb-4">
       <h1 className="text-center font-extrabold">Live Chat</h1>
-      <div
-        className="no-scrollbar flex h-full flex-col items-center justify-center overflow-y-scroll p-6"
-        style={{ height: "70vh" }}
-      >
+      <div className="no-scrollbar flex h-[70vh] flex-col items-center justify-center overflow-y-scroll p-6">
         <ul id="messages" className="h-full">
           {/* map over the chat history and display the messages */}
           {chatHistory.chat.map((message) => (
             <li key={message._id}>
               <div className="flex justify-between gap-3">
                 <h3>{message.author}</h3>
-                <UnixTimestampConverter unixTimestamp={message.date} type="livechat" />
+                <UnixTimestampConverter
+                  unixTimestamp={message.date}
+                  type="livechat"
+                />
               </div>
               {message.author === name ? (
-                <div
-                  className="flex justify-end bg-white font-extrabold"
-                  style={borderRadius}
-                >
-                  <p>{message.text}</p>
-                </div>
+                <p className="flex justify-end rounded-xl bg-lightgray px-4 py-1 font-bold">
+                  {message.text}
+                </p>
               ) : (
-                <div
-                  className="flex flex-col bg-white font-extrabold"
-                  style={borderRadius}
-                >
-                  <p>{message.text}</p>
-                </div>
+                <p className="flex flex-col rounded-xl bg-white px-4 py-1.5">
+                  {message.text}
+                </p>
               )}
             </li>
           ))}
         </ul>
       </div>
-
       <form
-        className="w-100% mb-6 mt-6 flex flex-col justify-between gap-3 p-6 md:flex-row"
+        className="flex w-full justify-between items-baseline gap-3 px-6 pt-3"
         onSubmit={handleSendMessage}
       >
-        <input
+        <StyledFormInput
+          fullWidthStyle
           type="text"
           value={chatData.text}
           required
-          placeholder="message to the event"
-          style={borderRadius}
+          placeholder="Message the Event"
           className="w-full resize"
           onChange={(e) =>
             setChatData(() => ({
@@ -232,6 +213,9 @@ export default function LiveChat() {
           Send
         </StyledButton>
       </form>
+      <StyledButton primaryColor onClick={handleReturn}>
+        Back
+      </StyledButton>
     </section>
   );
 }

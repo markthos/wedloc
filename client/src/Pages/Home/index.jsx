@@ -43,7 +43,7 @@ export default function Home() {
           Call To Action Here
         </h2>
         <RouterLink to={"/signup"}>
-          <StyledButton>Sign Up Now!</StyledButton>
+          <StyledButton outlined button>Sign Up Now!</StyledButton>
         </RouterLink>
       </section>
     </div>

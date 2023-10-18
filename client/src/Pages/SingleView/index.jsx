@@ -4,34 +4,26 @@ import { useMutation, useQuery } from "@apollo/client";
 import React, { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GET_POST } from "../../utils/queries";
-
 import UnixTimestampConverter from "../../components/UnixTimestampConverter";
 import StyledButton from "../../components/StyledButton";
 import MessageIcon from "@mui/icons-material/Message";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { IconButton } from "@mui/material";
+import { Icon, IconButton } from "@mui/material";
 import { UPVOTE, DOWNVOTE, ADD_COMMENT } from "../../utils/mutations";
-
 import LoadingScreen from "../../components/LoadingScreen";
+import StyledFormInput from "../../components/StyledFormInput";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
+// Lazy-loading screen
 const LazyLoadingScreen = React.lazy(() =>
   import("../../components/LoadingScreen"),
-); // Lazy-loading screen
-
-const borderRadius = {
-  borderBottomLeftRadius: "15px" /* Adjust the value as needed */,
-  borderTopRightRadius: "15px",
-  padding: "3px",
-  paddingLeft: "10px",
-  paddingRight: "10px",
-};
+);
 
 // DEMO VIDEO in there
 export default function SingleView({ cloudName, videoId }) {
   const { eventId, postId } = useParams();
   const navigate = useNavigate();
-
   const [imgFile, setImageFile] = useState(false);
   const [videoFile, setVideoFile] = useState(false);
   const [name, setName] = useState(localStorage.getItem("name"));
@@ -146,112 +138,133 @@ export default function SingleView({ cloudName, videoId }) {
     event.target.newComment.value = "";
   };
 
+  const handleDelete = async () => {
+    console.log("Delete This Post")
+  }
+
   return (
-    <section className="gap container m-auto flex w-96 flex-col justify-center">
-      <div className="mt-4 flex justify-center">
-        {imgFile && (
-          <Suspense fallback={<LazyLoadingScreen />}>
-            <img
-              width="500px"
-              src={postData.url}
-              alt={postData._id}
-              onLoad={handleImageLoad} // Call the function when the image is loaded.
-            ></img>
-          </Suspense>
-        )}
-        {videoFile && (
-          <iframe
-            src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
-            width="360"
-            height="640"
-            style={{ height: "100%", width: "100%", aspectRatio: "360 / 640" }} // hardcoded assumption of aspect ratio vert video
-            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            title={postData._id}
-          ></iframe>
-        )}
-      </div>
-
-      <div className="center flex justify-end gap-1 mr-1 my-2">
-        <h1>{postData.owner} on </h1>
-        <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
-      </div>
-
-      <div className="ml-1 mr-2 flex justify-between">
-        <div className="flex flex-row items-center justify-center">
-          <div className="relative">
-            <IconButton onClick={upVote}>
-              {storedLike ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-            </IconButton>
-            {upvoteTotal > 0 && (
-              <p className="absolute right-0 top-0">{upvoteTotal}</p>
-            )}
-          </div>
-          <div className="relative">
-            <IconButton onClick={() => setCommentView(!commentView)}>
-              <MessageIcon />
-            </IconButton>
-            {commentTotal && (
-              <p className="absolute right-0 top-0">{commentTotal}</p>
-            )}
+    <>
+      <section className="flex flex-col bg-beige">
+        {/* Image/Video section */}
+        <div className="m-auto md:w-[60vw] lg:w-[40vw] px-2 md:px-0 py-5">
+          {imgFile && (
+            <Suspense fallback={<LazyLoadingScreen />}>
+              <img
+                className="mb-4 h-full w-full object-cover shadow-xl"
+                src={postData.url}
+                alt={postData._id}
+                onLoad={handleImageLoad} // Call the function when the image is loaded.
+              ></img>
+            </Suspense>
+          )}
+          {videoFile && (
+            <iframe
+              src={`https://player.cloudinary.com/embed/?public_id=${postData.url}&cloud_name=${process.env.REACT_APP_CLOUD_NAME}&player[muted]=true&player[autoplayMode]=on-scroll&player[autoplay]=true&player[loop]=true`}
+              width="360"
+              height="640"
+              style={{
+                height: "100%",
+                width: "100%",
+                aspectRatio: "360 / 640",
+              }} // hardcoded assumption of aspect ratio vert video
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              allowFullScreen
+              frameBorder="0"
+              title={postData._id}
+            ></iframe>
+          )}
+          {/* Posted By / On Date */}
+          <div className="flex justify-end gap-1">
+            <p>Posted by {postData.owner} on </p>
+            <UnixTimestampConverter unixTimestamp={postData.date} type="post" />
           </div>
         </div>
+      </section>
 
-        
-
-        <StyledButton primaryColor onClick={handleReturn}>
-          Back
-        </StyledButton>
-      </div>
-      {commentView && (
-        <div className="m-4 flex flex-col text-center">
-          <h3>Comment Section</h3>
-          <ul className="flex flex-col gap-2">
-            {postData.comments.map((comment) => (
-              <li key={`commentId_${comment._id}`}>
-                <div className="flex justify-between">
-                  <h3>{comment.author}</h3>
-                  <UnixTimestampConverter
-                    unixTimestamp={comment.date}
-                    type="comment"
-                  />
-                </div>
-                {name === comment.author ? (
-                  <p
-                    className="flex justify-end  bg-white text-center font-extrabold"
-                    style={borderRadius}
-                  >
-                    {comment.text}
-                  </p>
+      <section className="mb-4 flex flex-col items-start md:items-center">
+        {/* Like, Comment, Delete Icons */}
+        <div className="flex w-full md:w-[40vw] lg:w-[40vw] justify-between">
+          <div className="flex">
+            {/* Like Icon */}
+            <div className="relative">
+              <IconButton onClick={upVote}>
+                {storedLike ? (
+                  <FavoriteIcon fontSize="large" />
                 ) : (
-                  <p
-                    className="flex justify-start bg-white text-center font-extrabold"
-                    style={borderRadius}
-                  >
-                    {comment.text}
-                  </p>
+                  <FavoriteBorderIcon fontSize="large" />
                 )}
-              </li>
-            ))}
-          </ul>
-          <form
-            className="w-100% mb-6 mt-6 flex justify-between gap-3"
-            onSubmit={handleNewComment}
-          >
-            <input
-              type="textarea"
-              name="newComment"
-              className="w-full resize"
-              placeholder="Comment..."
-              style={borderRadius}
-            />
-            <StyledButton type="submit" primaryColor>
-              Send
-            </StyledButton>
-          </form>
+              </IconButton>
+              {upvoteTotal > 0 && (
+                <p className="absolute right-0 top-0">{upvoteTotal}</p>
+              )}
+            </div>
+            {/* Comment Icon to open comments view */}
+            <div className="relative">
+              <IconButton onClick={() => setCommentView(!commentView)}>
+                <MessageIcon fontSize="large" />
+              </IconButton>
+              {commentTotal && (
+                <p className="absolute right-0 top-0">{commentTotal}</p>
+              )}
+            </div>
+          </div>
+          {/* Delete Icon */}
+          <div>
+            <IconButton onClick={handleDelete}>
+              <DeleteOutlineIcon fontSize="large" />
+            </IconButton>
+          </div>
         </div>
-      )}
-    </section>
+        {/* Comment Section */}
+        {commentView && (
+          <div className="flex flex-col w-full px-2 md:px-0 md:w-[60vw] lg:w-[40vw]">
+            <h3 className="font-bold text-center">Comment Section</h3>
+            <ul className="flex flex-col gap-2 mb-4">
+              {postData.comments.map((comment) => (
+                <li key={`commentId_${comment._id}`}>
+                  <div className="flex justify-between">
+                    <h3>{comment.author}</h3>
+                    <UnixTimestampConverter
+                      unixTimestamp={comment.date}
+                      type="comment"
+                    />
+                  </div>
+                  {name === comment.author ? (
+                    <p className="flex justify-end  bg-white text-center font-extrabold">
+                      {comment.text}
+                    </p>
+                  ) : (
+                    <p className="flex justify-start bg-white text-center font-extrabold">
+                      {comment.text}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+            {/* Comment Form */}
+            <form
+              className="flex items-baseline gap-3"
+              onSubmit={handleNewComment}
+            >
+              <StyledFormInput
+                fullWidthStyle
+                type={"text"}
+                name={"newComment"}
+                placeholder={"Comment..."}
+                required
+              />
+              <StyledButton submit primaryColor>
+                Send
+              </StyledButton>
+            </form>
+          </div>
+        )}
+        <div className="flex justify-center w-full">
+          <StyledButton primaryColor onClick={handleReturn}>
+            Back
+          </StyledButton>
+        </div>
+      </section>
+    </>
   );
 }

@@ -7,7 +7,6 @@ import Home from "./Home";
 import LiveChat from "./LiveChat";
 import Login from "./Login";  
 import Signup from "./Signup";
-import Upload from "./Upload";
 import Profile from './Profile';
 import About from './About';
 import EventCreator from './EventCreator';
@@ -15,5 +14,6 @@ import AttendeeSignup from "./AttendeeSignup";
 import MyEvents from "./MyEvents";
 import PayMent from "./PayMent";
 import SignOut from "./SignOut"
+import QRCode from "./QRCodePage";
 
-export { SingleView, EventSpace, Home, LiveChat, Login, Signup, SignOut, Upload, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent };
+export { SingleView, EventSpace, Home, LiveChat, Login, Signup, SignOut, Profile, About, EventCreator, AttendeeSignup, MyEvents, PayMent, QRCode };

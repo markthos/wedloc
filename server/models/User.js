@@ -32,6 +32,11 @@ const userSchema = new Schema({
     type: String,
     default: "https://i.imgur.com/1q6QXyv.png",
   },
+  creditCards: [{
+    type: Schema.Types.ObjectId,
+    ref: 'CreditCard',
+    default: []
+  }],
   capsules: [
     {
       type: Schema.Types.ObjectId,
