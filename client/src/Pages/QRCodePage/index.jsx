@@ -9,6 +9,7 @@ const QRCode = () => {
   const [url, setUrl] = useState();
   const { eventId } = useParams();
   const navigate = useNavigate();
+  
   useEffect(() => {
     setUrl(`https://wedloc-84c89e3ae29d.herokuapp.com/eventspace/${eventId}`);
   }, [eventId]);

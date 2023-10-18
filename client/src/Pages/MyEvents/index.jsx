@@ -175,7 +175,7 @@ export default function MyEvents() {
                 </div>
                 <div className="flex gap-4">
                   <StyledButton outlined>
-                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`}>
+                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`} lazy>
                       <QrCode2Icon />
                     </RouterLink>
                   </StyledButton>

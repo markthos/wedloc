@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
-import DefaultProfileImg from "./img/default_profile.png";
 import { useNavigate } from "react-router-dom";
 
 import { useMutation, useQuery } from "@apollo/client";
@@ -122,7 +121,7 @@ export default function Profile() {
             ) : (
               <img
                 src={User.profilePic}
-                alt="Default photo"
+                alt="Default"
                 className="h-80 w-80 rounded-full object-cover shadow-lg"
               />
             )}
