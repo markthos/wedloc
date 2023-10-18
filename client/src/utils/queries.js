@@ -92,35 +92,6 @@ export const GET_USER = gql`
       lastName
       email
       profilePic
-      capsules {
-        _id
-        title
-        date
-        location
-        posts_count
-        chat_count
-        posts {
-          _id
-          url
-          thumbnail
-          date
-          upVotes
-          comment_count
-          comments {
-            _id
-            text
-            author
-            date
-          }
-          owner
-        }
-        chat {
-          _id
-          text
-          date
-          author
-        }
-      }
     }
   }
 `;
