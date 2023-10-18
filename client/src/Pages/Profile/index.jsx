@@ -1,9 +1,3 @@
-// User Profile Page
-// TODO: Pull in profile info (first/last name, username, email, profile picture, etc.) and populate the form
-// TODO: Setup submit functionality so that the user can update their profile info
-// TODO: The Save Changes button should be disabled by default and only enabled when the user makes a change to the form
-// !FIX: Adjust responsive styling so it adjusts more smoothly
-
 import React, { useState, useEffect, useRef } from "react";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
@@ -49,20 +43,16 @@ export default function Profile() {
     widgetRef.current.open();
   };
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const { data } = await updateUser({
-        variables: { ...formState, profilePic: dataURL },
-      });
-      localStorage.setItem(
-        "name",
-        formState.firstName + " " + formState.lastName,
-      );
+ const handleFormSubmit = async (event) => {
+  event.preventDefault();
+  try {
+    const { data } = await updateUser({
+      variables: { ...formState, profilePic:dataURL },
+    });
       if (data && data.updateUser) {
         navigate(`/myevents`);
       } else {
-        throw new Error("something went wrong!");
+        throw new Error('something went wrong!');
       }
     } catch (error) {
       console.error(error);
@@ -94,7 +84,20 @@ export default function Profile() {
         }
       },
     );
-  }, [saveFolder]);
+
+    // Set formState to the current user's info
+    // Set formState with user data if available
+    if (data && data.me) {
+      const { firstName, lastName, username, email, profilePic } = data.me;
+      setFormState({
+        firstName: firstName || '',
+        lastName: lastName || '',
+        username: username || '',
+        email: email || '',
+        profilePic: profilePic || '',
+      });
+    }
+  }, [data, saveFolder]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
