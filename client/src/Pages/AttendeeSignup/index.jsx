@@ -24,7 +24,6 @@ export default function AttendeeSignup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(attendee);
     localStorage.setItem("name", attendee);
     setName(attendee);
   };

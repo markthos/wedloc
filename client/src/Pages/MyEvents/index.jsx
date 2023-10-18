@@ -1,9 +1,3 @@
-// The My Events Page where all the events that user has created will display and can be edited or deleted
-// TODO User should be routed to here after logging in
-// TODO Add modal for delete and edit (or take you to the event creator page to edit it)
-// TODO Improve visual design
-// TODO Connect to DB
-// TODO If user doesn't have any events, display a message or some kind of ui element/button to create an event
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
@@ -81,7 +75,6 @@ export default function MyEvents() {
 
   const handleDeleteModal = (capsule) => {
     setSelectedCapsule(capsule);
-    console.log("deleting" + selectedCapsule.id);
   };
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -126,7 +119,6 @@ export default function MyEvents() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
           setDataURL(result.info.url);
           setUploadedPhoto(result.info.url);
         }

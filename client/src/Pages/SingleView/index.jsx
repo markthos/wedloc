@@ -164,7 +164,6 @@ export default function SingleView({ cloudName, videoId }) {
 
   // delete post function
   const handleDelete = async () => {
-    console.log("Delete This Post");
     await deletePostDatabase();
     navigate(`/eventspace/${eventId}`);
   };
