@@ -102,7 +102,7 @@ export default function Profile() {
             {
               uploadedPhoto ? 
               <img src={uploadedPhoto} alt="Uploaded event" className="w-80 h-80 rounded-full object-cover shadow-lg" /> :
-              <img src={DefaultProfileImg} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
+              <img src={User.profilePic} alt="Default photo" className="w-80 h-80 rounded-full object-cover shadow-lg"/>
             }
           </div>
           <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
@@ -122,7 +122,7 @@ export default function Profile() {
                 type={"text"}
                 name={"firstName"}
                 onChange={handleChange}
-                placeholder={ User.firstName }
+                placeholder={User.firstName}
                 value={formState.firstName}
               />
             </div>
