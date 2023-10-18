@@ -51,7 +51,6 @@ const NetbankingForm = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Netbanking details submitted:", bankDetails);
     fetch("/api/netbanking-payment", {
       method: "POST",
       headers: {
@@ -105,7 +104,6 @@ const NetbankingForm = () => {
 // PAYPAL FORM
 const PayPalButton = () => {
   const handlePayPalPayment = () => {
-    console.log("Redirecting to PayPal...");
   };
   return (
     <div className="flex justify-center">
@@ -128,9 +126,7 @@ const CheckoutForm = () => {
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
     if (result.error) {
-      console.log(result.error.message);
     } else {
-      console.log(result.token);
     }
   };
   return (

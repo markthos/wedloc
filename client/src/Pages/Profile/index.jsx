@@ -77,7 +77,6 @@ export default function Profile() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          console.log("Done! Here is the image info: ", result.info);
           setDataURL(result.info.url);
           setUploadedPhoto(result.info.url);
         }
@@ -101,7 +100,6 @@ export default function Profile() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   const User = data.me;
-  console.log(User);
 
   return (
     <section className="container m-auto flex h-full items-center justify-center p-5">
