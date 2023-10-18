@@ -159,7 +159,7 @@ export default function MyEvents() {
           ) : (
             capsules.map((capsule) => (
               <div className="flex w-full items-center justify-between" key={capsule._id}>
-                  <RouterLink to={`/event/${capsule._id}`} className="hover:underline text-xl">
+                  <RouterLink to={`/eventspace/${capsule._id}`} className="hover:underline text-xl">
                     {capsule.title}
                   </RouterLink>
                   <div className="flex gap-4">
