@@ -7,7 +7,6 @@ import {
   LiveChat,
   Login,
   Signup,
-  Upload,
   Profile,
   About,
   EventCreator,
@@ -17,7 +16,6 @@ import {
   SignOut,
 } from "./Pages";
 import "./App.css";
-import { Cloudinary } from "@cloudinary/url-gen"; // import Cloudinary
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -32,8 +30,6 @@ const client = new ApolloClient({
 });
 
 export default function App() {
-  const cld = new Cloudinary({ cloud: { cloudName: "dp0h5vpsz" } }); // Create a Cloudinary instance
-  const cloudName = "dp0h5vpsz"; // Our Cloudinary cloud name
 
   return (
     <ApolloProvider client={client}>
@@ -61,10 +57,6 @@ export default function App() {
               />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route
-                path="/eventspace/:eventId/upload"
-                element={<Upload cloudName={cloudName} />}
-              />
               <Route path="/profile" element={<Profile />} />
               <Route path="/about" element={<About />} />
               <Route path="/eventcreator" element={<EventCreator />} />
