@@ -9,9 +9,10 @@ import EventHeader from "../../components/EventHeader";
 import StyledButton from "../../components/StyledButton";
 import DefaultProfileImg from "./img/default_profile.png";
 import FilterToggle from "./FilterToggle";
-import dayjs from "dayjs";
+import QRCodeGenerator from "../../components/QRCodeGenerator";
 
-import VideoPlayer from "../../components/VideoPlayer";
+
+import VideoPlayer from "../../components/VideoPlayer"; // Video player component for potential future use
 
 import { ADD_POST } from "../../utils/mutations";
 
@@ -147,6 +148,7 @@ export default function EventSpace() {
 
   return (
     <>
+    <QRCodeGenerator website={`${process.env.REACT_APP_HEROKU_URL}/eventspace/${eventId}`} />
       <EventHeader
         eventProfileImage={DefaultProfileImg}
         eventTitle={cap.title}
