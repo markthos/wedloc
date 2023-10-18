@@ -1,22 +1,36 @@
-import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+// The payment page component
+
+import React, { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import StyledButton from "../../components/StyledButton";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
+// OPTIONS MENU
 const PaymentOptions = ({ onSelect, selectedOption }) => (
-  <div className="flex flex-wrap justify-between md:space-x-4 my-6">
-    {['creditCard', 'netBanking', 'paypal'].map((option) => {
+  <div className="flex flex-col justify-center gap-4 md:gap-8 mb-4 md:flex-row">
+    {["creditCard", "netBanking", "paypal"].map((option) => {
       const labels = {
-        creditCard: 'Credit Card',
-        netBanking: 'Net Banking',
-        paypal: 'PayPal'
+        creditCard: "Credit Card",
+        netBanking: "Net Banking",
+        paypal: "PayPal",
       };
       return (
-        <button 
+        <button
           key={option}
-          className={`w-full md:w-auto m-1 md:m-0 p-4 border rounded-lg shadow-md transition-transform transform ${selectedOption === option ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white scale-105' : 'bg-white hover:bg-gray-100'}`} 
-          onClick={() => onSelect(option)}>
+          className={`transform rounded-lg border px-8 py-2 shadow-md transition-transform ${
+            selectedOption === option
+              ? "scale-105 bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
+              : "bg-white hover:bg-gray-100"
+          }`}
+          onClick={() => onSelect(option)}
+        >
           {labels[option]}
         </button>
       );
@@ -24,87 +38,90 @@ const PaymentOptions = ({ onSelect, selectedOption }) => (
   </div>
 );
 
+// NETBANKING FORM
 const NetbankingForm = () => {
   const [bankDetails, setBankDetails] = useState({
-    bankName: '',
-    accountNumber: '',
-    ifscCode: ''
+    bankName: "",
+    accountNumber: "",
+    ifscCode: "",
   });
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setBankDetails(prevState => ({ ...prevState, [name]: value }));
+    setBankDetails((prevState) => ({ ...prevState, [name]: value }));
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Netbanking details submitted:", bankDetails);
-    
     fetch("/api/netbanking-payment", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(bankDetails)
-    }).then(response => {
+      body: JSON.stringify(bankDetails),
+    }).then((response) => {
       // Handle response from server here
     });
   };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 bg-white p-4 md:p-6 rounded-lg shadow-md">
-      {['bankName', 'accountNumber', 'ifscCode'].map((field, index) => {
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-lg bg-white p-4 shadow-md md:p-6"
+    >
+      {["bankName", "accountNumber", "ifscCode"].map((field, index) => {
         const placeholders = {
-          bankName: 'Enter Bank Name',
-          accountNumber: 'Enter Account Number',
-          ifscCode: 'Enter IFSC Code'
+          bankName: "Enter Bank Name",
+          accountNumber: "Enter Account Number",
+          ifscCode: "Enter IFSC Code",
         };
         const labels = {
-          bankName: 'Bank Name',
-          accountNumber: 'Account Number',
-          ifscCode: 'IFSC Code'
+          bankName: "Bank Name",
+          accountNumber: "Account Number",
+          ifscCode: "IFSC Code",
         };
-
         return (
           <div key={index} className="flex flex-col">
-            <label className="mb-2 text-lg font-medium">{labels[field]}</label>
-            <input 
-              type="text" 
+            <label className="mb-2">{labels[field]}</label>
+            <input
+              type="text"
               name={field}
               value={bankDetails[field]}
               onChange={handleChange}
               placeholder={placeholders[field]}
-              className="p-2 border rounded-lg"
+              className="rounded-lg border p-2 mb-2"
+              required
             />
           </div>
         );
       })}
-      <button type="submit" className="mt-4 p-2 w-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-shadow">
-        Pay Now
-      </button>
+      <div className="mt-4 flex justify-center">
+        <StyledButton submit primaryColor>
+          Pay with Net Banking
+        </StyledButton>
+      </div>
     </form>
   );
 };
 
+// PAYPAL FORM
 const PayPalButton = () => {
   const handlePayPalPayment = () => {
     console.log("Redirecting to PayPal...");
   };
-
   return (
-    <button onClick={handlePayPalPayment} className="p-2 w-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-shadow">
-      Pay with PayPal
-    </button>
+    <div className="flex justify-center">
+      <StyledButton submit primaryColor onClick={handlePayPalPayment}>
+        Pay with PayPal
+      </StyledButton>
+    </div>
   );
 };
 
+// CREDIT CARD FORM
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
-  const [selectedOption, setSelectedOption] = useState('creditCard');
-
+  const [selectedOption, setSelectedOption] = useState("creditCard");
   const handleOptionSelect = (option) => setSelectedOption(option);
-
   const handleStripeSubmit = async (event) => {
     event.preventDefault();
     if (!stripe || !elements) return;
@@ -116,32 +133,39 @@ const CheckoutForm = () => {
       console.log(result.token);
     }
   };
-
   return (
-    <div className="space-y-6">
-      <PaymentOptions onSelect={handleOptionSelect} selectedOption={selectedOption} />
-      {selectedOption === 'creditCard' && (
-        <form onSubmit={handleStripeSubmit} className="space-y-4 bg-white p-4 md:p-6 rounded-lg shadow-md">
-          <div className="p-2 border rounded-lg">
+    <div className="container m-auto rounded-2xl bg-beige p-5 shadow-lg">
+      <PaymentOptions
+        onSelect={handleOptionSelect}
+        selectedOption={selectedOption}
+      />
+      {selectedOption === "creditCard" && (
+        <form
+          onSubmit={handleStripeSubmit}
+          className="rounded-lg bg-white p-4 shadow-md md:p-6"
+        >
+          <div className="rounded-lg border p-2">
             <CardElement />
           </div>
-          <button type="submit" className="p-2 w-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-shadow">
-            Pay Now
-          </button>
+          <div className="flex justify-center mt-4">
+            <StyledButton submit primaryColor>
+              Pay with Credit Card
+            </StyledButton>
+          </div>
         </form>
       )}
-      {selectedOption === 'netBanking' && <NetbankingForm />}
-      {selectedOption === 'paypal' && <PayPalButton />}
+      {selectedOption === "netBanking" && <NetbankingForm />}
+      {selectedOption === "paypal" && <PayPalButton />}
     </div>
   );
 };
 
 const Payment = () => (
-  <div className="px-4 py-6 md:px-0">
+  <section className="container m-auto flex h-full items-center justify-center p-5">
     <Elements stripe={stripePromise}>
       <CheckoutForm />
     </Elements>
-  </div>
+  </section>
 );
 
 export default Payment;
