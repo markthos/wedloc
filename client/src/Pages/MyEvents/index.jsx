@@ -245,18 +245,18 @@ export default function MyEvents() {
                     <img
                       src={uploadedPhoto}
                       alt="Uploaded event"
-                      className="h-48 w-48 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   ) : selectedCapsule.eventPic ? (
                     <img
                       src={selectedCapsule.eventPic}
                       alt="Uploaded event"
-                      className="h-48 w-48 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   ) : (
                     <CameraAltOutlinedIcon
                       fontSize="large"
-                      className="h-48 w-48 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   )}
                 </div>

@@ -33,7 +33,7 @@ export default function Header() {
             <img
               src={userProfilePic}
               alt="Profile"
-              className="h-10 w-10 self-center rounded-full"
+              className="h-10 w-10 self-center rounded-full object-cover"
             />
           </RouterLink>
         ) : (
