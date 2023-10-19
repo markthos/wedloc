@@ -9,6 +9,7 @@ import { GET_USER } from "../../utils/queries";
 
 export default function Profile() {
   const { loading, data, error } = useQuery(GET_USER);
+  const [formChanged, setFormChanged] = useState(false); // used to determine if the user has changed any of the form inputs
   const [formState, setFormState] = useState({
     firstName: "",
     lastName: "",
@@ -33,12 +34,17 @@ export default function Profile() {
       ...formState,
       [name]: value,
     });
+
+    setFormChanged(true);
   };
 
   // Open the widget without submitting the form
   const openCloudinaryWidget = (event) => {
     event.preventDefault();
     widgetRef.current.open();
+
+    // Set formChanged to true when a photo is uploaded
+    setFormChanged(true);
   };
 
  const handleFormSubmit = async (event) => {
@@ -194,9 +200,12 @@ export default function Profile() {
             </div>
           </div>
           <div className="flex justify-center">
+            {formChanged ? (
             <StyledButton submit primaryColor>
               Save Changes
             </StyledButton>
+            ) : null
+            }
           </div>
         </div>
       </form>
