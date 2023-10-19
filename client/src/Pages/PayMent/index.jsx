@@ -102,9 +102,19 @@ const NetbankingForm = () => {
 };
 
 // PAYPAL FORM
-const PayPalButton = () => {
+const PayPalButton = ({ donationAmount }) => {
   const handlePayPalPayment = () => {
+    const baseURL = "https://www.paypal.com/cgi-bin/webscr?";
+    const businessEmail = "arunmailme77@gmail.com";
+    const item_name = "Donation";
+    const currency_code = "USD";
+    const amount = donationAmount || '1';
+
+    const queryParams = `cmd=_xclick&business=${businessEmail}&item_name=${item_name}&amount=${amount}&currency_code=${currency_code}`;
+
+    window.location.href = baseURL + queryParams;
   };
+
   return (
     <div className="flex justify-center">
       <StyledButton submit primaryColor onClick={handlePayPalPayment}>
@@ -114,8 +124,9 @@ const PayPalButton = () => {
   );
 };
 
+
 // CREDIT CARD FORM
-const CheckoutForm = () => {
+const CheckoutForm = ({ donationAmount }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [selectedOption, setSelectedOption] = useState("creditCard");
@@ -160,18 +171,40 @@ const CheckoutForm = () => {
         </form>
       )}
       {selectedOption === "netBanking" && <NetbankingForm />}
-      {selectedOption === "paypal" && <PayPalButton />}
+      {selectedOption === "paypal" && <PayPalButton donationAmount={donationAmount} />}
     </div>
   );
 };
 
 
-const Payment = () => (
-  <section className="container m-auto md:pt-32 h-full p-5">
-    <Elements stripe={stripePromise}>
-      <CheckoutForm />
-    </Elements>
-  </section>
-);
+
+const Payment = () => {
+  // State to store donation amount
+  const [donationAmount, setDonationAmount] = useState('');
+
+  return (
+    <section className="container m-auto md:pt-32 h-full p-5">
+      <h2 className="text-2xl font-bold mb-2 text-center">Donations Accepted</h2>
+      <p className="mb-4 text-center">This is a free app that a team of developers worked hard on! Any donations welcome.</p>
+
+      {/* Donation Amount Input */}
+      <div className="mb-4">
+        <label className="block mb-2 text-center" htmlFor="donationAmount">Enter Donation Amount ($)</label>
+        <input
+          type="number"
+          id="donationAmount"
+          className="w-full p-2 rounded border"
+          value={donationAmount}
+          onChange={(e) => setDonationAmount(e.target.value)}
+          placeholder="Enter amount"
+        />
+      </div>
+
+      <Elements stripe={stripePromise}>
+      <CheckoutForm donationAmount={donationAmount} />
+      </Elements>
+    </section>
+  );
+};
 
 export default Payment;
