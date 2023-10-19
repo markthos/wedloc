@@ -150,15 +150,20 @@ export default function EventSpace() {
         eventDate={cap.date}
         eventLocation={cap.location}
       >
-        <StyledButton outlined button>
-          <Link to={`/eventspace/${eventId}/livechat`}>Live Chat</Link>
-        </StyledButton>
+        <Link to={`/eventspace/${eventId}/livechat`}>
+          <StyledButton outlined button>
+            Live Chat
+          </StyledButton>
+        </Link>
+
         <StyledButton outlined button onClick={() => widgetRef.current.open()}>
           Upload
         </StyledButton>
-        <StyledButton outlined button>
-          <Link to={`/eventspace/${eventId}/qrcode`}>QR Code</Link>
-        </StyledButton>
+        <Link to={`/eventspace/${eventId}/qrcode`}>
+          <StyledButton outlined button>
+            QR Code
+          </StyledButton>
+        </Link>
       </EventHeader>
 
       <div className="mb-3 flex justify-center">
