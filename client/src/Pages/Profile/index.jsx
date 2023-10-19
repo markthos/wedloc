@@ -47,16 +47,16 @@ export default function Profile() {
     setFormChanged(true);
   };
 
- const handleFormSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    const { data } = await updateUser({
-      variables: { ...formState, profilePic:dataURL },
-    });
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await updateUser({
+        variables: { ...formState, profilePic: dataURL },
+      });
       if (data && data.updateUser) {
         navigate(`/myevents`);
       } else {
-        throw new Error('something went wrong!');
+        throw new Error("something went wrong!");
       }
     } catch (error) {
       console.error(error);
@@ -93,11 +93,11 @@ export default function Profile() {
     if (data && data.me) {
       const { firstName, lastName, username, email, profilePic } = data.me;
       setFormState({
-        firstName: firstName || '',
-        lastName: lastName || '',
-        username: username || '',
-        email: email || '',
-        profilePic: profilePic || '',
+        firstName: firstName || "",
+        lastName: lastName || "",
+        username: username || "",
+        email: email || "",
+        profilePic: profilePic || "",
       });
     }
   }, [data, saveFolder]);
@@ -110,102 +110,104 @@ export default function Profile() {
     <section className="container m-auto flex h-full items-center justify-center p-5">
       <form
         onSubmit={handleFormSubmit}
-        className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row"
+        className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg"
       >
-        {/* 1 col in mobile, 2 columns above the md breakpoint (profile image col is 1/3 width, inputs col is 2/3 width) */}
-        <div className="text-center md:w-1/3">
-          <div className="m-auto mb-5 h-auto max-w-full rounded-full object-cover shadow-lg">
-            {uploadedPhoto ? (
-              <img
-                src={uploadedPhoto}
-                alt="Uploaded event"
-                className="h-auto max-w-full rounded-full object-cover shadow-lg"
-              />
-            ) : (
-              <img
-                src={User.profilePic}
-                alt="Default"
-                className="h-auto max-w-full rounded-full object-cover shadow-lg"
-              />
-            )}
-          </div>
-          <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
-            <AddAPhotoIcon className="mr-4" />
-            Upload Picture
-          </StyledButton>
-        </div>
-        {/* 1 col in mobile, 2 cols above the md breakpoint (label column is 1/4 width, input is 3/4 width) */}
-        <div className="flex w-full flex-col md:w-2/3">
-          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
-            <div className="w-full md:w-1/6 md:text-right">
-              <label htmlFor="firstName">First Name</label>
+        <h1 className="mb-4 text-center text-4xl">My Profile</h1>
+        {/* Contains the profile image section and user info form section, 
+        that's how it can be vertical in mobile and horizontal in wider viewports */}
+        <div className="flex flex-col gap-4 md:flex-row">
+          {/* Profile Image Section */}
+          <div className="flex flex-col items-center justify-center md:w-1/3">
+            <div className="m-auto mb-5 h-auto max-w-full rounded-full object-cover shadow-lg">
+              {uploadedPhoto ? (
+                <img
+                  src={uploadedPhoto}
+                  alt="Uploaded event"
+                  className="h-auto max-w-full rounded-full object-cover shadow-lg"
+                />
+              ) : (
+                <img
+                  src={User.profilePic}
+                  alt="Default"
+                  className="h-auto max-w-full rounded-full object-cover shadow-lg"
+                />
+              )}
             </div>
-            <div className="w-full md:w-5/6">
-              <StyledFormInput
-                fullWidthStyle
-                type={"text"}
-                name={"firstName"}
-                onChange={handleChange}
-                placeholder={User.firstName}
-                value={formState.firstName}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
-            <div className="w-full md:w-1/6 md:text-right">
-              <label htmlFor="lastName">Last Name</label>
-            </div>
-            <div className="w-full md:w-5/6">
-              <StyledFormInput
-                fullWidthStyle
-                type={"text"}
-                name={"lastName"}
-                onChange={handleChange}
-                placeholder={User.lastName}
-                value={formState.lastName}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
-            <div className="w-full md:w-1/6 md:text-right">
-              <label htmlFor="username">Username</label>
-            </div>
-            <div className="w-full md:w-5/6">
-              <StyledFormInput
-                fullWidthStyle
-                type={"text"}
-                name={"username"}
-                onChange={handleChange}
-                placeholder={User.username}
-                value={formState.username}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col items-baseline md:flex-row md:gap-4">
-            <div className="w-full md:w-1/6 md:text-right">
-              <label htmlFor="email">Email</label>
-            </div>
-            <div className="w-full md:w-5/6">
-              <StyledFormInput
-                fullWidthStyle
-                type={"email"}
-                name={"email"}
-                onChange={handleChange}
-                placeholder={User.email}
-                value={formState.email}
-              />
-            </div>
-          </div>
-          <div className="flex justify-center">
-            {formChanged ? (
-            <StyledButton submit primaryColor>
-              Save Changes
+            <StyledButton type="button" onClick={openCloudinaryWidget} outlined>
+              <AddAPhotoIcon className="mr-4" />
+              Upload Picture
             </StyledButton>
-            ) : null
-            }
+          </div>
+          {/* User Info Section */}
+          <div className="flex w-full flex-col justify-center md:w-2/3">
+            <div className="flex flex-col items-start md:flex-row md:gap-4">
+              <div className="w-full md:w-1/6 md:text-right">
+                <label htmlFor="firstName">First Name</label>
+              </div>
+              <div className="w-full md:w-5/6">
+                <StyledFormInput
+                  fullWidthStyle
+                  type={"text"}
+                  name={"firstName"}
+                  onChange={handleChange}
+                  placeholder={User.firstName}
+                  value={formState.firstName}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-start md:flex-row md:gap-4">
+              <div className="w-full md:w-1/6 md:text-right">
+                <label htmlFor="lastName">Last Name</label>
+              </div>
+              <div className="w-full md:w-5/6">
+                <StyledFormInput
+                  fullWidthStyle
+                  type={"text"}
+                  name={"lastName"}
+                  onChange={handleChange}
+                  placeholder={User.lastName}
+                  value={formState.lastName}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-start md:flex-row md:gap-4">
+              <div className="w-full md:w-1/6 md:text-right">
+                <label htmlFor="username">User Name</label>
+              </div>
+              <div className="w-full md:w-5/6">
+                <StyledFormInput
+                  fullWidthStyle
+                  type={"text"}
+                  name={"username"}
+                  onChange={handleChange}
+                  placeholder={User.username}
+                  value={formState.username}
+                />
+              </div>
+            </div>
+            <div className="flex flex-col items-start md:flex-row md:gap-4">
+              <div className="w-full md:w-1/6 md:text-right">
+                <label htmlFor="email">Email</label>
+              </div>
+              <div className="w-full md:w-5/6">
+                <StyledFormInput
+                  fullWidthStyle
+                  type={"email"}
+                  name={"email"}
+                  onChange={handleChange}
+                  placeholder={User.email}
+                  value={formState.email}
+                />
+              </div>
+            </div>
+            {/* Save changes button only appears when a change is made */}
+            <div className="flex justify-center">
+              {formChanged ? (
+                <StyledButton submit primaryColor>
+                  Save Changes
+                </StyledButton>
+              ) : null}
+            </div>
           </div>
         </div>
       </form>

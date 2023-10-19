@@ -134,8 +134,6 @@ export default function MyEvents() {
 
   const capsules = data.getUserCapsules;
 
-  // IMPLEMENT PHOTO DISPLAY
-
   return (
     <section className="container m-auto flex h-full items-center justify-center p-5">
       <form
@@ -171,14 +169,14 @@ export default function MyEvents() {
                   </RouterLink>
                 </div>
                 <div className="flex gap-4 md:w-1/4 md:justify-end">
-                  <StyledButton outlined>
-                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`}>
+                  <RouterLink to={`/eventspace/${capsule._id}/qrcode`}>
+                    <StyledButton outlined>
                       <QrCode2Icon
                         fontSize="large"
                         className="transition-all duration-500 ease-in-out hover:text-darkgray"
                       />
-                    </RouterLink>
-                  </StyledButton>
+                    </StyledButton>
+                  </RouterLink>
                   <StyledButton
                     onClick={(e) => {
                       e.preventDefault();
@@ -212,9 +210,7 @@ export default function MyEvents() {
           <RouterLink to={"/eventcreator"}>Create Event</RouterLink>
         </StyledButton>
       </form>
-
       {/* delete modal */}
-
       {isDeleteModalOpen && (
         <div className="flex min-h-full w-screen flex-row items-center justify-center">
           <div className="flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2">
@@ -225,19 +221,18 @@ export default function MyEvents() {
               <StyledButton onClick={handleDelete} primaryColor>
                 Confirm
               </StyledButton>
-              <StyledButton onClick={closeDeleteModal}  primaryColor>
+              <StyledButton onClick={closeDeleteModal} primaryColor>
                 Cancel
               </StyledButton>
             </div>
           </div>
         </div>
       )}
-
       {/* edit modal */}
       {isModalOpen && (
         <section className="flex min-h-full w-screen flex-row items-center justify-center px-2">
-          <div className="flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2 p-5">
-            <h1 className="text-center font-sans text-2xl font-medium md:text-3xl mb-4">
+          <div className="flex w-screen flex-col items-center rounded-md bg-beige p-5 shadow-lg md:w-1/2">
+            <h1 className="mb-4 text-center font-sans text-2xl font-medium md:text-3xl">
               Editing {selectedCapsule.title}
             </h1>
             <div className="flex w-full flex-col items-center">
@@ -291,7 +286,7 @@ export default function MyEvents() {
                   onChange={handleChange}
                   value={formState.location}
                 />
-                 <div className="mb-6 mt-4 flex gap-4">
+                <div className="mb-6 mt-4 flex gap-4">
                   <StyledButton onClick={closeEditModal} primaryColor>
                     Cancel
                   </StyledButton>
