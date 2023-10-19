@@ -57,10 +57,10 @@ export default function EventSpace() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          setDataURL(result.info.url);
+          setDataURL(result.info.secure_url);
           setUploadImageData({
             ...uploadImageData,
-            url: result.info.url,
+            url: result.info.secure_url,
           });
         }
       },
