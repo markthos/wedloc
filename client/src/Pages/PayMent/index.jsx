@@ -166,12 +166,42 @@ const CheckoutForm = () => {
 };
 
 
-const Payment = () => (
-  <section className="container m-auto md:pt-32 h-full p-5">
-    <Elements stripe={stripePromise}>
-      <CheckoutForm />
-    </Elements>
-  </section>
-);
+// const Payment = () => (
+//   <section className="container m-auto md:pt-32 h-full p-5">
+//     <Elements stripe={stripePromise}>
+//       <CheckoutForm />
+//     </Elements>
+//   </section>
+// );
+
+
+const Payment = () => {
+  // State to store donation amount
+  const [donationAmount, setDonationAmount] = useState('');
+
+  return (
+    <section className="container m-auto md:pt-32 h-full p-5">
+      <h2 className="text-2xl font-bold mb-2 text-center">Donations Accepted</h2>
+      <p className="mb-4 text-center">This is a free app that a team of developers worked hard on! Any donations welcome.</p>
+
+      {/* Donation Amount Input */}
+      <div className="mb-4">
+        <label className="block mb-2 text-center" htmlFor="donationAmount">Enter Donation Amount ($)</label>
+        <input
+          type="number"
+          id="donationAmount"
+          className="w-full p-2 rounded border"
+          value={donationAmount}
+          onChange={(e) => setDonationAmount(e.target.value)}
+          placeholder="Enter amount"
+        />
+      </div>
+
+      <Elements stripe={stripePromise}>
+        <CheckoutForm />
+      </Elements>
+    </section>
+  );
+};
 
 export default Payment;
