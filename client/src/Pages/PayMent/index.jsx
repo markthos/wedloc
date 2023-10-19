@@ -119,16 +119,23 @@ const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
   const [selectedOption, setSelectedOption] = useState("creditCard");
+  const [feedback, setFeedback] = useState('');
+
   const handleOptionSelect = (option) => setSelectedOption(option);
+
   const handleStripeSubmit = async (event) => {
     event.preventDefault();
     if (!stripe || !elements) return;
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
     if (result.error) {
+      setFeedback(result.error.message);
     } else {
+      setFeedback('Card is accepted');
+      // You can send the token to your backend here if needed.
     }
   };
+
   return (
     <div className="container m-auto rounded-2xl bg-beige p-5 shadow-lg">
       <PaymentOptions
@@ -148,6 +155,9 @@ const CheckoutForm = () => {
               Pay with Credit Card
             </StyledButton>
           </div>
+          <div className="mt-2 text-center">
+            {feedback}
+          </div>
         </form>
       )}
       {selectedOption === "netBanking" && <NetbankingForm />}
@@ -155,6 +165,7 @@ const CheckoutForm = () => {
     </div>
   );
 };
+
 
 const Payment = () => (
   <section className="container m-auto md:pt-32 h-full p-5">
