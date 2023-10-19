@@ -157,7 +157,7 @@ const CheckoutForm = () => {
 };
 
 const Payment = () => (
-  <section className="container m-auto flex h-full items-center justify-center p-5">
+  <section className="container m-auto md:pt-32 h-full p-5">
     <Elements stripe={stripePromise}>
       <CheckoutForm />
     </Elements>

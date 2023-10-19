@@ -1,11 +1,9 @@
 // The About Us Page to talk about the project, the team, and the tech and design stack used
 
 import { useEffect } from "react";
-
 // Animate on Scroll
 import Aos from "aos";
 import "aos/dist/aos.css";
-
 // Text Data
 import aboutUsData from "./assets/data/aboutUsData.json";
 // Team Images
@@ -15,10 +13,11 @@ import edward from "./assets/img/edward.png";
 import jake from "./assets/img/jake.jpg";
 import mark from "./assets/img/mark.jpg";
 import will from "./assets/img/will.jpg";
-// Logos
+// Logos for social links
 import githublogo from "./assets/img/logos/github_square_logo.svg";
 import linkedinlogo from "./assets/img/logos/linkedin_rect_logo.svg";
 import pflogo from "./assets/img/logos/pf_logo.svg";
+// Logos for tech stack
 import apolloGraphQLLogo from "./assets/img/logos/apollo_graphql_logo.svg";
 import expressJSLogo from "./assets/img/logos/expressjs_logo.svg";
 import graphqlLogo from "./assets/img/logos/graphql_logo.svg";
@@ -40,7 +39,7 @@ import stripeLogo from "./assets/img/logos/stripe_logo.svg";
 // Development Images
 import ideasPhase from "./assets/img/ideas_phase.png";
 import preDevPhase from "./assets/img/predevelopment_phase.png";
-
+// Arrays to loop through for images
 const teamPics = [arun, avery, edward, jake, mark, will];
 const socialLinkLogos = [linkedinlogo, githublogo, pflogo];
 const techStackLogos = [
