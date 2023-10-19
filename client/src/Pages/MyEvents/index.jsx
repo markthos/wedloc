@@ -169,7 +169,7 @@ export default function MyEvents() {
                 </div>
                 <div className="flex gap-4 md:w-1/4 md:justify-end">
                   <StyledButton outlined>
-                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`} lazy>
+                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`}>
                       <QrCode2Icon
                         fontSize="large"
                         className="transition-all duration-500 ease-in-out hover:text-darkgray"

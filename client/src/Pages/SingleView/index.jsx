@@ -60,12 +60,6 @@ export default function SingleView({ cloudName, videoId }) {
 
   const [postData, setPostData] = useState("");
 
-  // useEffect(() => {
-  //   if (auth.loggedIn) {
-  //     console.log("logged in"); //! use this to set the name state to user name
-  //   }
-  // }, []);
-
   useEffect(() => {
     setPostData(data?.getPost || "");
   }, [data]);
@@ -193,7 +187,6 @@ export default function SingleView({ cloudName, videoId }) {
                 aspectRatio: "360 / 640",
               }} // hardcoded assumption of aspect ratio vert video
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-              allowFullScreen
               frameBorder="0"
               title={postData._id}
             ></iframe>
