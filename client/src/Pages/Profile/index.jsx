@@ -3,7 +3,6 @@ import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import { useNavigate } from "react-router-dom";
-
 import { useMutation, useQuery } from "@apollo/client";
 import { UPDATE_USER } from "../../utils/mutations";
 import { GET_USER } from "../../utils/queries";
@@ -108,19 +107,19 @@ export default function Profile() {
         className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg md:flex-row"
       >
         {/* 1 col in mobile, 2 columns above the md breakpoint (profile image col is 1/3 width, inputs col is 2/3 width) */}
-        <div className="w-full text-center md:w-1/3">
-          <div className="m-auto mb-5 h-80 w-80 rounded-full object-cover shadow-lg">
+        <div className="text-center md:w-1/3">
+          <div className="m-auto mb-5 h-auto max-w-full rounded-full object-cover shadow-lg">
             {uploadedPhoto ? (
               <img
                 src={uploadedPhoto}
                 alt="Uploaded event"
-                className="h-80 w-80 rounded-full object-cover shadow-lg"
+                className="h-auto max-w-full rounded-full object-cover shadow-lg"
               />
             ) : (
               <img
                 src={User.profilePic}
                 alt="Default"
-                className="h-80 w-80 rounded-full object-cover shadow-lg"
+                className="h-auto max-w-full rounded-full object-cover shadow-lg"
               />
             )}
           </div>

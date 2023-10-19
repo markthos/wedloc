@@ -1,6 +1,6 @@
 // Sitewide navigation menu component
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
