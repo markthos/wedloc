@@ -86,8 +86,8 @@ export default function EventCreator() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          setDataURL(result.info.url);
-          setUploadedPhoto(result.info.url);
+          setDataURL(result.info.secure_url);
+          setUploadedPhoto(result.info.secure_url);
         }
       },
     );
