@@ -136,39 +136,44 @@ export default function MyEvents() {
   return (
     <section className="container m-auto flex h-full items-center justify-center p-5">
       <form
-        className={`flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg ${
+        className={`flex w-full flex-col items-center gap-4 rounded-md bg-beige px-5 py-5 shadow-lg md:px-10 ${
           isModalOpen ? "hidden" : ""
         }`}
       >
-        <h1 className="text-4xl">My Events</h1>
+        <h1 className="mb-4 text-4xl">My Events</h1>
         <div className="flex w-full flex-col items-center gap-4">
           {capsules.length === 0 ? (
             <p>No events found. Create an event to get started.</p>
           ) : (
             capsules.map((capsule) => (
               <div
-                className="flex w-full items-center justify-between"
+                className="flex w-full flex-col items-center justify-between md:flex-row"
                 key={capsule._id}
               >
-                <div className="flex justify-items-center content-center text-align">
+                <div className="mb-4 flex w-full flex-col items-center md:w-3/4 md:flex-row">
                   {capsule.eventPic && (
-                    <img
-                      src={capsule.eventPic}
-                      alt="Uploaded event"
-                      className="h-20 w-20 rounded-full self-center"
-                    />
+                    <RouterLink to={`/eventspace/${capsule._id}`}>
+                      <img
+                        src={capsule.eventPic}
+                        alt="Uploaded event"
+                        className="mb-4 h-28 w-28 rounded-full object-cover shadow-xl"
+                      />
+                    </RouterLink>
                   )}
                   <RouterLink
                     to={`/eventspace/${capsule._id}`}
-                    className="text-xl hover:underline self-center ml-3"
+                    className="text-xl hover:underline md:ml-5"
                   >
                     {capsule.title}
                   </RouterLink>
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4 md:w-1/4 md:justify-end">
                   <StyledButton outlined>
                     <RouterLink to={`/eventspace/${capsule._id}/qrcode`} lazy>
-                      <QrCode2Icon />
+                      <QrCode2Icon
+                        fontSize="large"
+                        className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                      />
                     </RouterLink>
                   </StyledButton>
                   <StyledButton
@@ -178,7 +183,10 @@ export default function MyEvents() {
                     }}
                     outlined
                   >
-                    <EditIcon />
+                    <EditIcon
+                      fontSize="large"
+                      className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                    />
                   </StyledButton>
                   <StyledButton
                     onClick={(e) => {
@@ -187,7 +195,10 @@ export default function MyEvents() {
                     }}
                     outlined
                   >
-                    <DeleteIcon />
+                    <DeleteIcon
+                      fontSize="large"
+                      className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                    />
                   </StyledButton>
                 </div>
               </div>
@@ -221,9 +232,9 @@ export default function MyEvents() {
 
       {/* edit modal */}
       {isModalOpen && (
-        <section className="flex min-h-full w-screen flex-row items-center justify-center">
-          <div className="mb-5 flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2">
-            <h1 className="mt-6 text-center font-sans text-2xl font-medium md:text-3xl">
+        <section className="flex min-h-full w-screen flex-row items-center justify-center px-2">
+          <div className="flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2 p-5">
+            <h1 className="text-center font-sans text-2xl font-medium md:text-3xl mb-4">
               Editing {selectedCapsule.title}
             </h1>
             <div className="flex w-full flex-col items-center">
@@ -231,23 +242,23 @@ export default function MyEvents() {
                 onSubmit={handleFormSubmit}
                 className="flex w-full flex-col items-center"
               >
-                <div className="flex h-32 w-32 items-center justify-center rounded-full bg-lightgray">
+                <div className="mb-4 flex h-48 w-48 items-center justify-center rounded-full bg-lightgray shadow-xl">
                   {uploadedPhoto ? (
                     <img
                       src={uploadedPhoto}
                       alt="Uploaded event"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full"
                     />
                   ) : selectedCapsule.eventPic ? (
                     <img
                       src={selectedCapsule.eventPic}
                       alt="Uploaded event"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full"
                     />
                   ) : (
                     <CameraAltOutlinedIcon
                       fontSize="large"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full"
                     />
                   )}
                 </div>
@@ -259,7 +270,6 @@ export default function MyEvents() {
                   <AddAPhotoIcon className="mr-4" />
                   Upload Picture
                 </StyledButton>
-
                 <StyledFormInput
                   fullWidthStyle
                   type="text"
@@ -278,13 +288,6 @@ export default function MyEvents() {
                   onChange={handleChange}
                   value={formState.location}
                 />
-                {/* <StyledFormInput 
-                fullWidthStyle
-                type="date"
-                name="date"
-                onChange={handleChange}
-                value={formState.date}
-              /> */}
                 <StyledButton type="submit" primaryColor>
                   Edit Event
                 </StyledButton>

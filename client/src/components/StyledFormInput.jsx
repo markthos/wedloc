@@ -17,10 +17,10 @@ export default function StyledFormInput({
 
   if (halfWidthStyle) {
     inputStyle =
-      "mb-5 w-1/2 rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-darkgray";
+      "mb-5 w-1/2 rounded-lg px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-darkgray transition-all duration-500 ease-in-out";
   } else if (fullWidthStyle) {
     inputStyle =
-      "mb-5 w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-darkgray";
+      "mb-5 w-full rounded-lg px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-darkgray transition-all duration-500 ease-in-out";
   }
 
   return (

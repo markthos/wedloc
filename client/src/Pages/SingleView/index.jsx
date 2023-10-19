@@ -257,11 +257,11 @@ export default function SingleView({ cloudName, videoId }) {
                     />
                   </div>
                   {name === comment.author ? (
-                    <p className="flex justify-end  bg-white text-center font-extrabold">
+                    <p className="flex justify-end  bg-lightgray px-2 py-1 text-center font-bold rounded-lg">
                       {comment.text}
                     </p>
                   ) : (
-                    <p className="flex justify-start bg-white text-center font-extrabold">
+                    <p className="flex justify-start bg-white px-2 py-1 text-center rounded-lg">
                       {comment.text}
                     </p>
                   )}
