@@ -16,7 +16,7 @@ import { UPDATE_CAPSULE } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 
 export default function MyEvents() {
-  const { loading, data, error } = useQuery(GET_MY_CAPSULES);
+  const { loading, data, error, refetch } = useQuery(GET_MY_CAPSULES);
   const [selectedCapsule, setSelectedCapsule] = useState(null);
   // THIS IS EDIT MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,6 +53,10 @@ export default function MyEvents() {
     setSelectedCapsule(capsule);
     setIsModalOpen(true);
   };
+  const closeEditModal = (capsule) => {
+    setIsModalOpen(false);
+    setSelectedCapsule(null);
+  };
 
   const openDeleteModal = (capsule) => {
     setSelectedCapsule(capsule);
@@ -69,31 +73,30 @@ export default function MyEvents() {
       // call the delete mutation here
       await deleteCapsule({ variables: { capsuleId: selectedCapsule._id } });
       closeDeleteModal();
-      return;
+      refetch();
     }
   };
 
-  const handleDeleteModal = (capsule) => {
-    setSelectedCapsule(capsule);
-  };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     // not even sure this was the best way to do this but here we are..
     if (formState.title === "") {
       formState.title = selectedCapsule.title;
     }
+
     if (formState.location === "") {
       formState.location = selectedCapsule.location;
     }
 
+    if (formState.eventPic === "") {
+      console.log(selectedCapsule.eventPic)
+      formState.eventPic = selectedCapsule.eventPic;
+    }
+
     const variables = {
       ...formState,
-      eventPic: dataURL,
+      eventPic: dataURL || selectedCapsule.eventPic,
       capsuleId: selectedCapsule._id,
     };
 
@@ -137,7 +140,7 @@ export default function MyEvents() {
     <section className="container m-auto flex h-full items-center justify-center p-5">
       <form
         className={`flex w-full flex-col items-center gap-4 rounded-md bg-beige px-5 py-5 shadow-lg md:px-10 ${
-          isModalOpen ? "hidden" : ""
+          isModalOpen || isDeleteModalOpen ? "hidden" : ""
         }`}
       >
         <h1 className="mb-4 text-4xl">My Events</h1>
@@ -222,7 +225,7 @@ export default function MyEvents() {
               <StyledButton onClick={handleDelete} primaryColor>
                 Confirm
               </StyledButton>
-              <StyledButton onClick={closeDeleteModal} outlined>
+              <StyledButton onClick={closeDeleteModal}  primaryColor>
                 Cancel
               </StyledButton>
             </div>
@@ -288,9 +291,14 @@ export default function MyEvents() {
                   onChange={handleChange}
                   value={formState.location}
                 />
-                <StyledButton type="submit" primaryColor>
-                  Edit Event
-                </StyledButton>
+                 <div className="mb-6 mt-4 flex gap-4">
+                  <StyledButton onClick={closeEditModal} primaryColor>
+                    Cancel
+                  </StyledButton>
+                  <StyledButton type="submit" primaryColor>
+                    Edit Event
+                  </StyledButton>
+                </div>
               </form>
             </div>
           </div>
