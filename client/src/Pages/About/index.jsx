@@ -72,11 +72,7 @@ export default function About() {
     <div className="overflow-hidden">
       {/* About the project section */}
       <section className="container m-auto px-5 pb-20">
-        <h1
-          data-aos="slide-right"
-          data-aos-once="true"
-          className="py-10 text-center text-4xl md:text-left md:text-6xl"
-        >
+        <h1 className="py-10 text-center text-4xl md:text-left md:text-6xl">
           How we did it...
         </h1>
         <h2
@@ -113,7 +109,7 @@ export default function About() {
             <h2
               data-aos="fade-right"
               data-aos-once="true"
-              className="mb-10 text-3xl"
+              className="mb-5 text-3xl"
             >
               Pre-Development
             </h2>
@@ -133,7 +129,7 @@ export default function About() {
               data-aos-once="true"
               data-aos-delay="300"
               data-aos-offset="0"
-              className="mb-10 text-3xl"
+              className="mb-5 text-3xl"
             >
               Development
             </h2>
@@ -155,7 +151,7 @@ export default function About() {
               data-aos-once="true"
               data-aos-delay="600"
               data-aos-offset="0"
-              className="mb-10 text-3xl"
+              className="mb-5 text-3xl"
             >
               Continuous Deployment
             </h2>
@@ -182,7 +178,7 @@ export default function About() {
         <h2
           data-aos="fade-up"
           data-aos-once="true"
-          className="mb-10 text-3xl md:text-center"
+          className="mb-5 text-3xl md:text-center"
         >
           Future Development
         </h2>
@@ -199,11 +195,7 @@ export default function About() {
       </section>
       {/* About the team section */}
       <section className="bg-beige px-5 pb-10">
-        <h2
-          data-aos="slide-right"
-          data-aos-once="true"
-          className="py-20 text-center text-4xl md:text-6xl"
-        >
+        <h2 className="py-20 text-center text-4xl md:text-6xl">
           Meet the Team
         </h2>
         {aboutUsData.team.map((member, teamIndex) => (
@@ -245,11 +237,7 @@ export default function About() {
       </section>
 
       <section className="container m-auto mb-20 px-5">
-        <h2
-          data-aos="slide-right"
-          data-aos-once="true"
-          className="py-20 text-center text-4xl md:text-5xl"
-        >
+        <h2 className="py-20 text-center text-4xl md:text-5xl">
           Our Tech and Design Stack
         </h2>
         <div className="flex flex-col items-center gap-10 md:flex-row md:flex-wrap">
