@@ -16,8 +16,6 @@ export default function NavMenu({ currentPage, handlePageChange }) {
   const [open, setOpen] = useState(false);
   const isAuthenticated = AuthService.loggedIn();
 
-  console.log(isAuthenticated);
-
 
   let menuRef = useRef();
 
