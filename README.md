@@ -1,33 +1,66 @@
 # WedLoc
 A UC Berkley Full Stack Web Development Bootcamp Project 03
 
+![License](https://img.shields.io/badge/License-mit-blue.svg)
+
+
 ## Description
 
-A website for wedding photographers/videographers to showcase their clients' wedding and give their clients a place to share their wedding with their guests.
+WedLoc is not just another wedding platform; it's a one-of-a-kind social hub designed exclusively for wedding photographers and videographers. Our mission is to provide a seamless space for professionals to organize and showcase wedding media, making it easy for couples and guests to relive their special moments. With added features like media comments and real-time chat, we've eliminated the need for attendees to sign up, making the entire experience hassle-free.
+
+
+## Table of Contents (if applicable)
+
+- [Description](#description)
+- [Heroku Deployment](#heroku-deployment)
+- [Features](#features)
+- [Project Presentation](#project-presentation)
+- [Visuals](#visuals)
+- [Usage](#usage)
+- [License](#license)
+- [Credits](#credits)
+- [Project Status](#project-status)
+
 
 ## Heroku Deployment
 
-COMING SOON!
+Here is the link to the deployment of our heroku app, [Wedloc](https://wedloc-84c89e3ae29d.herokuapp.com/)!
 
-<!-- [Task Titan Deployment](https://task-titan-bec51c55ebe5.herokuapp.com/) -->
+
+## Features
+
+- Showcase wedding photos and videos from events
+- Enable attendees to comment on media
+- Real-time chat for interactive event experiences
+- Share events with attendees for live chat and post-event interactions
+
 
 ## Project Presentation
 COMING SOON!
 <!-- [Google Slides](https://docs.google.com/presentation/d/1zrSl7t5zOl7puV-NsBfD0X0r-9z4GByRpmwSzZSQFi4/edit#slide=id.p) -->
 
+
 ## Visuals
 
-COMING SOON!
 
-<!-- ![Animated Demo](./public/images/readme/task_titan.gif)
-![Screenshot](./public/images/readme/Screenshot%202023-08-21%20at%207.29.22%20PM.png)
-![Screenshot](./public/images/readme/Screenshot%202023-08-21%20at%207.29.31%20PM.png)
-![Screenshot](./public/images/readme/Screenshot%202023-08-21%20at%207.29.46%20PM.png) -->
+![Screenshot](./client/public/assets/readme/Wedloc%20HomePage.png)
+![Screenshot](./client/public/assets/readme/Profile.png)
+![Screenshot](./client/public/assets/readme/MyEvents.png)
+![Screenshot](./client/public/assets/readme/EventSpace.png)
+![Screenshot](./client/public/assets/readme/SinglePostView.png)
+![Screenshot](./client/public/assets/readme/LiveChat.png)
 
 
 ## Usage
 
-This page is used for grading purposes by the UC Berkley coding bootcamp staff.
+Use the link to [Wedloc](https://wedloc-84c89e3ae29d.herokuapp.com/) and signup with your first name, last name, username, email, and password.  The username, email, and passwords need to be unique for verification. Once you sign up you will be immediately taken to your own events page where you can create, view, edit, and delete your events as they fit your business needs.  This application is especially geared towards wedding planners, photographers, and videographers, but it can be used by anyone that wants to encapsulate their special moment in time.
+
+Please note that this version of WedLoc is primarily for grading purposes by the UC Berkeley coding bootcamp staff.
+
+
+## License
+![License](https://img.shields.io/badge/License-MIT-blue.svg) This project is covered under the MIT public use license.
+
 
 ## Credits
 - The Team
@@ -38,13 +71,11 @@ This page is used for grading purposes by the UC Berkley coding bootcamp staff.
     - Mark Thostesen - <a href="https://github.com/markthos" target="_blank">markthos</a>
     - Will Cobb - <a href="https://github.com/1willcobb" target="_blank">1willcobb</a>
 
-## Features
-
-- Add events to showcase pictures and video
-- Comment on pictures and video
-- Live Chat for when the event is happening
-- Share the event with attendees so they can chat and comment on pictures and video during and after the event
 
 ## Project Status
 
-Completed October 2023
+WedLoc was successfully completed in October 2023.
+
+Stay tuned for exciting developments and improvements as we continue to make WedLoc the go-to platform for wedding media sharing and interaction.
+
+Thank you for considering WedLoc!
