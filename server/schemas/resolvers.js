@@ -61,8 +61,11 @@ const resolvers = {
       const postIdObject = new ObjectId(postId);
       const post = capsule.posts.find((post) => post._id.equals(postIdObject));
       if (!post) {
+        console.log("post not found");
         return null; // Post not found
       }
+
+      console.log("Post Found");
 
       return post;
     },
@@ -84,7 +87,7 @@ const resolvers = {
       context
     ) => {
       if (context.user) {
-
+        console.log("context.user", context.user);
         const capsule = await Capsule.create({
           title,
           date,
@@ -108,6 +111,7 @@ const resolvers = {
       context
     ) => {
       if (context.user) {
+        console.log("context.user", context.user);
         const capsule = await Capsule.findOneAndUpdate(
           { _id: capsuleId },
           { title, location, eventPic },
@@ -149,8 +153,10 @@ const resolvers = {
           throw new Error("Capsule not found");
         }
 
+        console.log("Capsule deleted", capsule);
         return { success: true, message: "Capsule deleted successfully" };
       } catch (error) {
+        console.error("Error deleting capsule", error);
         return { success: false, message: "Error deleting capsule" };
       }
     },
@@ -169,8 +175,11 @@ const resolvers = {
       );
 
       if (!updatedCapsule) {
+        console.log("capsule not found");
         return null; // Handle this as needed
       }
+
+      console.log("New Post Added");
 
       return updatedCapsule.posts[updatedCapsule.posts.length - 1];
     },
@@ -188,6 +197,9 @@ const resolvers = {
           );
         }
 
+
+        console.log(postId)
+
         const updated = await Capsule.findOneAndUpdate(
           { _id: capsuleId },
           { $pull: { posts: { _id: postId } } },
@@ -197,6 +209,8 @@ const resolvers = {
         if (!updated) {
           throw new Error("Post not found in the capsule or unable to remove it.");
         }
+        
+        console.log(updated)
 
         return updated;
       }
@@ -205,6 +219,7 @@ const resolvers = {
 
     // Add a Live to the database without being logged in
     addChat: async (parent, { text, author, capsuleId }) => {
+      console.log("adding chat...", text, author, capsuleId);
 
       const newLiveChat = await Capsule.findOneAndUpdate(
         { _id: capsuleId },
@@ -214,6 +229,7 @@ const resolvers = {
 
       const newChat = newLiveChat.chat[newLiveChat.chat.length - 1];
 
+      console.log("newLiveChat", newChat);
 
       return newChat;
     },
@@ -260,14 +276,18 @@ const resolvers = {
       const contextUserId = context.user._id;
       try {
         const deletedUser = await User.findOneAndDelete({ _id: contextUserId });
+        console.log("deletedUser", deletedUser);
+        console.log("contextUserId", contextUserId);
         return { deletedUser };
       } catch (error) {
+        console.error("Error deleting user:", error);
         throw new Error("Error deleting user");
       }
     },
 
     devDelUser: async (parent, { userId }) => {
       const user = await User.findOneAndDelete({ _id: userId });
+      console.log("user deleted", user);
     },
 
     login: async (parent, { username, password }) => {
@@ -355,6 +375,7 @@ const resolvers = {
       );
 
       if (!cap) {
+        console.log("post not found");
         return null;
       }
 
@@ -362,6 +383,7 @@ const resolvers = {
         post._id.equals(postIdObject)
       );
       // cap now contains the updated document
+      console.log("post found: upvote: " + upvotes.upVotes);
 
       return upvotes;
     },
@@ -377,6 +399,7 @@ const resolvers = {
       );
 
       if (!cap) {
+        console.log("post not found");
         return null;
       }
 
@@ -384,6 +407,7 @@ const resolvers = {
         post._id.equals(postIdObject)
       );
       // cap now contains the updated document
+      console.log("post found: downvote: " + downVotes.upVotes);
 
       return downVotes;
     },
@@ -403,12 +427,15 @@ const resolvers = {
       );
 
       if (!updatedPost) {
+        console.log("post not found");
         return null; // Handle this as needed
       }
 
       const post = updatedPost.posts.find((post) =>
         post._id.equals(postIdObject)
       );
+
+      console.log("New Comment Added");
 
       return post;
     },
