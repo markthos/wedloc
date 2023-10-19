@@ -132,8 +132,7 @@ const CheckoutForm = () => {
       setFeedback(result.error.message);
     } else {
       setFeedback('Card is accepted');
-      // You can send the token to your backend here if needed.
-    }
+     }
   };
 
   return (
