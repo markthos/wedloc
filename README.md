@@ -9,7 +9,7 @@ A UC Berkley Full Stack Web Development Bootcamp Project 03
 WedLoc is not just another wedding platform; it's a one-of-a-kind social hub designed exclusively for wedding photographers and videographers. Our mission is to provide a seamless space for professionals to organize and showcase wedding media, making it easy for couples and guests to relive their special moments. With added features like media comments and real-time chat, we've eliminated the need for attendees to sign up, making the entire experience hassle-free.
 
 
-## Table of Contents (if applicable)
+## Table of Contents
 
 - [Description](#description)
 - [Heroku Deployment](#heroku-deployment)
@@ -36,8 +36,7 @@ Here is the link to the deployment of our heroku app, [Wedloc](https://wedloc-84
 
 
 ## Project Presentation
-COMING SOON!
-<!-- [Google Slides](https://docs.google.com/presentation/d/1zrSl7t5zOl7puV-NsBfD0X0r-9z4GByRpmwSzZSQFi4/edit#slide=id.p) -->
+[Google Slides](https://docs.google.com/presentation/d/1Yo2I2PPT58voscTfZmLJ5dglf2jHLGa8pu-2-s-DXNI/edit#slide=id.p)
 
 
 ## Visuals
