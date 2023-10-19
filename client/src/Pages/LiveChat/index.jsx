@@ -16,7 +16,7 @@ import StyledButton from "../../components/StyledButton";
 import StyledFormInput from "../../components/StyledFormInput";
 
 // Create a Socket.IO client instance
-const socket = io("http://localhost:3000"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
+const socket = io("https://wedloc-84c89e3ae29d.herokuapp.com/"); //! SET TO PRODUCTION URL WHEN DEPLOYED "https://wedloc-84c89e3ae29d.herokuapp.com/"
 
 //* This is the LiveChat component
 export default function LiveChat() {
