@@ -291,18 +291,16 @@ const resolvers = {
     },
 
     login: async (parent, { username, password }) => {
-      console.log("hit login");
+
       const user = await User.findOne({ username });
       if (!user) {
         throw new AuthenticationError("Incorrect credentials");
       }
-      console.log("user found", user);
       const correctPw = await user.isCorrectPassword(password);
       if (!correctPw) {
         throw new AuthenticationError("Incorrect credentials");
       }
       const token = signToken(user);
-      console.log(token, user);
       return { token, user };
     },
 
