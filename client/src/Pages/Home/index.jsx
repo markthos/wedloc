@@ -185,7 +185,7 @@ export default function Home() {
           data-aos-once="true"
           className="mb-20 px-10 text-4xl font-bold md:px-20 md:text-6xl"
         >
-          WedLoc is the priemere wedding photgrapher's social networking site.
+          WedLoc is the premiere wedding photgrapher's social networking site.
         </h2>
         <h3
           data-aos="fade-right"
