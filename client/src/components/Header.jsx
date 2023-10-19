@@ -23,14 +23,18 @@ export default function Header() {
   return (
     <header className="relative bg-white">
       {/* Site Logo */}
-      <span className="pt-3 text-center font-logo text-4xl md:text-6xl block">
+      <span className="block pt-3 text-center font-logo text-4xl md:text-6xl">
         <RouterLink to="/">WedLoc</RouterLink>
       </span>
       {/* Profile Icon or Image */}
       <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
         {userProfilePic ? (
           <RouterLink to="/profile">
-            <img src={userProfilePic} alt="Profile" className="h-10 w-10 rounded-full self-center" />
+            <img
+              src={userProfilePic}
+              alt="Profile"
+              className="h-10 w-10 self-center rounded-full object-cover"
+            />
           </RouterLink>
         ) : (
           <RouterLink to="/login">
@@ -39,28 +43,9 @@ export default function Header() {
         )}
       </div>
       {/* Navigation Menu */}
-      <NavMenu />
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 transform">
+        <NavMenu />
+      </div>
     </header>
   );
 }
-
-
-
-
-  // return (
-  //   <header className="relative bg-white">
-  //     {/* Site Logo */}
-  //     <span className="pt-3 text-center font-logo text-4xl md:text-6xl block">
-  //       <RouterLink to={"/"}>WedLoc</RouterLink>
-  //     </span>
-  //     {/* Profile Icon, if logged in it will be an image */}
-  //     <div className="absolute right-16 top-1/2 -translate-y-1/2 transform">
-  //       <RouterLink to={"/profile"}>
-  //         <AccountCircleIcon fontSize="large" />
-  //       </RouterLink>
-  //     </div>
-  //     {/* Navigation Menu */}
-  //     <NavMenu />
-
-  //   </header>
-  // );

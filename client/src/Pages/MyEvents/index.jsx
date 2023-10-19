@@ -16,7 +16,7 @@ import { UPDATE_CAPSULE } from "../../utils/mutations";
 import { useState, useEffect, useRef } from "react";
 
 export default function MyEvents() {
-  const { loading, data, error } = useQuery(GET_MY_CAPSULES);
+  const { loading, data, error, refetch } = useQuery(GET_MY_CAPSULES);
   const [selectedCapsule, setSelectedCapsule] = useState(null);
   // THIS IS EDIT MODAL
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,6 +53,10 @@ export default function MyEvents() {
     setSelectedCapsule(capsule);
     setIsModalOpen(true);
   };
+  const closeEditModal = (capsule) => {
+    setIsModalOpen(false);
+    setSelectedCapsule(null);
+  };
 
   const openDeleteModal = (capsule) => {
     setSelectedCapsule(capsule);
@@ -69,31 +73,30 @@ export default function MyEvents() {
       // call the delete mutation here
       await deleteCapsule({ variables: { capsuleId: selectedCapsule._id } });
       closeDeleteModal();
-      return;
+      refetch();
     }
   };
 
-  const handleDeleteModal = (capsule) => {
-    setSelectedCapsule(capsule);
-  };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleFormSubmit = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     // not even sure this was the best way to do this but here we are..
     if (formState.title === "") {
       formState.title = selectedCapsule.title;
     }
+
     if (formState.location === "") {
       formState.location = selectedCapsule.location;
     }
 
+    if (formState.eventPic === "") {
+      console.log(selectedCapsule.eventPic)
+      formState.eventPic = selectedCapsule.eventPic;
+    }
+
     const variables = {
       ...formState,
-      eventPic: dataURL,
+      eventPic: dataURL || selectedCapsule.eventPic,
       capsuleId: selectedCapsule._id,
     };
 
@@ -131,46 +134,49 @@ export default function MyEvents() {
 
   const capsules = data.getUserCapsules;
 
-  // IMPLEMENT PHOTO DISPLAY
-
   return (
     <section className="container m-auto flex h-full items-center justify-center p-5">
       <form
-        className={`flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg ${
-          isModalOpen ? "hidden" : ""
+        className={`flex w-full flex-col items-center gap-4 rounded-md bg-beige px-5 py-5 shadow-lg md:px-10 ${
+          isModalOpen || isDeleteModalOpen ? "hidden" : ""
         }`}
       >
-        <h1 className="text-4xl">My Events</h1>
+        <h1 className="mb-4 text-4xl">My Events</h1>
         <div className="flex w-full flex-col items-center gap-4">
           {capsules.length === 0 ? (
             <p>No events found. Create an event to get started.</p>
           ) : (
             capsules.map((capsule) => (
               <div
-                className="flex w-full items-center justify-between"
+                className="flex w-full flex-col items-center justify-between md:flex-row"
                 key={capsule._id}
               >
-                <div className="flex justify-items-center content-center text-align">
+                <div className="mb-4 flex w-full flex-col items-center md:w-3/4 md:flex-row">
                   {capsule.eventPic && (
-                    <img
-                      src={capsule.eventPic}
-                      alt="Uploaded event"
-                      className="h-20 w-20 rounded-full self-center"
-                    />
+                    <RouterLink to={`/eventspace/${capsule._id}`}>
+                      <img
+                        src={capsule.eventPic}
+                        alt="Uploaded event"
+                        className="mb-4 h-28 w-28 rounded-full object-cover shadow-xl"
+                      />
+                    </RouterLink>
                   )}
                   <RouterLink
                     to={`/eventspace/${capsule._id}`}
-                    className="text-xl hover:underline self-center ml-3"
+                    className="text-xl hover:underline md:ml-5"
                   >
                     {capsule.title}
                   </RouterLink>
                 </div>
-                <div className="flex gap-4">
-                  <StyledButton outlined>
-                    <RouterLink to={`/eventspace/${capsule._id}/qrcode`} lazy>
-                      <QrCode2Icon />
-                    </RouterLink>
-                  </StyledButton>
+                <div className="flex gap-4 md:w-1/4 md:justify-end">
+                  <RouterLink to={`/eventspace/${capsule._id}/qrcode`}>
+                    <StyledButton outlined>
+                      <QrCode2Icon
+                        fontSize="large"
+                        className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                      />
+                    </StyledButton>
+                  </RouterLink>
                   <StyledButton
                     onClick={(e) => {
                       e.preventDefault();
@@ -178,7 +184,10 @@ export default function MyEvents() {
                     }}
                     outlined
                   >
-                    <EditIcon />
+                    <EditIcon
+                      fontSize="large"
+                      className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                    />
                   </StyledButton>
                   <StyledButton
                     onClick={(e) => {
@@ -187,7 +196,10 @@ export default function MyEvents() {
                     }}
                     outlined
                   >
-                    <DeleteIcon />
+                    <DeleteIcon
+                      fontSize="large"
+                      className="transition-all duration-500 ease-in-out hover:text-darkgray"
+                    />
                   </StyledButton>
                 </div>
               </div>
@@ -198,9 +210,7 @@ export default function MyEvents() {
           <RouterLink to={"/eventcreator"}>Create Event</RouterLink>
         </StyledButton>
       </form>
-
       {/* delete modal */}
-
       {isDeleteModalOpen && (
         <div className="flex min-h-full w-screen flex-row items-center justify-center">
           <div className="flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2">
@@ -211,19 +221,18 @@ export default function MyEvents() {
               <StyledButton onClick={handleDelete} primaryColor>
                 Confirm
               </StyledButton>
-              <StyledButton onClick={closeDeleteModal} outlined>
+              <StyledButton onClick={closeDeleteModal} primaryColor>
                 Cancel
               </StyledButton>
             </div>
           </div>
         </div>
       )}
-
       {/* edit modal */}
       {isModalOpen && (
-        <section className="flex min-h-full w-screen flex-row items-center justify-center">
-          <div className="mb-5 flex w-screen flex-col items-center rounded-md bg-beige shadow-lg md:w-1/2">
-            <h1 className="mt-6 text-center font-sans text-2xl font-medium md:text-3xl">
+        <section className="flex min-h-full w-screen flex-row items-center justify-center px-2">
+          <div className="flex w-screen flex-col items-center rounded-md bg-beige p-5 shadow-lg md:w-1/2">
+            <h1 className="mb-4 text-center font-sans text-2xl font-medium md:text-3xl">
               Editing {selectedCapsule.title}
             </h1>
             <div className="flex w-full flex-col items-center">
@@ -231,23 +240,23 @@ export default function MyEvents() {
                 onSubmit={handleFormSubmit}
                 className="flex w-full flex-col items-center"
               >
-                <div className="flex h-32 w-32 items-center justify-center rounded-full bg-lightgray">
+                <div className="mb-4 flex h-48 w-48 items-center justify-center rounded-full bg-lightgray shadow-xl">
                   {uploadedPhoto ? (
                     <img
                       src={uploadedPhoto}
                       alt="Uploaded event"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   ) : selectedCapsule.eventPic ? (
                     <img
                       src={selectedCapsule.eventPic}
                       alt="Uploaded event"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   ) : (
                     <CameraAltOutlinedIcon
                       fontSize="large"
-                      className="h-32 w-32 rounded-full"
+                      className="h-48 w-48 rounded-full object-cover"
                     />
                   )}
                 </div>
@@ -259,7 +268,6 @@ export default function MyEvents() {
                   <AddAPhotoIcon className="mr-4" />
                   Upload Picture
                 </StyledButton>
-
                 <StyledFormInput
                   fullWidthStyle
                   type="text"
@@ -278,16 +286,14 @@ export default function MyEvents() {
                   onChange={handleChange}
                   value={formState.location}
                 />
-                {/* <StyledFormInput 
-                fullWidthStyle
-                type="date"
-                name="date"
-                onChange={handleChange}
-                value={formState.date}
-              /> */}
-                <StyledButton type="submit" primaryColor>
-                  Edit Event
-                </StyledButton>
+                <div className="mb-6 mt-4 flex gap-4">
+                  <StyledButton onClick={closeEditModal} primaryColor>
+                    Cancel
+                  </StyledButton>
+                  <StyledButton type="submit" primaryColor>
+                    Edit Event
+                  </StyledButton>
+                </div>
               </form>
             </div>
           </div>

@@ -1,90 +1,76 @@
 // Sitewide navigation menu component
-// TODO: Set up menu so that when a user is not logged in it only shows the following links: Home, Sign Up, Login, About
-// TODO: Set up menu so that when a user is logged in it shows the following links: Home, My Profile, Event Creator, My Events, About, Sign Out
-// TODO: The width and height of the menu should be 100% wide and 50% tall of the viewport when in a small screen size, the size of the text should increase as well
-// TODO: Menu should disappear if cursor is not hovering over it
-// TODO: When the menu is open it should have an X icon to close it in the upper right corner
-// TODO: Get the NavLink active class to work
 
-
-import React, { useState, useEffect, useRef } from "react";
-import { Link as RouterLink, NavLink } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
 import AuthService from "../utils/auth";
 
 export default function NavMenu({ currentPage, handlePageChange }) {
-  const [open, setOpen] = useState(false);
   const isAuthenticated = AuthService.loggedIn();
 
-
-  let menuRef = useRef();
-
-  useEffect(() => {
-    let handler = (e) => {
-      if (!menuRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
-  });
-
   // Storing the labels and routes in an array to loop through
-const menuItemsAuthenticated = [
-  { label: 'Home', route: '/' },
-  { label: 'Event Creator', route: '/eventcreator' },
-  { label: 'My Events', route: '/myevents' },
-  { label: 'My Profile', route: '/profile' },
-  { label: 'About Us', route: '/about' },
-  { label: 'Payment', route: '/payment' },
-  { label: 'Sign Out', route: '/signout'},
-];
+  const menuItemsAuthenticated = [
+    { label: "Home", route: "/" },
+    { label: "Event Creator", route: "/eventcreator" },
+    { label: "My Events", route: "/myevents" },
+    { label: "My Profile", route: "/profile" },
+    { label: "About Us", route: "/about" },
+    { label: "Payment", route: "/payment" },
+    { label: "Sign Out", route: "/signout" },
+  ];
 
-const menuItemsUnauthenticated = [
-  { label: 'Home', route: '/' },
-  { label: 'Sign Up', route: '/signup' },
-  { label: 'Log In', route: '/login' },
-  { label: 'About Us', route: '/about' },
-  { label: 'Payment', route: '/payment'},
-];
+  const menuItemsUnauthenticated = [
+    { label: "Home", route: "/" },
+    { label: "Sign Up", route: "/signup" },
+    { label: "Log In", route: "/login" },
+    { label: "About Us", route: "/about" },
+    { label: "Payment", route: "/payment" },
+  ];
 
-const menuItemsToRender = isAuthenticated ? menuItemsAuthenticated : menuItemsUnauthenticated;
+  const menuItemsToRender = isAuthenticated
+    ? menuItemsAuthenticated
+    : menuItemsUnauthenticated;
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <div
-      ref={menuRef}
-      className="absolute right-5 top-1/2 -translate-y-1/2 transform cursor-pointer"
-    >
-      <div
-        onClick={() => {
-          setOpen(!open);
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
+        <MenuIcon fontSize="large" className="text-black" />
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
         }}
       >
-        <MenuIcon fontSize="large" />
-      </div>
-
-      <div
-        className={`absolute right-0 top-15 w-64 transform border text-lg 
-        ${
-          open ? "visible bg-white" : "invisible"
-        } duration-250 transition-all ease-in-out`}
-      >
-        <ul>
-          {/* Looping through the menuItems array so you don't have to repeat all the styles for each link */}
-          {menuItemsToRender.map((item) => (
-            <li key={item.label}>
-              <NavLink
-                to={item.route}
-                className="block p-3 hover:bg-lightgray"
-              >
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </div>
+        {menuItemsToRender.map((item) => (
+          <MenuItem key={item.label} onClick={handleClose}>
+            <NavLink to={item.route} className="w-screen px-2 py-1 md:w-max md:px-4 md:py-2 font-sans text-lg">
+              {item.label}
+            </NavLink>
+          </MenuItem>
+        ))}
+      </Menu>
     </div>
   );
 }

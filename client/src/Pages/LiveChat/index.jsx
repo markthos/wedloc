@@ -73,22 +73,8 @@ export default function LiveChat() {
       </div>
       ${
         message.author === name
-          ? `<div class="flex justify-end bg-white font-extrabold" 
-            style="border-bottom-left-radius: 15px;
-            border-top-right-radius: 15px;
-            padding: 3px;
-            padding-left: 10px;
-            padding-right: 10px;">
-            <p>${message.text}</p>
-          </div>`
-          : `<div class="flex justify-start bg-white font-extrabold" 
-            style="border-bottom-left-radius: 15px;
-            border-top-right-radius: 15px;
-            padding: 3px;
-            padding-left: 10px;
-            padding-right: 10px;">
-            <p>${message.text}</p>
-          </div>`
+          ? `<p class="flex justify-end rounded-xl bg-lightgray px-4 py-1 font-bold">${message.text}</p>`
+          : `<p class="flex flex-col rounded-xl bg-white px-4 py-1.5">${message.text}</p>`
       }`;
       messages.appendChild(item);
 

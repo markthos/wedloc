@@ -86,8 +86,8 @@ export default function EventCreator() {
       },
       function (error, result) {
         if (!error && result && result.event === "success") {
-          setDataURL(result.info.url);
-          setUploadedPhoto(result.info.url);
+          setDataURL(result.info.secure_url);
+          setUploadedPhoto(result.info.secure_url);
         }
       },
     );
@@ -99,7 +99,7 @@ export default function EventCreator() {
         onSubmit={handleFormSubmit}
         className="flex w-full flex-col items-center gap-4 rounded-md bg-beige p-10 shadow-lg "
       >
-        <h1 className="text-4xl"> CREATE AN EVENT </h1>
+        <h1 className="text-4xl">Create an Event</h1>
         <div className="text-center">
           <div className="mb-5">
             {uploadedPhoto ? (

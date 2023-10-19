@@ -60,12 +60,6 @@ export default function SingleView({ cloudName, videoId }) {
 
   const [postData, setPostData] = useState("");
 
-  // useEffect(() => {
-  //   if (auth.loggedIn) {
-  //     console.log("logged in"); //! use this to set the name state to user name
-  //   }
-  // }, []);
-
   useEffect(() => {
     setPostData(data?.getPost || "");
   }, [data]);
@@ -193,7 +187,6 @@ export default function SingleView({ cloudName, videoId }) {
                 aspectRatio: "360 / 640",
               }} // hardcoded assumption of aspect ratio vert video
               allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-              allowFullScreen
               frameBorder="0"
               title={postData._id}
             ></iframe>
@@ -257,11 +250,11 @@ export default function SingleView({ cloudName, videoId }) {
                     />
                   </div>
                   {name === comment.author ? (
-                    <p className="flex justify-end  bg-white text-center font-extrabold">
+                    <p className="flex justify-end  bg-lightgray px-2 py-1 text-center font-bold rounded-lg">
                       {comment.text}
                     </p>
                   ) : (
-                    <p className="flex justify-start bg-white text-center font-extrabold">
+                    <p className="flex justify-start bg-white px-2 py-1 text-center rounded-lg">
                       {comment.text}
                     </p>
                   )}
