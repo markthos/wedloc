@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://wedloc:BBTK5cXTd4xsSNVf@wedloc.t785pkl.mongodb.net/?retryWrites=true&w=majority');
+mongoose.connect(process.env.MONGODB_URI);
 
 module.exports = mongoose.connection;
